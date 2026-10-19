@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-10-19T22:00:51Z",
+  "lastUpdated": "2026-10-19T22:31:16Z",
   "fx": {
-    "usdtToman": 260705,
-    "freeUsdToman": 259662,
+    "usdtToman": 260300,
+    "freeUsdToman": 259259,
     "gold18kToman": 17850000,
     "stale": false
   },
@@ -64,7 +64,7 @@
   },
   "crypto": {
     "BTC": {
-      "priceUsd": 82026.0,
+      "priceUsd": 82065.0,
       "athUsd": 73750,
       "high1yUsd": 73750,
       "high90dUsd": 91869.12,
@@ -73,7 +73,7 @@
       "stale": false
     },
     "ETH": {
-      "priceUsd": 2406.52,
+      "priceUsd": 2407.84,
       "athUsd": 4878,
       "high1yUsd": 4878,
       "high90dUsd": 2695.3,
@@ -82,7 +82,7 @@
       "stale": false
     },
     "SOL": {
-      "priceUsd": 105.1,
+      "priceUsd": 105.17,
       "athUsd": 259.9,
       "high1yUsd": 259.9,
       "high90dUsd": 117.71,
@@ -130,19 +130,19 @@
     }
   },
   "sources": {
-    "usdtToman": "nobitex_stats_free_market",
+    "usdtToman": "tetherland",
     "freeUsdToman": "nobitex_stats_free_market",
-    "BTC": "coingecko_simple_price",
-    "ETH": "coingecko_simple_price",
-    "SOL": "coingecko_simple_price",
-    "فپنتا": "cached_stale_from_2026-10-19",
-    "وفیروزه": "cached_stale_from_2026-10-19",
-    "شپدیس": "cached_stale_from_2026-10-19",
-    "فهامون": "cached_stale_from_2026-10-19",
-    "فکور": "cached_stale_from_2026-10-19",
-    "فپردیس": "cached_stale_from_2026-10-19",
-    "وسرمایه": "cached_stale_from_2026-10-19",
-    "زشک": "cached_stale_from_2026-10-19",
-    "فساپ": "cached_stale_from_2026-10-19"
+    "BTC": "coingecko",
+    "ETH": "coingecko",
+    "SOL": "coingecko",
+    "فپنتا": "cached_firewall_bypass",
+    "وفیروزه": "cached_firewall_bypass",
+    "شپدیس": "cached_firewall_bypass",
+    "فهامون": "cached_firewall_bypass",
+    "فکور": "cached_firewall_bypass",
+    "فپردیس": "cached_firewall_bypass",
+    "وسرمایه": "cached_firewall_bypass",
+    "زشک": "cached_firewall_bypass",
+    "فساپ": "cached_firewall_bypass"
   }
 }
