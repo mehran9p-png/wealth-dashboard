@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>داشبورد ثروت</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Compact Mobile Header (Fits 380px Screen) -->
+    <header class="compact-header">
+      <div class="header-right">
+        <div class="logo-badge">ث</div>
+        <div class="title-wrap">
+          <div class="app-title">داشبورد ثروت</div>
+          <div class="sub-date" id="jalaliTodayText">۱۴۰۵/۰۷/۲۷</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="unitToggleBtn" onclick="window.toggleUnit()" title="تغییر تومان/ریال" style="width:auto; padding:0 0.45rem; font-size:0.72rem; font-weight:700;">تومان</button>
+        <button class="icon-btn" onclick="window.togglePrivacy()" title="مخفی‌سازی ارقام">👁️</button>
+        <button class="icon-btn" onclick="window.toggleTheme()" title="تغییر پوسته تاریک/روشن">🌓</button>
+        <button class="icon-btn" onclick="window.openManualPriceModal()" title="ثبت دستی قیمت روز">⚡</button>
+        <button class="icon-btn" onclick="window.openPortfolioModal()" title="ویرایش دارایی‌ها">✏️</button>
+      </div>
+    </header>
+
+    <!-- Status Badges Row -->
+    <div class="status-bar">
+      <div style="display:flex; gap:0.35rem; align-items:center;">
+        <span id="sampleDataBadge" class="badge badge-warning">داده نمونه (برای ویرایش ✏️ را بزنید)</span>
+        <span id="lastUpdatedBadge" class="badge badge-info">بروزرسانی: --</span>
+      </div>
+    </div>
+
+    <!-- Error & Stale Banners -->
+    <div id="errorBanner" class="banner banner-error">
+      <span id="errorBannerText">خطا در بارگذاری فایل داده</span>
+    </div>
+
+    <div id="staleBanner" class="banner banner-warn">
+      <span>⚠️ قیمت‌ها بیش از ۲ روز قدمت دارند. از گیت‌هاب Run workflow را بزنید یا قیمت دستی وارد کنید.</span>
+      <button class="btn" onclick="window.openManualPriceModal()">ثبت دستی</button>
+    </div>
+
+    <!-- 4 Summary KPI Cards -->
+    <section class="kpi-grid">
+      <div class="card kpi-card">
+        <div class="kpi-label"><span>ثروت خالص کل</span></div>
+        <div class="kpi-val sensitive" id="kpiNetWorthToman">--</div>
+        <div class="kpi-sub sensitive" id="kpiNetWorthUsd">--</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-label"><span>پورتفوی بورس</span></div>
+        <div class="kpi-val sensitive" id="kpiStocksToman">--</div>
+        <div class="kpi-sub sensitive" id="kpiStocksPnl">--</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-label"><span>ذخیره استیبل‌کوین</span></div>
+        <div class="kpi-val sensitive" id="kpiStableToman">--</div>
+        <div class="kpi-sub sensitive" id="kpiStableUsd">--</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-label"><span>نقد + NFT تلگرام</span></div>
+        <div class="kpi-val sensitive" id="kpiCashNftToman">--</div>
+        <div class="kpi-sub" id="kpiCashNftSub">--</div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-scroller">
+      <button class="tab-btn active" onclick="window.switchTab('tabOverview', this)">📊 نمای کلی</button>
+      <button class="tab-btn" onclick="window.switchTab('tabStocks', this)">📈 بورس ایران</button>
+      <button class="tab-btn" onclick="window.switchTab('tabCrypto', this)">💎 شکار ریزش</button>
+      <button class="tab-btn" onclick="window.switchTab('tabCashNft', this)">💵 نقد و NFT</button>
+      <button class="tab-btn" onclick="window.switchTab('tabWhatIf', this)">⏳ مقایسه</button>
+      <button class="tab-btn" onclick="window.switchTab('tabRisk', this)">🛡️ ریسک</button>
+    </nav>
+
+    <!-- TAB 1: OVERVIEW -->
+    <section id="tabOverview" class="tab-pane active">
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-header">
+            <span class="section-title">ترکیب کل دارایی‌ها</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="allocationDonutCanvas"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-header">
+            <span class="section-title">روند رشد ثروت (اسنپ‌شات روزانه)</span>
+            <select id="historyRangeSelect" style="width:auto;" onchange="window.renderHistoryChart()">
+              <option value="7">۱ هفته (1W)</option>
+              <option value="30">۱ ماه (1M)</option>
+              <option value="90">۳ ماه (3M)</option>
+              <option value="180">۶ ماه (6M)</option>
+              <option value="365">۱ سال (1Y)</option>
+              <option value="all" selected>کل دوره (All)</option>
+            </select>
+          </div>
+          <div class="chart-container">
+            <canvas id="historyLineCanvas"></canvas>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.55rem;">
+            <span id="histCumReturnBadge" class="badge badge-success">--</span>
+            <span id="histBestDayBadge" class="badge badge-info">--</span>
+            <span id="histWorstDayBadge" class="badge badge-danger">--</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: STOCKS -->
+    <section id="tabStocks" class="tab-pane">
+      <div class="card">
+        <div class="section-header">
+          <span class="section-title">سبد سهام و صندوق‌های بورس ایران</span>
+          <button class="btn" onclick="window.openManualPriceModal()">⚡ ورود دستی قیمت</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>نماد</th>
+                <th>نام</th>
+                <th>تعداد</th>
+                <th>میانگین خرید</th>
+                <th>قیمت روز</th>
+                <th>تغییر روزانه</th>
+                <th>ارزش فعلی</th>
+                <th>سود/زیان</th>
+                <th>وزن کل</th>
+              </tr>
+            </thead>
+            <tbody id="stocksTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: CRYPTO & DIP PLANNER -->
+    <section id="tabCrypto" class="tab-pane">
+      <div class="card">
+        <div class="section-header">
+          <span class="section-title">ذخیره استیبل‌کوین شبکه اتریوم (Dry Powder)</span>
+          <span id="fxSpreadInfo" class="badge badge-info">--</span>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>توکن</th>
+                <th>مقدار</th>
+                <th>ارزش دلاری</th>
+                <th>ارزش به دلار آزاد</th>
+                <th>ارزش به نرخ تتر</th>
+              </tr>
+            </thead>
+            <tbody id="stablecoinsTableBody"></tbody>
+          </table>
+        </div>
+        <div class="form-row" style="grid-template-columns: repeat(3, 1fr); margin-top:0.75rem;">
+          <div class="form-group">
+            <label>سهم BTC (%):</label>
+            <input type="number" id="dipAllocBtc" value="50" onchange="window.saveDipAllocations()" />
+          </div>
+          <div class="form-group">
+            <label>سهم ETH (%):</label>
+            <input type="number" id="dipAllocEth" value="30" onchange="window.saveDipAllocations()" />
+          </div>
+          <div class="form-group">
+            <label>سهم SOL (%):</label>
+            <input type="number" id="dipAllocSol" value="20" onchange="window.saveDipAllocations()" />
+          </div>
+        </div>
+      </div>
+      <div id="dipPlannerCards" class="grid-3"></div>
+    </section>
+
+    <!-- TAB 4: CASH & TELEGRAM NFTs -->
+    <section id="tabCashNft" class="tab-pane">
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-header">
+            <span class="section-title">نقدینگی ریالی (شکار اصلاح تتر)</span>
+            <span id="cashTargetBadge" class="badge badge-warning">--</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>مبلغ نقد (تومان):</label>
+              <input type="number" id="cashAmountInput" value="56000000" onchange="window.saveCashConfig()" />
+            </div>
+            <div class="form-group">
+              <label>تارگت خرید تتر (تومان):</label>
+              <input type="number" id="cashTargetUsdtInput" value="64500" onchange="window.saveCashConfig()" />
+            </div>
+          </div>
+          <div style="font-size:0.8rem; display:grid; gap:0.4rem; background:var(--bg-input); padding:0.7rem; border-radius:9px;">
+            <div>قابل خرید در قیمت فعلی: <strong class="sensitive" id="cashBuysNowText">--</strong></div>
+            <div>قابل خرید در قیمت هدف: <strong class="sensitive" id="cashBuysTargetText" style="color:var(--success)">--</strong></div>
+            <div id="cashErosionText" style="color:var(--text-muted); font-size:0.74rem;">--</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-header">
+            <span class="section-title">کلکسیون NFT تلگرام</span>
+            <span class="badge badge-danger">غیرنقدشونده و پرریسک</span>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>نام آیتم</th>
+                  <th>دسته</th>
+                  <th>قیمت خرید</th>
+                  <th>ارزش روز (ویرایش)</th>
+                  <th>سود/زیان</th>
+                </tr>
+              </thead>
+              <tbody id="nftsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: WHAT IF COMPARISON -->
+    <section id="tabWhatIf" class="tab-pane">
+      <div class="card">
+        <div class="section-header">
+          <span class="section-title">مقایسه «اگر جای دیگر سرمایه‌گذاری می‌کردم؟»</span>
+        </div>
+        <div class="form-row" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="form-group">
+            <label>بازه زمانی:</label>
+            <select id="whatIfPeriodSelect" onchange="window.renderWhatIfTab()">
+              <option value="30d">۱ ماه گذشته</option>
+              <option value="90d">۳ ماه گذشته</option>
+              <option value="180d" selected>۶ ماه گذشته</option>
+              <option value="365d">۱ سال گذشته</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>سرمایه اولیه (تومان):</label>
+            <input type="number" id="whatIfCapitalInput" value="150000000" onchange="window.renderWhatIfTab()" />
+          </div>
+          <div class="form-group">
+            <label>سود بانکی سالانه (%):</label>
+            <input type="number" id="whatIfBankRateInput" value="23" onchange="window.renderWhatIfTab()" />
+          </div>
+        </div>
+        <div class="chart-container" style="margin-bottom:0.75rem;">
+          <canvas id="whatIfBarCanvas"></canvas>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>رتبه</th><th>بازار موازی</th><th>ارزش نهایی</th><th>بازده</th><th>مقایسه با سبد شما</th></tr>
+            </thead>
+            <tbody id="whatIfTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: RISK ANALYSIS -->
+    <section id="tabRisk" class="tab-pane">
+      <div class="grid-2">
+        <div class="card risk-gauge-box">
+          <div class="section-title" style="margin-bottom:0.5rem;">امتیاز کل ریسک سبد (۰ تا ۱۰۰)</div>
+          <div class="risk-circle" id="riskScoreCircle">--</div>
+          <span id="riskLevelBadge" class="badge badge-warning">--</span>
+          <div id="riskMetricsBox" style="margin-top:0.75rem; font-size:0.78rem; text-align:right; width:100%; display:grid; gap:0.35rem;"></div>
+        </div>
+        <div class="card">
+          <div class="section-header">
+            <span class="section-title">تحلیل تمرکز و پیشنهادهای اصلاحی</span>
+          </div>
+          <div id="riskSuggestionsList"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="disclaimer">
+      ⚖️ <strong>سلب مسئولیت:</strong> تمامی محاسبات، پله‌های خرید، شاخص‌های تکنیکال و تحلیل‌های ریسک این داشبورد صرفاً جنبه آموزشی و آماری دارند و توصیه مالی یا سیگنال خرید و فروش محسوب نمی‌شوند.
+    </div>
+  </div>
+
+  <!-- MODAL: PORTFOLIO JSON EDITOR -->
+  <div id="portfolioModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="section-header">
+        <span class="section-title">ویرایش کامل دارایی‌ها (ذخیره در مرورگر گوشی)</span>
+        <button class="btn" onclick="window.closePortfolioModal()">✖ بستن</button>
+      </div>
+      <textarea id="portfolioJsonTextarea" rows="12" style="direction:ltr; font-family:monospace; margin-bottom:0.65rem;"></textarea>
+      <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+        <button class="btn btn-primary" onclick="window.savePortfolioJson()">💾 ذخیره تغییرات</button>
+        <button class="btn" onclick="window.exportPortfolioFile()">⬇️ دانلود JSON</button>
+        <label class="btn" style="cursor:pointer;">
+          ⬆️ بارگذاری فایل JSON
+          <input type="file" accept=".json" style="display:none;" onchange="window.importPortfolioFile(event)" />
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: MANUAL PRICE FALLBACK -->
+  <div id="manualPriceModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="section-header">
+        <span class="section-title">ثبت دستی قیمت روز نمادها و ارز</span>
+        <button class="btn" onclick="window.closeManualPriceModal()">✖ بستن</button>
+      </div>
+      <div id="manualPricesFormBox" class="form-row"></div>
+      <button class="btn btn-primary" style="width:100%;" onclick="window.saveManualPrices()">ثبت و بروزرسانی محاسبات</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
