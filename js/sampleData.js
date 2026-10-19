@@ -1,8 +1,3 @@
-/**
- * داده‌های پیش‌فرض (Fallback) تعبیه‌شده در کد جاوااسکریپت
- * تضمین می‌کند حتی در صورت خطای شبکه یا باز کردن فایل به صورت آفلاین، هیچ عددی صفر نباشد.
- */
-
 export const FALLBACK_PORTFOLIO = {
   isSampleData: true,
   lastEdited: "2026-10-19T12:00:00Z",
@@ -26,9 +21,9 @@ export const FALLBACK_PORTFOLIO = {
   },
   cash: {
     amountToman: 56000000,
-    targetUsdtToman: 64500,
-    initialUsdtToman: 62000,
-    initialGold18kToman: 4100000
+    targetUsdtToman: 248000,
+    initialUsdtToman: 235000,
+    initialGold18kToman: 15900000
   },
   nfts: [
     { id: "nft-1", name: "Plush Pepe Gift #104", category: "Telegram Gift", buyToman: 24000000, currentToman: 28500000 },
@@ -43,9 +38,9 @@ export const FALLBACK_PORTFOLIO = {
 export const FALLBACK_PRICES = {
   lastUpdated: "2026-10-19T12:30:00Z",
   fx: {
-    usdtToman: 68400,
-    freeUsdToman: 68100,
-    gold18kToman: 4580000,
+    usdtToman: 262000,
+    freeUsdToman: 261500,
+    gold18kToman: 17850000,
     stale: false
   },
   stocks: {
@@ -69,45 +64,19 @@ export const FALLBACK_PRICES = {
     "30d": { tedpix: 1.04, gold18k: 1.08, usdFree: 1.06, btcToman: 1.11, ethToman: 1.03, inflation: 1.03 },
     "90d": { tedpix: 1.09, gold18k: 1.17, usdFree: 1.12, btcToman: 1.21, ethToman: 1.06, inflation: 1.09 },
     "180d": { tedpix: 1.15, gold18k: 1.31, usdFree: 1.19, btcToman: 1.34, ethToman: 1.11, inflation: 1.18 },
-    "365d": { tedpix: 1.22, gold18k: 1.49, usdFree: 1.35, btcToman: 1.63, ethToman: 1.20, inflation: 1.38 }
+    "365d": { tedpix": 1.22, gold18k: 1.49, usdFree: 1.35, btcToman: 1.63, ethToman: 1.20, inflation: 1.38 }
   },
   sources: {
-    usdtToman: "embedded_sample",
+    usdtToman: "embedded_free_market",
     BTC: "embedded_sample"
   }
 };
 
 export const FALLBACK_HISTORY = [
-  { date: "2026-09-18", totalToman: 151200000 },
-  { date: "2026-09-19", totalToman: 151450000 },
-  { date: "2026-09-20", totalToman: 152100000 },
-  { date: "2026-09-21", totalToman: 151800000 },
-  { date: "2026-09-22", totalToman: 152900000 },
-  { date: "2026-09-23", totalToman: 153400000 },
-  { date: "2026-09-24", totalToman: 153100000 },
-  { date: "2026-09-25", totalToman: 153600000 },
-  { date: "2026-09-26", totalToman: 154200000 },
-  { date: "2026-09-27", totalToman: 154900000 },
-  { date: "2026-09-28", totalToman: 154300000 },
-  { date: "2026-09-29", totalToman: 155100000 },
-  { date: "2026-09-30", totalToman: 155800000 },
-  { date: "2026-10-01", totalToman: 156200000 },
-  { date: "2026-10-02", totalToman: 156000000 },
-  { date: "2026-10-03", totalToman: 156900000 },
-  { date: "2026-10-04", totalToman: 157500000 },
-  { date: "2026-10-05", totalToman: 157100000 },
-  { date: "2026-10-06", totalToman: 158000000 },
-  { date: "2026-10-07", totalToman: 158600000 },
-  { date: "2026-10-08", totalToman: 159200000 },
-  { date: "2026-10-09", totalToman: 159500000 },
-  { date: "2026-10-10", totalToman: 160100000 },
-  { date: "2026-10-11", totalToman: 159800000 },
-  { date: "2026-10-12", totalToman: 160700000 },
-  { date: "2026-10-13", totalToman: 161400000 },
-  { date: "2026-10-14", totalToman: 162100000 },
-  { date: "2026-10-15", totalToman: 163000000 },
-  { date: "2026-10-16", totalToman: 163800000 },
-  { date: "2026-10-17", totalToman: 164900000 },
-  { date: "2026-10-18", totalToman: 166100000 },
-  { date: "2026-10-19", totalToman: 167303527 }
+  { date: "2026-09-18", totalToman: 228500000 },
+  { date: "2026-09-25", totalToman: 232400000 },
+  { date: "2026-10-02", totalToman: 236800000 },
+  { date: "2026-10-09", totalToman: 241200000 },
+  { date: "2026-10-16", totalToman: 245100000 },
+  { date: "2026-10-19", totalToman: 247455392 }
 ];
