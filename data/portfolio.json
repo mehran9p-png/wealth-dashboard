@@ -1,0 +1,131 @@
+{
+  "isSampleData": true,
+  "lastEdited": "2026-10-19T12:00:00Z",
+  "stocks": [
+    {
+      "symbol": "فپنتا",
+      "name": "صندوق سرمایه‌گذاری پنتا",
+      "sector": "فلزات اساسی",
+      "qty": 1489,
+      "avgBuyToman": 4450,
+      "insCode": "17914401175772326"
+    },
+    {
+      "symbol": "وفیروزه",
+      "name": "صندوق فیروزه موفقیت",
+      "sector": "صندوق سهامی",
+      "qty": 7749,
+      "avgBuyToman": 560,
+      "insCode": "55254206302462116"
+    },
+    {
+      "symbol": "شپدیس",
+      "name": "پتروشیمی پردیس",
+      "sector": "پتروشیمی",
+      "qty": 3139,
+      "avgBuyToman": 1180,
+      "insCode": "44891482026867833"
+    },
+    {
+      "symbol": "فهامون",
+      "name": "صندوق سرمایه‌گذاری هامون",
+      "sector": "فلزات اساسی",
+      "qty": 3607,
+      "avgBuyToman": 610,
+      "insCode": "38232437866669967"
+    },
+    {
+      "symbol": "فکور",
+      "name": "صندوق سرمایه‌گذاری کوروش",
+      "sector": "صندوق بخشی",
+      "qty": 1240,
+      "avgBuyToman": 590,
+      "insCode": "66442254613568889"
+    },
+    {
+      "symbol": "فپردیس",
+      "name": "صندوق سرمایه‌گذاری پردیس",
+      "sector": "صندوق سهامی",
+      "qty": 62,
+      "avgBuyToman": 8200,
+      "insCode": "41933952242799993"
+    },
+    {
+      "symbol": "وسرمایه",
+      "name": "صندوق سرمایه‌گذاری سرمایه",
+      "sector": "صندوق سهامی",
+      "qty": 658,
+      "avgBuyToman": 430,
+      "insCode": "21963356012832211"
+    },
+    {
+      "symbol": "زشک",
+      "name": "کشاورزی و دامپروری زشک",
+      "sector": "زراعت",
+      "qty": 211,
+      "avgBuyToman": 1190,
+      "insCode": "61449234123698745"
+    },
+    {
+      "symbol": "فساپ",
+      "name": "صندوق سرمایه‌گذاری ساپ",
+      "sector": "صندوق بخشی",
+      "qty": 212,
+      "avgBuyToman": 420,
+      "insCode": "51617145879012365"
+    }
+  ],
+  "stablecoins": [
+    {
+      "symbol": "LUSD",
+      "network": "Ethereum",
+      "amount": 406.90,
+      "pegUsd": 1.004
+    },
+    {
+      "symbol": "USDT",
+      "network": "Ethereum",
+      "amount": 5.49,
+      "pegUsd": 1.000
+    }
+  ],
+  "dipPlan": {
+    "allocations": {
+      "BTC": 50,
+      "ETH": 30,
+      "SOL": 20
+    }
+  },
+  "cash": {
+    "amountToman": 56000000,
+    "targetUsdtToman": 64500,
+    "initialUsdtToman": 62000,
+    "initialGold18kToman": 4100000
+  },
+  "nfts": [
+    {
+      "id": "nft-1",
+      "name": "Plush Pepe Gift #104",
+      "category": "Telegram Gift",
+      "buyToman": 24000000,
+      "currentToman": 28500000
+    },
+    {
+      "id": "nft-2",
+      "name": "Fragment Username @...",
+      "category": "Username",
+      "buyToman": 18000000,
+      "currentToman": 19500000
+    },
+    {
+      "id": "nft-3",
+      "name": "Anonymous Number +888",
+      "category": "Number",
+      "buyToman": 14000000,
+      "currentToman": 15000000
+    }
+  ],
+  "whatIfConfig": {
+    "bankRateAnnual": 23
+  }
+}
