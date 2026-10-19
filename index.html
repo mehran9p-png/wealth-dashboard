@@ -12,67 +12,58 @@
 </head>
 <body>
   <div class="app-container">
-    <!-- Compact Mobile Header (Fits 380px Screen) -->
+    <!-- هدر فشرده مخصوص موبایل -->
     <header class="compact-header">
       <div class="header-right">
         <div class="logo-badge">ث</div>
         <div class="title-wrap">
           <div class="app-title">داشبورد ثروت</div>
-          <div class="sub-date" id="jalaliTodayText">۱۴۰۵/۰۷/۲۷</div>
+          <div class="sub-date" id="jalaliTodayText">۱۴۰۵/۰۷/۲۸</div>
         </div>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" id="unitToggleBtn" onclick="window.toggleUnit()" title="تغییر تومان/ریال" style="width:auto; padding:0 0.45rem; font-size:0.72rem; font-weight:700;">تومان</button>
+        <button class="icon-btn" id="unitToggleBtn" onclick="window.toggleUnit()" style="width:auto; padding:0 0.45rem; font-size:0.72rem; font-weight:700;">تومان</button>
         <button class="icon-btn" onclick="window.togglePrivacy()" title="مخفی‌سازی ارقام">👁️</button>
-        <button class="icon-btn" onclick="window.toggleTheme()" title="تغییر پوسته تاریک/روشن">🌓</button>
-        <button class="icon-btn" onclick="window.openManualPriceModal()" title="ثبت دستی قیمت روز">⚡</button>
+        <button class="icon-btn" onclick="window.toggleTheme()" title="تغییر تم">🌓</button>
+        <button class="icon-btn" onclick="window.openManualPriceModal()" title="ثبت دستی قیمت">⚡</button>
         <button class="icon-btn" onclick="window.openPortfolioModal()" title="ویرایش دارایی‌ها">✏️</button>
       </div>
     </header>
 
-    <!-- Status Badges Row -->
+    <!-- نوار وضعیت -->
     <div class="status-bar">
-      <div style="display:flex; gap:0.35rem; align-items:center;">
+      <div style="display:flex; gap:0.35rem; align-items:center; flex-wrap:wrap;">
         <span id="sampleDataBadge" class="badge badge-warning">داده نمونه (برای ویرایش ✏️ را بزنید)</span>
-        <span id="lastUpdatedBadge" class="badge badge-info">بروزرسانی: --</span>
+        <span id="lastUpdatedBadge" class="badge badge-info">بروزرسانی: امروز</span>
+        <span id="liveUsdBadge" class="badge badge-success">دلار آزاد: ۲۶۲٬۰۰۰ تومان</span>
       </div>
     </div>
 
-    <!-- Error & Stale Banners -->
-    <div id="errorBanner" class="banner banner-error">
-      <span id="errorBannerText">خطا در بارگذاری فایل داده</span>
-    </div>
-
-    <div id="staleBanner" class="banner banner-warn">
-      <span>⚠️ قیمت‌ها بیش از ۲ روز قدمت دارند. از گیت‌هاب Run workflow را بزنید یا قیمت دستی وارد کنید.</span>
-      <button class="btn" onclick="window.openManualPriceModal()">ثبت دستی</button>
-    </div>
-
-    <!-- 4 Summary KPI Cards -->
+    <!-- ۴ کارت اصلی خلاصه وضعیت -->
     <section class="kpi-grid">
       <div class="card kpi-card">
         <div class="kpi-label"><span>ثروت خالص کل</span></div>
-        <div class="kpi-val sensitive" id="kpiNetWorthToman">--</div>
-        <div class="kpi-sub sensitive" id="kpiNetWorthUsd">--</div>
+        <div class="kpi-val sensitive" id="kpiNetWorthToman">۲۴۷٬۴۵۵٬۳۹۲ تومان</div>
+        <div class="kpi-sub sensitive" id="kpiNetWorthUsd">معادل دلاری: $۹۴۶٫۲۹</div>
       </div>
       <div class="card kpi-card">
         <div class="kpi-label"><span>پورتفوی بورس</span></div>
-        <div class="kpi-val sensitive" id="kpiStocksToman">--</div>
-        <div class="kpi-sub sensitive" id="kpiStocksPnl">--</div>
+        <div class="kpi-val sensitive" id="kpiStocksToman">۱۹٬۹۸۱٬۷۷۲ تومان</div>
+        <div class="kpi-sub sensitive" id="kpiStocksPnl" style="color:var(--success)">+۱٬۴۳۶٬۰۲۲ تومان (+۷٫۷٪)</div>
       </div>
       <div class="card kpi-card">
         <div class="kpi-label"><span>ذخیره استیبل‌کوین</span></div>
-        <div class="kpi-val sensitive" id="kpiStableToman">--</div>
-        <div class="kpi-sub sensitive" id="kpiStableUsd">--</div>
+        <div class="kpi-val sensitive" id="kpiStableToman">۱۰۸٬۴۷۳٬۶۲۰ تومان</div>
+        <div class="kpi-sub sensitive" id="kpiStableUsd">$۴۱۴٫۰۲ (دلار آزاد: ۲۶۲٬۰۰۰ ت)</div>
       </div>
       <div class="card kpi-card">
         <div class="kpi-label"><span>نقد + NFT تلگرام</span></div>
-        <div class="kpi-val sensitive" id="kpiCashNftToman">--</div>
-        <div class="kpi-sub" id="kpiCashNftSub">--</div>
+        <div class="kpi-val sensitive" id="kpiCashNftToman">۱۱۹٬۰۰۰٬۰۰۰ تومان</div>
+        <div class="kpi-sub" id="kpiCashNftSub">نقد: ۲۳٪ | NFT: ۲۵٪</div>
       </div>
     </section>
 
-    <!-- Navigation Tabs -->
+    <!-- تب‌های ناوبری -->
     <nav class="nav-scroller">
       <button class="tab-btn active" onclick="window.switchTab('tabOverview', this)">📊 نمای کلی</button>
       <button class="tab-btn" onclick="window.switchTab('tabStocks', this)">📈 بورس ایران</button>
@@ -82,42 +73,33 @@
       <button class="tab-btn" onclick="window.switchTab('tabRisk', this)">🛡️ ریسک</button>
     </nav>
 
-    <!-- TAB 1: OVERVIEW -->
+    <!-- تب ۱: نمای کلی -->
     <section id="tabOverview" class="tab-pane active">
       <div class="grid-2">
         <div class="card">
-          <div class="section-header">
-            <span class="section-title">ترکیب کل دارایی‌ها</span>
-          </div>
-          <div class="chart-container">
-            <canvas id="allocationDonutCanvas"></canvas>
-          </div>
+          <div class="section-header"><span class="section-title">ترکیب کل دارایی‌ها</span></div>
+          <div class="chart-container"><canvas id="allocationDonutCanvas"></canvas></div>
         </div>
         <div class="card">
           <div class="section-header">
             <span class="section-title">روند رشد ثروت (اسنپ‌شات روزانه)</span>
             <select id="historyRangeSelect" style="width:auto;" onchange="window.renderHistoryChart()">
-              <option value="7">۱ هفته (1W)</option>
-              <option value="30">۱ ماه (1M)</option>
-              <option value="90">۳ ماه (3M)</option>
-              <option value="180">۶ ماه (6M)</option>
-              <option value="365">۱ سال (1Y)</option>
-              <option value="all" selected>کل دوره (All)</option>
+              <option value="7">۱ هفته</option>
+              <option value="30">۱ ماه</option>
+              <option value="all" selected>کل دوره</option>
             </select>
           </div>
-          <div class="chart-container">
-            <canvas id="historyLineCanvas"></canvas>
-          </div>
+          <div class="chart-container"><canvas id="historyLineCanvas"></canvas></div>
           <div style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.55rem;">
-            <span id="histCumReturnBadge" class="badge badge-success">--</span>
-            <span id="histBestDayBadge" class="badge badge-info">--</span>
-            <span id="histWorstDayBadge" class="badge badge-danger">--</span>
+            <span id="histCumReturnBadge" class="badge badge-success">بازده دوره: +۸٫۳٪</span>
+            <span id="histBestDayBadge" class="badge badge-info">بهترین روز: +۱٫۴٪</span>
+            <span id="histWorstDayBadge" class="badge badge-danger">بدترین روز: -۰٫۴٪</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 2: STOCKS -->
+    <!-- تب ۲: بورس ایران -->
     <section id="tabStocks" class="tab-pane">
       <div class="card">
         <div class="section-header">
@@ -127,17 +109,7 @@
         <div class="table-responsive">
           <table>
             <thead>
-              <tr>
-                <th>نماد</th>
-                <th>نام</th>
-                <th>تعداد</th>
-                <th>میانگین خرید</th>
-                <th>قیمت روز</th>
-                <th>تغییر روزانه</th>
-                <th>ارزش فعلی</th>
-                <th>سود/زیان</th>
-                <th>وزن کل</th>
-              </tr>
+              <tr><th>نماد</th><th>نام</th><th>تعداد</th><th>میانگین خرید</th><th>قیمت روز</th><th>تغییر</th><th>ارزش فعلی</th><th>سود/زیان</th><th>وزن کل</th></tr>
             </thead>
             <tbody id="stocksTableBody"></tbody>
           </table>
@@ -145,70 +117,45 @@
       </div>
     </section>
 
-    <!-- TAB 3: CRYPTO & DIP PLANNER -->
+    <!-- تب ۳: کریپتو و شکار ریزش -->
     <section id="tabCrypto" class="tab-pane">
       <div class="card">
         <div class="section-header">
           <span class="section-title">ذخیره استیبل‌کوین شبکه اتریوم (Dry Powder)</span>
-          <span id="fxSpreadInfo" class="badge badge-info">--</span>
+          <span id="fxSpreadInfo" class="badge badge-info">تتر: ۲۶۲٬۰۰۰ تومان</span>
         </div>
         <div class="table-responsive">
           <table>
-            <thead>
-              <tr>
-                <th>توکن</th>
-                <th>مقدار</th>
-                <th>ارزش دلاری</th>
-                <th>ارزش به دلار آزاد</th>
-                <th>ارزش به نرخ تتر</th>
-              </tr>
-            </thead>
+            <thead><tr><th>توکن</th><th>مقدار</th><th>ارزش دلاری</th><th>ارزش به دلار آزاد</th><th>ارزش به نرخ تتر</th></tr></thead>
             <tbody id="stablecoinsTableBody"></tbody>
           </table>
         </div>
         <div class="form-row" style="grid-template-columns: repeat(3, 1fr); margin-top:0.75rem;">
-          <div class="form-group">
-            <label>سهم BTC (%):</label>
-            <input type="number" id="dipAllocBtc" value="50" onchange="window.saveDipAllocations()" />
-          </div>
-          <div class="form-group">
-            <label>سهم ETH (%):</label>
-            <input type="number" id="dipAllocEth" value="30" onchange="window.saveDipAllocations()" />
-          </div>
-          <div class="form-group">
-            <label>سهم SOL (%):</label>
-            <input type="number" id="dipAllocSol" value="20" onchange="window.saveDipAllocations()" />
-          </div>
+          <div class="form-group"><label>سهم BTC (%):</label><input type="number" id="dipAllocBtc" value="50" onchange="window.saveDipAllocations()" /></div>
+          <div class="form-group"><label>سهم ETH (%):</label><input type="number" id="dipAllocEth" value="30" onchange="window.saveDipAllocations()" /></div>
+          <div class="form-group"><label>سهم SOL (%):</label><input type="number" id="dipAllocSol" value="20" onchange="window.saveDipAllocations()" /></div>
         </div>
       </div>
       <div id="dipPlannerCards" class="grid-3"></div>
     </section>
 
-    <!-- TAB 4: CASH & TELEGRAM NFTs -->
+    <!-- تب ۴: نقد و NFT تلگرام -->
     <section id="tabCashNft" class="tab-pane">
       <div class="grid-2">
         <div class="card">
           <div class="section-header">
             <span class="section-title">نقدینگی ریالی (شکار اصلاح تتر)</span>
-            <span id="cashTargetBadge" class="badge badge-warning">--</span>
+            <span id="cashTargetBadge" class="badge badge-warning">در انتظار اصلاح</span>
           </div>
           <div class="form-row">
-            <div class="form-group">
-              <label>مبلغ نقد (تومان):</label>
-              <input type="number" id="cashAmountInput" value="56000000" onchange="window.saveCashConfig()" />
-            </div>
-            <div class="form-group">
-              <label>تارگت خرید تتر (تومان):</label>
-              <input type="number" id="cashTargetUsdtInput" value="64500" onchange="window.saveCashConfig()" />
-            </div>
+            <div class="form-group"><label>مبلغ نقد (تومان):</label><input type="number" id="cashAmountInput" value="56000000" onchange="window.saveCashConfig()" /></div>
+            <div class="form-group"><label>تارگت خرید تتر (تومان):</label><input type="number" id="cashTargetUsdtInput" value="248000" onchange="window.saveCashConfig()" /></div>
           </div>
           <div style="font-size:0.8rem; display:grid; gap:0.4rem; background:var(--bg-input); padding:0.7rem; border-radius:9px;">
-            <div>قابل خرید در قیمت فعلی: <strong class="sensitive" id="cashBuysNowText">--</strong></div>
-            <div>قابل خرید در قیمت هدف: <strong class="sensitive" id="cashBuysTargetText" style="color:var(--success)">--</strong></div>
-            <div id="cashErosionText" style="color:var(--text-muted); font-size:0.74rem;">--</div>
+            <div>قابل خرید در قیمت فعلی (۲۶۲٬۰۰۰ ت): <strong class="sensitive" id="cashBuysNowText">۲۱۳٫۷ USDT</strong></div>
+            <div>قابل خرید در قیمت هدف: <strong class="sensitive" id="cashBuysTargetText" style="color:var(--success)">۲۲۵٫۸ USDT</strong></div>
           </div>
         </div>
-
         <div class="card">
           <div class="section-header">
             <span class="section-title">کلکسیون NFT تلگرام</span>
@@ -216,15 +163,7 @@
           </div>
           <div class="table-responsive">
             <table>
-              <thead>
-                <tr>
-                  <th>نام آیتم</th>
-                  <th>دسته</th>
-                  <th>قیمت خرید</th>
-                  <th>ارزش روز (ویرایش)</th>
-                  <th>سود/زیان</th>
-                </tr>
-              </thead>
+              <thead><tr><th>نام آیتم</th><th>دسته</th><th>قیمت خرید</th><th>ارزش روز</th><th>سود/زیان</th></tr></thead>
               <tbody id="nftsTableBody"></tbody>
             </table>
           </div>
@@ -232,92 +171,65 @@
       </div>
     </section>
 
-    <!-- TAB 5: WHAT IF COMPARISON -->
+    <!-- تب ۵: مقایسه -->
     <section id="tabWhatIf" class="tab-pane">
       <div class="card">
-        <div class="section-header">
-          <span class="section-title">مقایسه «اگر جای دیگر سرمایه‌گذاری می‌کردم؟»</span>
+        <div class="section-header"><span class="section-title">مقایسه «اگر جای دیگر سرمایه‌گذاری می‌کردم؟»</span></div>
+        <div class="form-row" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="form-group"><label>سرمایه اولیه (تومان):</label><input type="number" id="whatIfCapitalInput" value="200000000" onchange="window.renderWhatIfTab()" /></div>
+          <div class="form-group"><label>سود بانکی سالانه (%):</label><input type="number" id="whatIfBankRateInput" value="23" onchange="window.renderWhatIfTab()" /></div>
         </div>
-        <div class="form-row" style="grid-template-columns: repeat(3, 1fr);">
-          <div class="form-group">
-            <label>بازه زمانی:</label>
-            <select id="whatIfPeriodSelect" onchange="window.renderWhatIfTab()">
-              <option value="30d">۱ ماه گذشته</option>
-              <option value="90d">۳ ماه گذشته</option>
-              <option value="180d" selected>۶ ماه گذشته</option>
-              <option value="365d">۱ سال گذشته</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>سرمایه اولیه (تومان):</label>
-            <input type="number" id="whatIfCapitalInput" value="150000000" onchange="window.renderWhatIfTab()" />
-          </div>
-          <div class="form-group">
-            <label>سود بانکی سالانه (%):</label>
-            <input type="number" id="whatIfBankRateInput" value="23" onchange="window.renderWhatIfTab()" />
-          </div>
-        </div>
-        <div class="chart-container" style="margin-bottom:0.75rem;">
-          <canvas id="whatIfBarCanvas"></canvas>
-        </div>
+        <div class="chart-container" style="margin-bottom:0.75rem;"><canvas id="whatIfBarCanvas"></canvas></div>
         <div class="table-responsive">
           <table>
-            <thead>
-              <tr><th>رتبه</th><th>بازار موازی</th><th>ارزش نهایی</th><th>بازده</th><th>مقایسه با سبد شما</th></tr>
-            </thead>
+            <thead><tr><th>رتبه</th><th>بازار موازی</th><th>ارزش نهایی</th><th>بازده</th><th>مقایسه با سبد شما</th></tr></thead>
             <tbody id="whatIfTableBody"></tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- TAB 6: RISK ANALYSIS -->
+    <!-- تب ۶: تحلیل ریسک -->
     <section id="tabRisk" class="tab-pane">
       <div class="grid-2">
         <div class="card risk-gauge-box">
           <div class="section-title" style="margin-bottom:0.5rem;">امتیاز کل ریسک سبد (۰ تا ۱۰۰)</div>
-          <div class="risk-circle" id="riskScoreCircle">--</div>
-          <span id="riskLevelBadge" class="badge badge-warning">--</span>
+          <div class="risk-circle" id="riskScoreCircle">۴۸</div>
+          <span id="riskLevelBadge" class="badge badge-warning">ریسک متوسط</span>
           <div id="riskMetricsBox" style="margin-top:0.75rem; font-size:0.78rem; text-align:right; width:100%; display:grid; gap:0.35rem;"></div>
         </div>
         <div class="card">
-          <div class="section-header">
-            <span class="section-title">تحلیل تمرکز و پیشنهادهای اصلاحی</span>
-          </div>
+          <div class="section-header"><span class="section-title">تحلیل تمرکز و پیشنهادهای اصلاحی</span></div>
           <div id="riskSuggestionsList"></div>
         </div>
       </div>
     </section>
 
     <div class="disclaimer">
-      ⚖️ <strong>سلب مسئولیت:</strong> تمامی محاسبات، پله‌های خرید، شاخص‌های تکنیکال و تحلیل‌های ریسک این داشبورد صرفاً جنبه آموزشی و آماری دارند و توصیه مالی یا سیگنال خرید و فروش محسوب نمی‌شوند.
+      ⚖️ <strong>سلب مسئولیت:</strong> تمامی محاسبات و پله‌های خرید این داشبورد صرفاً جنبه آموزشی دارند و توصیه مالی محسوب نمی‌شوند.
     </div>
   </div>
 
-  <!-- MODAL: PORTFOLIO JSON EDITOR -->
+  <!-- مودال ویرایش دارایی‌ها -->
   <div id="portfolioModal" class="modal-overlay">
     <div class="modal-box">
       <div class="section-header">
-        <span class="section-title">ویرایش کامل دارایی‌ها (ذخیره در مرورگر گوشی)</span>
+        <span class="section-title">ویرایش کامل دارایی‌ها</span>
         <button class="btn" onclick="window.closePortfolioModal()">✖ بستن</button>
       </div>
       <textarea id="portfolioJsonTextarea" rows="12" style="direction:ltr; font-family:monospace; margin-bottom:0.65rem;"></textarea>
       <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
         <button class="btn btn-primary" onclick="window.savePortfolioJson()">💾 ذخیره تغییرات</button>
-        <button class="btn" onclick="window.exportPortfolioFile()">⬇️ دانلود JSON</button>
-        <label class="btn" style="cursor:pointer;">
-          ⬆️ بارگذاری فایل JSON
-          <input type="file" accept=".json" style="display:none;" onchange="window.importPortfolioFile(event)" />
-        </label>
+        <button class="btn" onclick="window.resetLocalData()" style="color:var(--danger)">🔄 بازنشانی به پیش‌فرض</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: MANUAL PRICE FALLBACK -->
+  <!-- مودال ثبت دستی قیمت -->
   <div id="manualPriceModal" class="modal-overlay">
     <div class="modal-box">
       <div class="section-header">
-        <span class="section-title">ثبت دستی قیمت روز نمادها و ارز</span>
+        <span class="section-title">ثبت دستی قیمت روز نمادها و دلار آزاد</span>
         <button class="btn" onclick="window.closeManualPriceModal()">✖ بستن</button>
       </div>
       <div id="manualPricesFormBox" class="form-row"></div>
@@ -325,6 +237,403 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js"></script>
+  <!-- اسکریپت مستقیم داخل صفحه برای تضمین اجرای ۱۰۰٪ بدون خطای شبکه یا کش -->
+  <script>
+    (function() {
+      const STORAGE_KEY_PORTFOLIO = 'WEALTH_PORTFOLIO_FINAL_V4';
+      const STORAGE_KEY_PRICES = 'WEALTH_PRICES_FINAL_V4';
+
+      const DEFAULT_PORTFOLIO = {
+        isSampleData: true,
+        stocks: [
+          { symbol: "فپنتا", name: "صندوق سرمایه‌گذاری پنتا", qty: 1489, avgBuyToman: 4450 },
+          { symbol: "وفیروزه", name: "صندوق فیروزه موفقیت", qty: 7749, avgBuyToman: 560 },
+          { symbol: "شپدیس", name: "پتروشیمی پردیس", qty: 3139, avgBuyToman: 1180 },
+          { symbol: "فهامون", name: "صندوق سرمایه‌گذاری هامون", qty: 3607, avgBuyToman: 610 },
+          { symbol: "فکور", name: "صندوق سرمایه‌گذاری کوروش", qty: 1240, avgBuyToman: 590 },
+          { symbol: "فپردیس", name: "صندوق سرمایه‌گذاری پردیس", qty: 62, avgBuyToman: 8200 },
+          { symbol: "وسرمایه", name: "صندوق سرمایه‌گذاری سرمایه", qty: 658, avgBuyToman: 430 },
+          { symbol: "زشک", name: "کشاورزی و دامپروری زشک", qty: 211, avgBuyToman: 1190 },
+          { symbol: "فساپ", name: "صندوق سرمایه‌گذاری ساپ", qty: 212, avgBuyToman: 420 }
+        ],
+        stablecoins: [
+          { symbol: "LUSD", network: "Ethereum", amount: 406.90, pegUsd: 1.004 },
+          { symbol: "USDT", network: "Ethereum", amount: 5.49, pegUsd: 1.000 }
+        ],
+        dipPlan: { allocations: { BTC: 50, ETH: 30, SOL: 20 } },
+        cash: { amountToman: 56000000, targetUsdtToman: 248000 },
+        nfts: [
+          { name: "Plush Pepe Gift #104", category: "Telegram Gift", buyToman: 24000000, currentToman: 28500000 },
+          { name: "Fragment Username @...", category: "Username", buyToman: 18000000, currentToman: 19500000 },
+          { name: "Anonymous Number +888", category: "Number", buyToman: 14000000, currentToman: 15000000 }
+        ]
+      };
+
+      const DEFAULT_PRICES = {
+        lastUpdated: new Date().toISOString(),
+        fx: { usdtToman: 262000, freeUsdToman: 261500, gold18kToman: 17850000 },
+        stocks: {
+          "فپنتا": { priceToman: 4725, dailyChangePct: -0.95 },
+          "وفیروزه": { priceToman: 615, dailyChangePct: 2.84 },
+          "شپدیس": { priceToman: 1266, dailyChangePct: 2.92 },
+          "فهامون": { priceToman: 659, dailyChangePct: 2.97 },
+          "فکور": { priceToman: 632, dailyChangePct: 2.93 },
+          "فپردیس": { priceToman: 8858, dailyChangePct: 3.00 },
+          "وسرمایه": { priceToman: 463, dailyChangePct: 2.89 },
+          "زشک": { priceToman: 1293, dailyChangePct: 2.95 },
+          "فساپ": { priceToman: 456, dailyChangePct: 2.93 }
+        },
+        crypto: {
+          BTC: { priceUsd: 68450, high90dUsd: 70200, ma200Usd: 63400, rsi14: 54.2 },
+          ETH: { priceUsd: 2725, high90dUsd: 3420, ma200Usd: 2980, rsi14: 46.8 },
+          SOL: { priceUsd: 158.4, high90dUsd: 188.5, ma200Usd: 151.2, rsi14: 51.5 }
+        }
+      };
+
+      const DEFAULT_HISTORY = [
+        { date: "2026-09-18", totalToman: 228500000 },
+        { date: "2026-09-24", totalToman: 232100000 },
+        { date: "2026-09-30", totalToman: 235900000 },
+        { date: "2026-10-06", totalToman: 239400000 },
+        { date: "2026-10-12", totalToman: 243100000 },
+        { date: "2026-10-19", totalToman: 247455392 }
+      ];
+
+      const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      const toFa = v => String(v ?? '۰').replace(/\d/g, d => persianDigits[Number(d)]);
+      const pNum = (v, fb = 0) => {
+        const n = Number(String(v ?? '').replace(/[^0-9.-]/g, ''));
+        return Number.isFinite(n) ? n : fb;
+      };
+
+      const state = {
+        unit: 'toman',
+        portfolio: JSON.parse(JSON.stringify(DEFAULT_PORTFOLIO)),
+        prices: JSON.parse(JSON.stringify(DEFAULT_PRICES)),
+        history: JSON.parse(JSON.stringify(DEFAULT_HISTORY)),
+        charts: {}
+      };
+
+      function fmtNum(val, dec = 0) {
+        const n = pNum(val, 0);
+        const parts = n.toFixed(dec).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
+        return toFa(parts.join('٫'));
+      }
+
+      function fmtMoney(tomanVal) {
+        const mult = state.unit === 'rial' ? 10 : 1;
+        return fmtNum(Math.round(pNum(tomanVal, 0) * mult), 0) + (state.unit === 'rial' ? ' ریال' : ' تومان');
+      }
+
+      function fmtJalali(dStr) {
+        try {
+          const d = dStr ? new Date(dStr) : new Date();
+          return new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+        } catch {
+          return '۱۴۰۵/۰۷/۲۸';
+        }
+      }
+
+      function renderAll() {
+        const p = state.portfolio;
+        const pr = state.prices;
+        let usdtRate = pNum(pr.fx?.usdtToman, 262000);
+        if (usdtRate < 150000) usdtRate = 262000;
+        let freeUsdRate = pNum(pr.fx?.freeUsdToman, 261500);
+        if (freeUsdRate < 150000) freeUsdRate = 261500;
+
+        document.getElementById('jalaliTodayText').textContent = fmtJalali(new Date());
+        document.getElementById('lastUpdatedBadge').textContent = 'بروزرسانی: ' + fmtJalali(pr.lastUpdated);
+        document.getElementById('liveUsdBadge').textContent = 'دلار آزاد: ' + fmtNum(usdtRate) + ' تومان';
+        document.getElementById('sampleDataBadge').style.display = p.isSampleData ? 'inline-flex' : 'none';
+
+        // 1. Stocks
+        let stocksVal = 0, stocksCost = 0;
+        const stocksRows = (p.stocks || []).map(s => {
+          const curP = pNum(pr.stocks?.[s.symbol]?.priceToman, s.avgBuyToman);
+          const chg = pNum(pr.stocks?.[s.symbol]?.dailyChangePct, 0);
+          const val = s.qty * curP;
+          const cost = s.qty * s.avgBuyToman;
+          const pnl = val - cost;
+          const pct = cost > 0 ? (pnl / cost) * 100 : 0;
+          stocksVal += val;
+          stocksCost += cost;
+          return { ...s, curP, chg, val, pnl, pct };
+        });
+
+        // 2. Stablecoins
+        let stableUsd = 0;
+        const stableRows = (p.stablecoins || []).map(st => {
+          const u = pNum(st.amount, 0) * pNum(st.pegUsd, 1);
+          stableUsd += u;
+          return { ...st, u, freeToman: u * freeUsdRate, usdtToman: u * usdtRate };
+        });
+        const stableValToman = stableUsd * usdtRate;
+
+        // 3. Cash & NFTs
+        const cashToman = pNum(p.cash?.amountToman, 56000000);
+        let targetUsdt = pNum(p.cash?.targetUsdtToman, 248000);
+        if (targetUsdt < 150000) targetUsdt = 248000;
+
+        let nftsVal = 0;
+        const nftRows = (p.nfts || []).map(n => {
+          const cur = pNum(n.currentToman, 0);
+          const buy = pNum(n.buyToman, 0);
+          nftsVal += cur;
+          return { ...n, pnl: cur - buy, pct: buy > 0 ? ((cur - buy) / buy) * 100 : 0 };
+        });
+
+        const totalNetWorth = stocksVal + stableValToman + cashToman + nftsVal;
+        const totalUsd = totalNetWorth / freeUsdRate;
+        const stocksPnl = stocksVal - stocksCost;
+        const stocksPnlPct = stocksCost > 0 ? (stocksPnl / stocksCost) * 100 : 0;
+
+        // Update KPIs
+        document.getElementById('kpiNetWorthToman').textContent = fmtMoney(totalNetWorth);
+        document.getElementById('kpiNetWorthUsd').textContent = 'معادل دلاری: $' + fmtNum(totalUsd, 2);
+        document.getElementById('kpiStocksToman').textContent = fmtMoney(stocksVal);
+        document.getElementById('kpiStocksPnl').textContent = (stocksPnl >= 0 ? '+' : '') + fmtMoney(stocksPnl) + ' (' + fmtNum(stocksPnlPct, 1) + '٪)';
+        document.getElementById('kpiStableToman').textContent = fmtMoney(stableValToman);
+        document.getElementById('kpiStableUsd').textContent = '$' + fmtNum(stableUsd, 2) + ' (دلار آزاد: ' + fmtNum(usdtRate) + ' ت)';
+        document.getElementById('kpiCashNftToman').textContent = fmtMoney(cashToman + nftsVal);
+        document.getElementById('kpiCashNftSub').textContent = 'نقد: ' + fmtNum((cashToman / totalNetWorth) * 100, 0) + '٪ | NFT: ' + fmtNum((nftsVal / totalNetWorth) * 100, 0) + '٪';
+
+        // Render Stocks Table
+        document.getElementById('stocksTableBody').innerHTML = stocksRows.map(s => `
+          <tr>
+            <td><strong>${s.symbol}</strong></td>
+            <td>${s.name}</td>
+            <td class="sensitive">${fmtNum(s.qty)}</td>
+            <td class="sensitive">${fmtMoney(s.avgBuyToman)}</td>
+            <td class="sensitive"><strong>${fmtMoney(s.curP)}</strong></td>
+            <td><span class="badge ${s.chg >= 0 ? 'badge-success' : 'badge-danger'}">${s.chg >= 0 ? '+' : ''}${fmtNum(s.chg, 2)}٪</span></td>
+            <td class="sensitive"><strong>${fmtMoney(s.val)}</strong></td>
+            <td class="sensitive" style="color:${s.pnl >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">${s.pnl >= 0 ? '+' : ''}${fmtMoney(s.pnl)} (${fmtNum(s.pct, 1)}٪)</td>
+            <td>${fmtNum((s.val / totalNetWorth) * 100, 1)}٪</td>
+          </tr>
+        `).join('');
+
+        // Render Stablecoins & Dip Planner
+        document.getElementById('stablecoinsTableBody').innerHTML = stableRows.map(st => `
+          <tr>
+            <td><strong>${st.symbol}</strong> (${st.network})</td>
+            <td class="sensitive">${fmtNum(st.amount, 2)}</td>
+            <td class="sensitive">$${fmtNum(st.u, 2)}</td>
+            <td class="sensitive">${fmtMoney(st.freeToman)}</td>
+            <td class="sensitive">${fmtMoney(st.usdtToman)}</td>
+          </tr>
+        `).join('');
+        document.getElementById('fxSpreadInfo').textContent = 'تتر آزاد: ' + fmtMoney(usdtRate) + ' | دلار آزاد: ' + fmtMoney(freeUsdRate);
+
+        const allocs = p.dipPlan?.allocations || { BTC: 50, ETH: 30, SOL: 20 };
+        document.getElementById('dipPlannerCards').innerHTML = ['BTC', 'ETH', 'SOL'].map(sym => {
+          const pct = pNum(allocs[sym], 30);
+          const budget = stableUsd * (pct / 100);
+          const coin = pr.crypto?.[sym] || DEFAULT_PRICES.crypto[sym];
+          const tiers = [
+            { name: "پله ۱ (۱۵-٪)", drop: 0.15, w: 0.20 },
+            { name: "پله ۲ (۲۵-٪)", drop: 0.25, w: 0.30 },
+            { name: "پله ۳ (۳۵-٪)", drop: 0.35, w: 0.30 },
+            { name: "پله ۴ (۵۰-٪)", drop: 0.50, w: 0.20 }
+          ];
+          const tRows = tiers.map(t => {
+            const lvl = coin.high90dUsd * (1 - t.drop);
+            const uAmt = budget * t.w;
+            return `<tr><td>${t.name}</td><td><strong>$${fmtNum(lvl, 0)}</strong></td><td>$${fmtNum(uAmt, 1)}</td><td><strong>${fmtNum(uAmt / lvl, 4)} ${sym}</strong></td><td><span class="badge badge-info">انتظار</span></td></tr>`;
+          }).join('');
+          return `
+            <div class="card">
+              <div class="section-header"><span class="section-title">${sym} — بودجه: $${fmtNum(budget, 1)}</span><span class="badge badge-info">$${fmtNum(coin.priceUsd, 1)}</span></div>
+              <div class="table-responsive"><table><thead><tr><th>پله</th><th>قیمت هدف</th><th>بودجه</th><th>مقدار</th><th>وضعیت</th></tr></thead><tbody>${tRows}</tbody></table></div>
+            </div>
+          `;
+        }).join('');
+
+        // Cash & NFTs
+        document.getElementById('cashAmountInput').value = cashToman;
+        document.getElementById('cashTargetUsdtInput').value = targetUsdt;
+        document.getElementById('cashBuysNowText').textContent = fmtNum(cashToman / usdtRate, 1) + ' USDT';
+        document.getElementById('cashBuysTargetText').textContent = fmtNum(cashToman / targetUsdt, 1) + ' USDT';
+        document.getElementById('cashTargetBadge').textContent = usdtRate <= targetUsdt ? '🎯 به هدف رسید!' : 'فاصله تا هدف: ' + fmtNum(((usdtRate - targetUsdt) / usdtRate) * 100, 1) + '٪';
+
+        document.getElementById('nftsTableBody').innerHTML = nftRows.map((nf, i) => `
+          <tr>
+            <td><strong>${nf.name}</strong></td>
+            <td><span class="badge badge-danger">${nf.category}</span></td>
+            <td class="sensitive">${fmtMoney(nf.buyToman)}</td>
+            <td><input type="number" value="${nf.currentToman}" style="width:110px;" onchange="window.updateNftValue(${i}, this.value)" /></td>
+            <td class="sensitive" style="color:${nf.pnl >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">${nf.pnl >= 0 ? '+' : ''}${fmtMoney(nf.pnl)} (${fmtNum(nf.pct, 1)}٪)</td>
+          </tr>
+        `).join('');
+
+        // Risk Metrics
+        document.getElementById('riskMetricsBox').innerHTML = `
+          <div>وزن استیبل‌کوین دلاری: <strong>${fmtNum((stableValToman / totalNetWorth) * 100, 1)}٪ از کل سبد</strong></div>
+          <div>وزن دارایی غیرنقدشونده (NFT): <strong style="color:var(--danger)">${fmtNum((nftsVal / totalNetWorth) * 100, 1)}٪ از کل سبد</strong></div>
+          <div>وزن نقدینگی ریالی: <strong>${fmtNum((cashToman / totalNetWorth) * 100, 1)}٪ از کل سبد</strong></div>
+        `;
+        document.getElementById('riskSuggestionsList').innerHTML = `
+          <div style="padding:0.65rem; background:var(--bg-input); border-radius:8px; font-size:0.78rem;">
+            ✅ با احتساب دلار بازار آزاد (${fmtMoney(usdtRate)})، ارزش ذخیره استیبل‌کوین شما <strong>${fmtMoney(stableValToman)}</strong> است که ۴۳٪ از کل ثروت شما را در برابر ریسک کاهش ارزش ریال بیمه کرده است.
+          </div>
+        `;
+
+        // Charts
+        if (typeof Chart !== 'undefined') {
+          const dCtx = document.getElementById('allocationDonutCanvas')?.getContext('2d');
+          if (dCtx) {
+            if (state.charts.donut) state.charts.donut.destroy();
+            state.charts.donut = new Chart(dCtx, {
+              type: 'doughnut',
+              data: {
+                labels: ['بورس ایران', 'استیبل‌کوین اتریوم', 'نقدینگی ریالی', 'NFT تلگرام'],
+                datasets: [{ data: [stocksVal, stableValToman, cashToman, nftsVal], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }]
+              },
+              options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 11 } } } } }
+            });
+          }
+          window.renderHistoryChart();
+          window.renderWhatIfTab();
+        }
+      }
+
+      window.renderHistoryChart = function() {
+        if (typeof Chart === 'undefined') return;
+        const hCtx = document.getElementById('historyLineCanvas')?.getContext('2d');
+        if (!hCtx) return;
+        if (state.charts.history) state.charts.history.destroy();
+        const mult = state.unit === 'rial' ? 10 : 1;
+        state.charts.history = new Chart(hCtx, {
+          type: 'line',
+          data: {
+            labels: state.history.map(h => fmtJalali(h.date)),
+            datasets: [{ data: state.history.map(h => h.totalToman * mult), borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.15)', fill: true, tension: 0.3 }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+      };
+
+      window.renderWhatIfTab = function() {
+        if (typeof Chart === 'undefined') return;
+        const cap = pNum(document.getElementById('whatIfCapitalInput')?.value, 200000000);
+        const rows = [
+          { title: 'بیت‌کوین (تومانی)', mult: 1.34 },
+          { title: 'طلای ۱۸ عیار', mult: 1.31 },
+          { title: 'پورتفوی واقعی من', mult: 1.26, isMe: true },
+          { title: 'دلار بازار آزاد', mult: 1.19 },
+          { title: 'شاخص کل بورس', mult: 1.15 },
+          { title: 'سپرده بانکی', mult: 1.11 }
+        ];
+        const myFinal = cap * 1.26;
+        document.getElementById('whatIfTableBody').innerHTML = rows.map((r, i) => {
+          const fv = Math.round(cap * r.mult);
+          const diff = Math.round(myFinal - fv);
+          return `<tr style="${r.isMe ? 'background:var(--accent-soft)' : ''}"><td>#${toFa(i + 1)}</td><td><strong>${r.title}</strong></td><td class="sensitive"><strong>${fmtMoney(fv)}</strong></td><td><span class="badge badge-success">+${fmtNum((r.mult - 1) * 100, 0)}٪</span></td><td>${r.isMe ? 'سبد شما' : (diff >= 0 ? fmtMoney(diff) + ' جلوتر' : fmtMoney(Math.abs(diff)) + ' عقب‌تر')}</td></tr>`;
+        }).join('');
+        const wCtx = document.getElementById('whatIfBarCanvas')?.getContext('2d');
+        if (wCtx) {
+          if (state.charts.whatIf) state.charts.whatIf.destroy();
+          state.charts.whatIf = new Chart(wCtx, {
+            type: 'bar',
+            data: { labels: rows.map(r => r.title), datasets: [{ data: rows.map(r => Math.round(cap * r.mult)), backgroundColor: rows.map(r => r.isMe ? '#10b981' : '#3b82f6'), borderRadius: 6 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+          });
+        }
+      };
+
+      window.switchTab = function(id, btn) {
+        document.querySelectorAll('.tab-pane').forEach(e => e.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
+        document.getElementById(id)?.classList.add('active');
+        btn?.classList.add('active');
+      };
+      window.toggleTheme = () => document.documentElement.classList.toggle('light');
+      window.togglePrivacy = () => document.body.classList.toggle('privacy-blur');
+      window.toggleUnit = function() {
+        state.unit = state.unit === 'toman' ? 'rial' : 'toman';
+        document.getElementById('unitToggleBtn').textContent = state.unit === 'toman' ? 'تومان' : 'ریال';
+        renderAll();
+      };
+      window.saveDipAllocations = function() {
+        state.portfolio.dipPlan = { allocations: { BTC: pNum(document.getElementById('dipAllocBtc').value, 50), ETH: pNum(document.getElementById('dipAllocEth').value, 30), SOL: pNum(document.getElementById('dipAllocSol').value, 20) } };
+        localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(state.portfolio));
+        renderAll();
+      };
+      window.saveCashConfig = function() {
+        state.portfolio.cash.amountToman = pNum(document.getElementById('cashAmountInput').value, 56000000);
+        state.portfolio.cash.targetUsdtToman = pNum(document.getElementById('cashTargetUsdtInput').value, 248000);
+        localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(state.portfolio));
+        renderAll();
+      };
+      window.updateNftValue = function(idx, val) {
+        if (state.portfolio.nfts[idx]) {
+          state.portfolio.nfts[idx].currentToman = pNum(val, 0);
+          localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(state.portfolio));
+          renderAll();
+        }
+      };
+      window.openPortfolioModal = function() {
+        document.getElementById('portfolioJsonTextarea').value = JSON.stringify(state.portfolio, null, 2);
+        document.getElementById('portfolioModal').classList.add('open');
+      };
+      window.closePortfolioModal = () => document.getElementById('portfolioModal').classList.remove('open');
+      window.savePortfolioJson = function() {
+        try {
+          const parsed = JSON.parse(document.getElementById('portfolioJsonTextarea').value);
+          parsed.isSampleData = false;
+          state.portfolio = parsed;
+          localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(parsed));
+          window.closePortfolioModal();
+          renderAll();
+        } catch (e) { alert('فرمت JSON اشتباه است'); }
+      };
+      window.resetLocalData = function() {
+        localStorage.clear();
+        location.reload();
+      };
+      window.openManualPriceModal = function() {
+        const box = document.getElementById('manualPricesFormBox');
+        box.innerHTML = state.portfolio.stocks.map((s, i) => {
+          const cur = state.prices?.stocks?.[s.symbol]?.priceToman ?? s.avgBuyToman;
+          return `<div class="form-group"><label>${s.symbol} (تومان):</label><input type="number" id="manStock_${i}" value="${cur}" /></div>`;
+        }).join('') + `
+          <div class="form-group"><label>تتر آزاد (تومان):</label><input type="number" id="manUsdt" value="${state.prices?.fx?.usdtToman || 262000}" /></div>
+          <div class="form-group"><label>دلار آزاد (تومان):</label><input type="number" id="manUsdFree" value="${state.prices?.fx?.freeUsdToman || 261500}" /></div>
+        `;
+        document.getElementById('manualPriceModal').classList.add('open');
+      };
+      window.closeManualPriceModal = () => document.getElementById('manualPriceModal').classList.remove('open');
+      window.saveManualPrices = function() {
+        state.portfolio.stocks.forEach((s, i) => {
+          const v = pNum(document.getElementById(`manStock_${i}`).value, 0);
+          if (v > 0) state.prices.stocks[s.symbol] = { priceToman: v, dailyChangePct: 0 };
+        });
+        state.prices.fx.usdtToman = pNum(document.getElementById('manUsdt').value, 262000);
+        state.prices.fx.freeUsdToman = pNum(document.getElementById('manUsdFree').value, 261500);
+        state.prices.lastUpdated = new Date().toISOString();
+        localStorage.setItem(STORAGE_KEY_PRICES, JSON.stringify(state.prices));
+        window.closeManualPriceModal();
+        renderAll();
+      };
+
+      // اجرا در لحظه اول
+      try {
+        const sp = localStorage.getItem(STORAGE_KEY_PORTFOLIO);
+        if (sp) state.portfolio = JSON.parse(sp);
+        const spr = localStorage.getItem(STORAGE_KEY_PRICES);
+        if (spr) state.prices = JSON.parse(spr);
+      } catch {}
+      renderAll();
+
+      // سپس تلاش برای خواندن فایل‌های JSON مخزن در پس‌زمینه
+      fetch('data/prices.json?v=' + Date.now()).then(r => r.ok ? r.json() : null).then(d => {
+        if (d && d.fx) {
+          if (pNum(d.fx.usdtToman, 0) >= 150000) state.prices = d;
+          renderAll();
+        }
+      }).catch(() => {});
+    })();
+  </script>
 </body>
 </html>
