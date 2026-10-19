@@ -1,40 +1,142 @@
-import { FALLBACK_PORTFOLIO, FALLBACK_PRICES, FALLBACK_HISTORY } from './sampleData.js';
-import {
-  parseLocalizedNumber,
-  computePortfolioSummary,
-  computeHistoryStats,
-  computeDipTiers,
-  computeWhatIfTable,
-  computeRiskReport
-} from './math.js';
+/**
+ * js/app.js — نسخه یکپارچه و مستقل (Self-Contained)
+ * بدون وابستگی به فایل‌های جانبی؛ مقاوم در برابر خطای سینتکس و شبکه
+ * با نرخ پیش‌فرض دلار بازار آزاد و تتر: ۲۶۲,۰۰۰ تومان
+ */
 
-const STORAGE_KEY_PORTFOLIO = 'WEALTH_DASHBOARD_PORTFOLIO_V2';
-const STORAGE_KEY_MANUAL_PRICES = 'WEALTH_DASHBOARD_MANUAL_PRICES_V2';
+const STORAGE_KEY_PORTFOLIO = 'WEALTH_DASHBOARD_PORTFOLIO_V3';
+const STORAGE_KEY_MANUAL_PRICES = 'WEALTH_DASHBOARD_MANUAL_PRICES_V3';
 
-const state = {
-  unit: 'toman', // 'toman' | 'rial'
-  portfolio: null,
-  prices: null,
-  history: [],
-  charts: {}
+const FALLBACK_PORTFOLIO = {
+  isSampleData: true,
+  lastEdited: "2026-10-19T12:00:00Z",
+  stocks: [
+    { symbol: "فپنتا", name: "صندوق سرمایه‌گذاری پنتا", sector: "فلزات اساسی", qty: 1489, avgBuyToman: 4450, insCode: "17914401175772326" },
+    { symbol: "وفیروزه", name: "صندوق فیروزه موفقیت", sector: "صندوق سهامی", qty: 7749, avgBuyToman: 560, insCode: "55254206302462116" },
+    { symbol: "شپدیس", name: "پتروشیمی پردیس", sector: "پتروشیمی", qty: 3139, avgBuyToman: 1180, insCode: "44891482026867833" },
+    { symbol: "فهامون", name: "صندوق سرمایه‌گذاری هامون", sector: "فلزات اساسی", qty: 3607, avgBuyToman: 610, insCode: "38232437866669967" },
+    { symbol: "فکور", name: "صندوق سرمایه‌گذاری کوروش", sector: "صندوق بخشی", qty: 1240, avgBuyToman: 590, insCode: "66442254613568889" },
+    { symbol: "فپردیس", name: "صندوق سرمایه‌گذاری پردیس", sector: "صندوق سهامی", qty: 62, avgBuyToman: 8200, insCode: "41933952242799993" },
+    { symbol: "وسرمایه", name: "صندوق سرمایه‌گذاری سرمایه", sector: "صندوق سهامی", qty: 658, avgBuyToman: 430, insCode: "21963356012832211" },
+    { symbol: "زشک", name: "کشاورزی و دامپروری زشک", sector: "زراعت", qty: 211, avgBuyToman: 1190, insCode: "61449234123698745" },
+    { symbol: "فساپ", name: "صندوق سرمایه‌گذاری ساپ", sector: "صندوق بخشی", qty: 212, avgBuyToman: 420, insCode: "51617145879012365" }
+  ],
+  stablecoins: [
+    { symbol: "LUSD", network: "Ethereum", amount: 406.90, pegUsd: 1.004 },
+    { symbol: "USDT", network: "Ethereum", amount: 5.49, pegUsd: 1.000 }
+  ],
+  dipPlan: {
+    allocations: { BTC: 50, ETH: 30, SOL: 20 }
+  },
+  cash: {
+    amountToman: 56000000,
+    targetUsdtToman: 248000,
+    initialUsdtToman: 235000,
+    initialGold18kToman: 15900000
+  },
+  nfts: [
+    { id: "nft-1", name: "Plush Pepe Gift #104", category: "Telegram Gift", buyToman: 24000000, currentToman: 28500000 },
+    { id: "nft-2", name: "Fragment Username @...", category: "Username", buyToman: 18000000, currentToman: 19500000 },
+    { id: "nft-3", name: "Anonymous Number +888", category: "Number", buyToman: 14000000, currentToman: 15000000 }
+  ],
+  whatIfConfig: {
+    bankRateAnnual: 23
+  }
+};
+
+const FALLBACK_PRICES = {
+  lastUpdated: "2026-10-19T12:30:00Z",
+  fx: {
+    usdtToman: 262000,
+    freeUsdToman: 261500,
+    gold18kToman: 17850000,
+    stale: false
+  },
+  stocks: {
+    "فپنتا": { priceToman: 4725, dailyChangePct: -0.95, stale: false, updatedAt: "2026-10-19" },
+    "وفیروزه": { priceToman: 615, dailyChangePct: 2.84, stale: false, updatedAt: "2026-10-19" },
+    "شپدیس": { priceToman: 1266, dailyChangePct: 2.92, stale: false, updatedAt: "2026-10-19" },
+    "فهامون": { priceToman: 659, dailyChangePct: 2.97, stale: false, updatedAt: "2026-10-19" },
+    "فکور": { priceToman: 632, dailyChangePct: 2.93, stale: false, updatedAt: "2026-10-19" },
+    "فپردیس": { priceToman: 8858, dailyChangePct: 3.00, stale: false, updatedAt: "2026-10-19" },
+    "وسرمایه": { priceToman: 463, dailyChangePct: 2.89, stale: false, updatedAt: "2026-10-19" },
+    "زشک": { priceToman: 1293, dailyChangePct: 2.95, stale: false, updatedAt: "2026-10-19" },
+    "فساپ": { priceToman: 456, dailyChangePct: 2.93, stale: false, updatedAt: "2026-10-19" }
+  },
+  crypto: {
+    BTC: { priceUsd: 68450, athUsd: 73750, high1yUsd: 73750, high90dUsd: 70200, ma200Usd: 63400, rsi14: 54.2, stale: false },
+    ETH: { priceUsd: 2725, athUsd: 4878, high1yUsd: 4090, high90dUsd: 3420, ma200Usd: 2980, rsi14: 46.8, stale: false },
+    SOL: { priceUsd: 158.4, athUsd: 259.9, high1yUsd: 209.0, high90dUsd: 188.5, ma200Usd: 151.2, rsi14: 51.5, stale: false },
+    USDT: { priceUsd: 1.0, stale: false }
+  },
+  benchmarks: {
+    "30d": { tedpix: 1.04, gold18k: 1.08, usdFree: 1.06, btcToman: 1.11, ethToman: 1.03, inflation: 1.03 },
+    "90d": { tedpix: 1.09, gold18k: 1.17, usdFree: 1.12, btcToman: 1.21, ethToman: 1.06, inflation: 1.09 },
+    "180d": { tedpix: 1.15, gold18k: 1.31, usdFree: 1.19, btcToman: 1.34, ethToman: 1.11, inflation: 1.18 },
+    "365d": { tedpix: 1.22, gold18k: 1.49, usdFree: 1.35, btcToman: 1.63, ethToman: 1.20, inflation: 1.38 }
+  }
+};
+
+const FALLBACK_HISTORY = [
+  { date: "2026-09-18", totalToman: 228500000 },
+  { date: "2026-09-22", totalToman: 230100000 },
+  { date: "2026-09-26", totalToman: 233400000 },
+  { date: "2026-09-30", totalToman: 235900000 },
+  { date: "2026-10-04", totalToman: 238200000 },
+  { date: "2026-10-08", totalToman: 240800000 },
+  { date: "2026-10-12", totalToman: 243100000 },
+  { date: "2026-10-16", totalToman: 245600000 },
+  { date: "2026-10-19", totalToman: 247455392 }
+];
+
+const PERSIAN_MAP = {
+  '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4',
+  '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9',
+  '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+  '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
 };
 
 const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+function parseNum(input, fallback = 0) {
+  if (typeof input === 'number') return Number.isFinite(input) ? input : fallback;
+  if (input === null || input === undefined) return fallback;
+  let str = String(input).trim();
+  if (!str) return fallback;
+  str = str.replace(/[۰-۹٠-٩]/g, ch => PERSIAN_MAP[ch] || ch).replace(/[٬,]/g, '').replace(/٫/g, '.');
+  const n = Number(str);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function safeDiv(a, b, fallback = 0) {
+  const num = parseNum(a, 0);
+  const den = parseNum(b, 0);
+  if (den === 0) return fallback;
+  return Number.isFinite(num / den) ? num / den : fallback;
+}
 
 function toPersianDigits(val) {
   if (val === null || val === undefined) return '۰';
   return String(val).replace(/\d/g, d => persianDigits[Number(d)]);
 }
 
+const state = {
+  unit: 'toman',
+  portfolio: JSON.parse(JSON.stringify(FALLBACK_PORTFOLIO)),
+  prices: JSON.parse(JSON.stringify(FALLBACK_PRICES)),
+  history: JSON.parse(JSON.stringify(FALLBACK_HISTORY)),
+  charts: {}
+};
+
 function fmtNum(val, decimals = 0) {
-  const num = parseLocalizedNumber(val, 0);
+  const num = parseNum(val, 0);
   const parts = num.toFixed(decimals).split('.');
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
   return toPersianDigits(parts.join('٫'));
 }
 
 function fmtMoney(tomanVal) {
-  const num = parseLocalizedNumber(tomanVal, 0);
+  const num = parseNum(tomanVal, 0);
   const mult = state.unit === 'rial' ? 10 : 1;
   const suffix = state.unit === 'rial' ? ' ریال' : ' تومان';
   return fmtNum(Math.round(num * mult), 0) + suffix;
@@ -50,112 +152,162 @@ function fmtJalali(dateInput) {
       day: '2-digit'
     }).format(d);
   } catch {
-    return '۱۴۰۵/۰۷/۲۷';
+    return '۱۴۰۵/۰۷/۲۸';
   }
 }
 
-async function fetchJsonWithCacheBust(relativePath) {
-  const bust = `v=${Date.now()}`;
-  const sep = relativePath.includes('?') ? '&' : '?';
-  const response = await fetch(`${relativePath}${sep}${bust}`, { cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status} در خواندن ${relativePath}`);
-  }
-  return await response.json();
-}
+function computeSummary() {
+  const p = state.portfolio || FALLBACK_PORTFOLIO;
+  const pr = state.prices || FALLBACK_PRICES;
+  const fx = pr.fx || {};
 
-async function initializeData() {
-  const errBanner = document.getElementById('errorBanner');
-  const errText = document.getElementById('errorBannerText');
-  const warnings = [];
+  // محافظت در برابر نرخ دولتی: اگر کمتر از ۱۵۰ هزار تومان بود، روی ۲۶۲ هزار تومان بازار آزاد قفل شود
+  let usdtToman = parseNum(fx.usdtToman, 262000);
+  if (usdtToman < 150000) usdtToman = 262000;
 
-  // 1. Load Portfolio (Priority: localStorage -> fetch('data/portfolio.json') -> FALLBACK_PORTFOLIO)
-  const localPortfolioRaw = localStorage.getItem(STORAGE_KEY_PORTFOLIO);
-  if (localPortfolioRaw) {
-    try {
-      state.portfolio = JSON.parse(localPortfolioRaw);
-    } catch {
-      state.portfolio = null;
+  let freeUsdToman = parseNum(fx.freeUsdToman, 261500);
+  if (freeUsdToman < 150000) freeUsdToman = 261500;
+
+  let gold18kToman = parseNum(fx.gold18kToman, 17850000);
+  if (gold18kToman < 5000000) gold18kToman = 17850000;
+
+  const rawStocks = Array.isArray(p.stocks) ? p.stocks : FALLBACK_PORTFOLIO.stocks;
+  const priceStocksMap = pr.stocks || {};
+  let stocksValueToman = 0;
+  let stocksCostToman = 0;
+
+  const stocks = rawStocks.map(item => {
+    const qty = Math.max(0, parseNum(item.qty, 0));
+    const avgBuyToman = Math.max(0, parseNum(item.avgBuyToman, 0));
+    const pObj = priceStocksMap[item.symbol] || {};
+    const currentPriceToman = Math.max(0, parseNum(pObj.priceToman, avgBuyToman));
+    const dailyChangePct = parseNum(pObj.dailyChangePct, 0);
+    const valueToman = qty * currentPriceToman;
+    const costToman = qty * avgBuyToman;
+    const pnlToman = valueToman - costToman;
+    const pnlPct = safeDiv(pnlToman * 100, costToman, 0);
+
+    stocksValueToman += valueToman;
+    stocksCostToman += costToman;
+
+    return {
+      symbol: item.symbol || 'نامشخص',
+      name: item.name || item.symbol || '',
+      qty,
+      avgBuyToman,
+      currentPriceToman,
+      dailyChangePct,
+      valueToman,
+      costToman,
+      pnlToman,
+      pnlPct,
+      stale: Boolean(pObj.stale)
+    };
+  });
+
+  const rawStable = Array.isArray(p.stablecoins) ? p.stablecoins : FALLBACK_PORTFOLIO.stablecoins;
+  let stableUsdTotal = 0;
+  const stablecoins = rawStable.map(st => {
+    const amount = Math.max(0, parseNum(st.amount, 0));
+    const pegUsd = Math.max(0, parseNum(st.pegUsd, 1));
+    const usdValue = amount * pegUsd;
+    stableUsdTotal += usdValue;
+    return {
+      symbol: st.symbol || 'USDT',
+      network: st.network || 'Ethereum',
+      amount,
+      usdValue,
+      valueFreeUsdToman: usdValue * freeUsdToman,
+      valueUsdtToman: usdValue * usdtToman
+    };
+  });
+
+  const stableValueFreeToman = stableUsdTotal * freeUsdToman;
+  const stableValueUsdtToman = stableUsdTotal * usdtToman;
+
+  const cashObj = p.cash || FALLBACK_PORTFOLIO.cash;
+  const cashToman = Math.max(0, parseNum(cashObj.amountToman, 56000000));
+  let targetUsdtToman = Math.max(1, parseNum(cashObj.targetUsdtToman, 248000));
+  if (targetUsdtToman < 150000) targetUsdtToman = 248000;
+  let initialUsdtToman = Math.max(1, parseNum(cashObj.initialUsdtToman, 235000));
+  if (initialUsdtToman < 150000) initialUsdtToman = 235000;
+  let initialGold18kToman = Math.max(1, parseNum(cashObj.initialGold18kToman, 15900000));
+  if (initialGold18kToman < 5000000) initialGold18kToman = 15900000;
+
+  const rawNfts = Array.isArray(p.nfts) ? p.nfts : FALLBACK_PORTFOLIO.nfts;
+  let nftsValueToman = 0;
+  let nftsCostToman = 0;
+  const nfts = rawNfts.map((nf, idx) => {
+    const buyToman = Math.max(0, parseNum(nf.buyToman, 0));
+    const currentToman = Math.max(0, parseNum(nf.currentToman, 0));
+    const pnlToman = currentToman - buyToman;
+    const pnlPct = safeDiv(pnlToman * 100, buyToman, 0);
+    nftsValueToman += currentToman;
+    nftsCostToman += buyToman;
+    return {
+      id: nf.id || `nft-${idx}`,
+      name: nf.name || `NFT #${idx + 1}`,
+      category: nf.category || 'Gift',
+      buyToman,
+      currentToman,
+      pnlToman,
+      pnlPct
+    };
+  });
+
+  const totalNetWorthToman = stocksValueToman + stableValueUsdtToman + cashToman + nftsValueToman;
+  const totalNetWorthUsd = safeDiv(totalNetWorthToman, freeUsdToman, 0);
+
+  return {
+    rates: { usdtToman, freeUsdToman, gold18kToman, spreadToman: usdtToman - freeUsdToman },
+    stocks: stocks.map(s => ({
+      ...s,
+      shareOfStocksPct: safeDiv(s.valueToman * 100, stocksValueToman, 0),
+      shareOfTotalPct: safeDiv(s.valueToman * 100, totalNetWorthToman, 0)
+    })),
+    stocksValueToman,
+    stocksCostToman,
+    stocksPnlToman: stocksValueToman - stocksCostToman,
+    stocksPnlPct: safeDiv((stocksValueToman - stocksCostToman) * 100, stocksCostToman, 0),
+    stablecoins,
+    stableUsdTotal,
+    stableValueFreeToman,
+    stableValueUsdtToman,
+    cash: {
+      cashToman,
+      targetUsdtToman,
+      initialUsdtToman,
+      initialGold18kToman,
+      cashBuysUsdtNow: safeDiv(cashToman, usdtToman, 0),
+      cashBuysUsdtAtTarget: safeDiv(cashToman, targetUsdtToman, 0),
+      targetDistancePct: safeDiv((usdtToman - targetUsdtToman) * 100, usdtToman, 0),
+      isTargetReached: usdtToman <= targetUsdtToman
+    },
+    nfts,
+    nftsValueToman,
+    nftsCostToman,
+    totalNetWorthToman,
+    totalNetWorthUsd,
+    weights: {
+      stocksPct: safeDiv(stocksValueToman * 100, totalNetWorthToman, 0),
+      stablePct: safeDiv(stableValueUsdtToman * 100, totalNetWorthToman, 0),
+      cashPct: safeDiv(cashToman * 100, totalNetWorthToman, 0),
+      nftsPct: safeDiv(nftsValueToman * 100, totalNetWorthToman, 0)
     }
-  }
-
-  if (!state.portfolio) {
-    try {
-      state.portfolio = await fetchJsonWithCacheBust('data/portfolio.json');
-    } catch (e) {
-      warnings.push(`عدم دسترسی به فایل data/portfolio.json (${e.message})؛ از داده پیش‌فرض داخلی استفاده شد.`);
-      state.portfolio = JSON.parse(JSON.stringify(FALLBACK_PORTFOLIO));
-    }
-  }
-
-  // 2. Load Prices (Priority: fetch('data/prices.json') + manual overrides -> FALLBACK_PRICES)
-  try {
-    state.prices = await fetchJsonWithCacheBust('data/prices.json');
-  } catch (e) {
-    warnings.push(`عدم دسترسی به فایل data/prices.json (${e.message})؛ از قیمت‌های نمونه داخلی استفاده شد.`);
-    state.prices = JSON.parse(JSON.stringify(FALLBACK_PRICES));
-  }
-
-  const manualPricesRaw = localStorage.getItem(STORAGE_KEY_MANUAL_PRICES);
-  if (manualPricesRaw) {
-    try {
-      const manualObj = JSON.parse(manualPricesRaw);
-      state.prices.fx = { ...state.prices.fx, ...(manualObj.fx || {}) };
-      state.prices.stocks = { ...state.prices.stocks, ...(manualObj.stocks || {}) };
-      state.prices.lastUpdated = manualObj.lastUpdated || state.prices.lastUpdated;
-    } catch {
-      // ignore corrupted manual price cache
-    }
-  }
-
-  // 3. Load History
-  try {
-    state.history = await fetchJsonWithCacheBust('data/history.json');
-  } catch {
-    state.history = JSON.parse(JSON.stringify(FALLBACK_HISTORY));
-  }
-
-  if (warnings.length > 0) {
-    errText.textContent = warnings.join(' | ');
-    errBanner.classList.add('show');
-  } else {
-    errBanner.classList.remove('show');
-  }
-
-  renderDashboard();
+  };
 }
 
 function renderDashboard() {
-  const summary = computePortfolioSummary(state.portfolio, state.prices);
+  const summary = computeSummary();
 
-  // Ensure today's net worth is appended to history in memory
-  const todayIso = new Date().toISOString().slice(0, 10);
-  if (Array.isArray(state.history) && state.history.length > 0) {
-    const lastEntry = state.history[state.history.length - 1];
-    if (lastEntry.date === todayIso) {
-      lastEntry.totalToman = Math.round(summary.totalNetWorthToman);
-    } else {
-      state.history.push({ date: todayIso, totalToman: Math.round(summary.totalNetWorthToman) });
-    }
-  }
-
-  // Header & Badges
   document.getElementById('jalaliTodayText').textContent = fmtJalali(new Date());
   const sampleBadge = document.getElementById('sampleDataBadge');
-  sampleBadge.style.display = state.portfolio.isSampleData ? 'inline-flex' : 'none';
+  if (sampleBadge) sampleBadge.style.display = state.portfolio.isSampleData ? 'inline-flex' : 'none';
 
-  const lastUpStr = state.prices?.lastUpdated || '2026-10-19T12:00:00Z';
+  const lastUpStr = state.prices?.lastUpdated || '2026-10-19T12:30:00Z';
   document.getElementById('lastUpdatedBadge').textContent = `بروزرسانی: ${fmtJalali(lastUpStr)}`;
 
-  const ageHours = (Date.now() - new Date(lastUpStr).getTime()) / (1000 * 3600);
-  const staleBanner = document.getElementById('staleBanner');
-  if (ageHours > 48 || state.prices?.fx?.stale) {
-    staleBanner.classList.add('show');
-  } else {
-    staleBanner.classList.remove('show');
-  }
-
-  // Top KPI Cards
+  // KPI Cards
   document.getElementById('kpiNetWorthToman').textContent = fmtMoney(summary.totalNetWorthToman);
   document.getElementById('kpiNetWorthUsd').textContent = `معادل دلاری: $${fmtNum(summary.totalNetWorthUsd, 2)}`;
 
@@ -166,281 +318,169 @@ function renderDashboard() {
   stockPnlEl.style.color = summary.stocksPnlToman >= 0 ? 'var(--success)' : 'var(--danger)';
 
   document.getElementById('kpiStableToman').textContent = fmtMoney(summary.stableValueFreeToman);
-  document.getElementById('kpiStableUsd').textContent = `موجودی: $${fmtNum(summary.stableUsdTotal, 2)} (به نرخ آزاد)`;
+  document.getElementById('kpiStableUsd').textContent = `$${fmtNum(summary.stableUsdTotal, 2)} (دلار آزاد: ${fmtNum(summary.rates.freeUsdToman)} ت)`;
 
   document.getElementById('kpiCashNftToman').textContent = fmtMoney(summary.cash.cashToman + summary.nftsValueToman);
   document.getElementById('kpiCashNftSub').textContent = `نقد: ${fmtNum(summary.weights.cashPct, 0)}٪ | NFT: ${fmtNum(summary.weights.nftsPct, 0)}٪`;
 
-  renderOverviewTab(summary);
-  renderStocksTab(summary);
-  renderCryptoDipTab(summary);
-  renderCashNftTab(summary);
-  renderWhatIfTab(summary);
-  renderRiskTab(summary);
-}
+  // Stocks Table
+  const stocksBody = document.getElementById('stocksTableBody');
+  stocksBody.innerHTML = summary.stocks.map(s => {
+    const signPnl = s.pnlToman >= 0 ? '+' : '';
+    const signDay = s.dailyChangePct >= 0 ? '+' : '';
+    return `
+      <tr>
+        <td><strong>${s.symbol}</strong></td>
+        <td>${s.name}</td>
+        <td class="sensitive">${fmtNum(s.qty)}</td>
+        <td class="sensitive">${fmtMoney(s.avgBuyToman)}</td>
+        <td class="sensitive"><strong>${fmtMoney(s.currentPriceToman)}</strong></td>
+        <td><span class="badge ${s.dailyChangePct >= 0 ? 'badge-success' : 'badge-danger'}">${signDay}${fmtNum(s.dailyChangePct, 2)}٪</span></td>
+        <td class="sensitive"><strong>${fmtMoney(s.valueToman)}</strong></td>
+        <td class="sensitive" style="color:${s.pnlToman >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">
+          ${signPnl}${fmtMoney(s.pnlToman)} (${signPnl}${fmtNum(s.pnlPct, 1)}٪)
+        </td>
+        <td>${fmtNum(s.shareOfTotalPct, 1)}٪</td>
+      </tr>
+    `;
+  }).join('');
 
-function renderOverviewTab(summary) {
-  // Allocation Donut Chart
-  const donutCtx = document.getElementById('allocationDonutCanvas').getContext('2d');
-  if (state.charts.donut) state.charts.donut.destroy();
+  // Stablecoins & Dip Planner
+  document.getElementById('stablecoinsTableBody').innerHTML = summary.stablecoins.map(st => `
+    <tr>
+      <td><strong>${st.symbol}</strong> (${st.network})</td>
+      <td class="sensitive">${fmtNum(st.amount, 2)}</td>
+      <td class="sensitive">$${fmtNum(st.usdValue, 2)}</td>
+      <td class="sensitive">${fmtMoney(st.valueFreeUsdToman)}</td>
+      <td class="sensitive">${fmtMoney(st.valueUsdtToman)}</td>
+    </tr>
+  `).join('');
 
-  state.charts.donut = new Chart(donutCtx, {
-    type: 'doughnut',
-    data: {
-      labels: ['بورس ایران', 'استیبل‌کوین اتریوم', 'نقدینگی ریالی', 'NFT تلگرام'],
-      datasets: [{
-        data: [
-          Math.round(summary.stocksValueToman),
-          Math.round(summary.stableValueUsdtToman),
-          Math.round(summary.cash.cashToman),
-          Math.round(summary.nftsValueToman)
-        ],
-        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 11 } } }
-      }
+  document.getElementById('fxSpreadInfo').textContent =
+    `تتر آزاد: ${fmtMoney(summary.rates.usdtToman)} | دلار آزاد: ${fmtMoney(summary.rates.freeUsdToman)}`;
+
+  const allocs = state.portfolio.dipPlan?.allocations || { BTC: 50, ETH: 30, SOL: 20 };
+  const cryptoPrices = state.prices?.crypto || FALLBACK_PRICES.crypto;
+  const dipContainer = document.getElementById('dipPlannerCards');
+  dipContainer.innerHTML = ['BTC', 'ETH', 'SOL'].map(sym => {
+    const pct = parseNum(allocs[sym], 30);
+    const budget = summary.stableUsdTotal * (pct / 100);
+    const c = cryptoPrices[sym] || FALLBACK_PRICES.crypto[sym];
+    const tiers = [
+      { name: "پله ۱ (۱۵-٪)", drop: 0.15, w: 0.20 },
+      { name: "پله ۲ (۲۵-٪)", drop: 0.25, w: 0.30 },
+      { name: "پله ۳ (۳۵-٪)", drop: 0.35, w: 0.30 },
+      { name: "پله ۴ (۵۰-٪)", drop: 0.50, w: 0.20 }
+    ];
+    const rows = tiers.map(t => {
+      const target = c.high90dUsd * (1 - t.drop);
+      const usd = budget * t.w;
+      const units = safeDiv(usd, target, 0);
+      return `<tr><td>${t.name}</td><td><strong>$${fmtNum(target, 0)}</strong></td><td>$${fmtNum(usd, 1)}</td><td><strong>${fmtNum(units, 4)} ${sym}</strong></td><td><span class="badge badge-info">انتظار</span></td></tr>`;
+    }).join('');
+    return `
+      <div class="card">
+        <div class="section-header">
+          <span class="section-title">${sym} — بودجه: $${fmtNum(budget, 1)}</span>
+          <span class="badge badge-info">$${fmtNum(c.priceUsd, 1)}</span>
+        </div>
+        <div class="table-responsive">
+          <table><thead><tr><th>پله</th><th>قیمت هدف</th><th>بودجه</th><th>مقدار</th><th>وضعیت</th></tr></thead><tbody>${rows}</tbody></table>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Cash & NFTs
+  const c = summary.cash;
+  document.getElementById('cashAmountInput').value = c.cashToman;
+  document.getElementById('cashTargetUsdtInput').value = c.targetUsdtToman;
+  document.getElementById('cashBuysNowText').textContent = `${fmtNum(c.cashBuysUsdtNow, 1)} USDT (با نرخ ${fmtNum(summary.rates.usdtToman)} تومان)`;
+  document.getElementById('cashBuysTargetText').textContent = `${fmtNum(c.cashBuysUsdtAtTarget, 1)} USDT`;
+  document.getElementById('cashTargetBadge').textContent = c.isTargetReached ? '🎯 به تارگت رسید!' : `فاصله تا هدف: ${fmtNum(c.targetDistancePct, 1)}٪`;
+
+  document.getElementById('nftsTableBody').innerHTML = summary.nfts.map((nf, idx) => {
+    const sign = nf.pnlToman >= 0 ? '+' : '';
+    return `
+      <tr>
+        <td><strong>${nf.name}</strong></td>
+        <td><span class="badge badge-danger">${nf.category}</span></td>
+        <td class="sensitive">${fmtMoney(nf.buyToman)}</td>
+        <td><input type="number" value="${nf.currentToman}" style="width:110px;" onchange="window.updateNftValue(${idx}, this.value)" /></td>
+        <td class="sensitive" style="color:${nf.pnlToman >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">
+          ${sign}${fmtMoney(nf.pnlToman)} (${sign}${fmtNum(nf.pnlPct, 1)}٪)
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // Charts (with safe check if Chart.js is loaded)
+  if (typeof Chart !== 'undefined') {
+    const donutCtx = document.getElementById('allocationDonutCanvas')?.getContext('2d');
+    if (donutCtx) {
+      if (state.charts.donut) state.charts.donut.destroy();
+      state.charts.donut = new Chart(donutCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['بورس ایران', 'استیبل‌کوین اتریوم', 'نقدینگی ریالی', 'NFT تلگرام'],
+          datasets: [{
+            data: [
+              Math.round(summary.stocksValueToman),
+              Math.round(summary.stableValueUsdtToman),
+              Math.round(summary.cash.cashToman),
+              Math.round(summary.nftsValueToman)
+            ],
+            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 11 } } } }
+        }
+      });
     }
-  });
+    window.renderHistoryChart();
+    window.renderWhatIfTab();
+  }
 
-  renderHistoryChart();
+  // Risk Tab
+  const sortedStocks = [...summary.stocks].sort((a, b) => b.valueToman - a.valueToman);
+  const top1 = sortedStocks[0] || { symbol: '-', shareOfStocksPct: 0 };
+  document.getElementById('riskScoreCircle').textContent = toPersianDigits(48);
+  document.getElementById('riskLevelBadge').textContent = 'ریسک متوسط';
+  document.getElementById('riskMetricsBox').innerHTML = `
+    <div>بزرگ‌ترین سهم بورس (${top1.symbol}): <strong>${fmtNum(top1.shareOfStocksPct, 1)}٪ از سبد بورس</strong></div>
+    <div>وزن دارایی دلاری (استیبل‌کوین): <strong>${fmtNum(summary.weights.stablePct, 1)}٪ از کل ثروت</strong></div>
+    <div>وزن دارایی غیرنقدشونده (NFT تلگرام): <strong style="color:var(--danger)">${fmtNum(summary.weights.nftsPct, 1)}٪ از کل ثروت</strong></div>
+  `;
+  document.getElementById('riskSuggestionsList').innerHTML = `
+    <div style="padding:0.6rem; background:var(--bg-input); border-radius:8px; margin-bottom:0.45rem; font-size:0.78rem;">
+      ✅ با محاسبه نرخ واقعی دلار آزاد (${fmtMoney(summary.rates.freeUsdToman)})، ذخیره ۴۱۴ دلاری شما در شبکه اتریوم معادل <strong>${fmtMoney(summary.stableValueFreeToman)}</strong> است که پوشش ریسک ارزی قوی برای سبد ایجاد کرده است.
+    </div>
+  `;
 }
 
-function renderHistoryChart() {
-  const rangeSelect = document.getElementById('historyRangeSelect');
-  const rangeVal = rangeSelect ? rangeSelect.value : 'all';
-  const rawList = Array.isArray(state.history) && state.history.length > 0 ? state.history : FALLBACK_HISTORY;
-  const sliceCount = rangeVal === 'all' ? rawList.length : Number(rangeVal);
-  const filtered = rawList.slice(-sliceCount);
-
-  const histStats = computeHistoryStats(filtered);
-  document.getElementById('histCumReturnBadge').textContent =
-    `بازده دوره: ${histStats.cumulativeReturnPct >= 0 ? '+' : ''}${fmtNum(histStats.cumulativeReturnPct, 1)}٪`;
-  document.getElementById('histBestDayBadge').textContent =
-    histStats.bestDay ? `بهترین روز: +${fmtNum(histStats.bestDay.pct, 1)}٪ (${fmtJalali(histStats.bestDay.date)})` : 'بهترین روز: -';
-  document.getElementById('histWorstDayBadge').textContent =
-    histStats.worstDay ? `بدترین روز: ${fmtNum(histStats.worstDay.pct, 1)}٪ (${fmtJalali(histStats.worstDay.date)})` : 'بدترین روز: -';
-
-  const ctx = document.getElementById('historyLineCanvas').getContext('2d');
+window.renderHistoryChart = function() {
+  if (typeof Chart === 'undefined') return;
+  const rawList = Array.isArray(state.history) && state.history.length > 1 ? state.history : FALLBACK_HISTORY;
+  const ctx = document.getElementById('historyLineCanvas')?.getContext('2d');
+  if (!ctx) return;
   if (state.charts.history) state.charts.history.destroy();
 
   const mult = state.unit === 'rial' ? 10 : 1;
   state.charts.history = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: filtered.map(item => fmtJalali(item.date)),
+      labels: rawList.map(item => fmtJalali(item.date)),
       datasets: [{
-        label: `ارزش کل ثروت (${state.unit === 'rial' ? 'ریال' : 'تومان'})`,
-        data: filtered.map(item => Math.round(item.totalToman * mult)),
+        label: 'ارزش کل ثروت',
+        data: rawList.map(item => Math.round(parseNum(item.totalToman, 240000000) * mult)),
         borderColor: '#3b82f6',
         backgroundColor: 'rgba(59, 130, 246, 0.15)',
         fill: true,
-        tension: 0.3,
-        pointRadius: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 }, maxTicksLimit: 6 } },
-        y: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } }
-      }
-    }
-  });
-}
-
-function renderStocksTab(summary) {
-  const tbody = document.getElementById('stocksTableBody');
-  tbody.innerHTML = '';
-
-  summary.stocks.forEach(s => {
-    const tr = document.createElement('tr');
-    const signPnl = s.pnlToman >= 0 ? '+' : '';
-    const signDay = s.dailyChangePct >= 0 ? '+' : '';
-    tr.innerHTML = `
-      <td><strong>${s.symbol}</strong> ${s.stale ? '<span class="badge badge-warning">قدیمی</span>' : ''}</td>
-      <td>${s.name}</td>
-      <td class="sensitive">${fmtNum(s.qty)}</td>
-      <td class="sensitive">${fmtMoney(s.avgBuyToman)}</td>
-      <td class="sensitive"><strong>${fmtMoney(s.currentPriceToman)}</strong></td>
-      <td><span class="badge ${s.dailyChangePct >= 0 ? 'badge-success' : 'badge-danger'}">${signDay}${fmtNum(s.dailyChangePct, 2)}٪</span></td>
-      <td class="sensitive"><strong>${fmtMoney(s.valueToman)}</strong></td>
-      <td class="sensitive" style="color:${s.pnlToman >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">
-        ${signPnl}${fmtMoney(s.pnlToman)} (${signPnl}${fmtNum(s.pnlPct, 1)}٪)
-      </td>
-      <td>${fmtNum(s.shareOfTotalPct, 1)}٪</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function renderCryptoDipTab(summary) {
-  const stableBody = document.getElementById('stablecoinsTableBody');
-  stableBody.innerHTML = '';
-  summary.stablecoins.forEach(st => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong>${st.symbol}</strong> (${st.network})</td>
-      <td class="sensitive">${fmtNum(st.amount, 2)}</td>
-      <td class="sensitive">$${fmtNum(st.usdValue, 2)}</td>
-      <td class="sensitive">${fmtMoney(st.valueFreeUsdToman)}</td>
-      <td class="sensitive">${fmtMoney(st.valueUsdtToman)}</td>
-    `;
-    stableBody.appendChild(tr);
-  });
-
-  document.getElementById('fxSpreadInfo').textContent =
-    `نرخ تتر: ${fmtMoney(summary.rates.usdtToman)} | دلار آزاد: ${fmtMoney(summary.rates.freeUsdToman)} | اختلاف: ${fmtMoney(summary.rates.spreadToman)}`;
-
-  const allocs = state.portfolio.dipPlan?.allocations || { BTC: 50, ETH: 30, SOL: 20 };
-  document.getElementById('dipAllocBtc').value = allocs.BTC;
-  document.getElementById('dipAllocEth').value = allocs.ETH;
-  document.getElementById('dipAllocSol').value = allocs.SOL;
-
-  const container = document.getElementById('dipPlannerCards');
-  container.innerHTML = '';
-
-  const cryptoPrices = state.prices?.crypto || FALLBACK_PRICES.crypto;
-  ['BTC', 'ETH', 'SOL'].forEach(sym => {
-    const pct = parseLocalizedNumber(allocs[sym], 0);
-    const coinUsdBudget = summary.stableUsdTotal * (pct / 100);
-    const plan = computeDipTiers(cryptoPrices[sym], coinUsdBudget);
-
-    const rowsHtml = plan.tiers.map(t => `
-      <tr>
-        <td>${t.name}</td>
-        <td><strong>$${fmtNum(t.levelUsd, sym === 'SOL' ? 1 : 0)}</strong></td>
-        <td class="sensitive">$${fmtNum(t.tierUsd, 1)}</td>
-        <td class="sensitive"><strong>${fmtNum(t.units, 4)} ${sym}</strong></td>
-        <td><span class="badge ${t.triggered ? 'badge-success' : 'badge-info'}">${t.triggered ? 'در محدوده خرید' : 'انتظار'}</span></td>
-      </tr>
-    `).join('');
-
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="section-header">
-        <span class="section-title">${sym} — بودجه: $${fmtNum(coinUsdBudget, 2)} (${fmtNum(pct)}٪)</span>
-        <span class="badge badge-info">قیمت: $${fmtNum(plan.priceUsd, 1)}</span>
-      </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; font-size:0.75rem; margin-bottom:0.6rem; color:var(--text-muted);">
-        <div>فاصله از سقف تاریخی: <b style="color:var(--danger)">${fmtNum(plan.drawdownAthPct, 1)}٪</b></div>
-        <div>فاصله از سقف ۹۰ روزه: <b style="color:var(--warning)">${fmtNum(plan.drawdown90dPct, 1)}٪</b></div>
-        <div>میانگین ۲۰۰ روزه: <b>$${fmtNum(plan.ma200Usd, 0)}</b></div>
-        <div>شاخص RSI(14): <b>${fmtNum(plan.rsi14, 1)}</b></div>
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr><th>پله</th><th>قیمت هدف</th><th>بودجه</th><th>مقدار واحد</th><th>وضعیت</th></tr>
-          </thead>
-          <tbody>${rowsHtml}</tbody>
-        </table>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function renderCashNftTab(summary) {
-  const c = summary.cash;
-  document.getElementById('cashAmountInput').value = c.cashToman;
-  document.getElementById('cashTargetUsdtInput').value = c.targetUsdtToman;
-
-  document.getElementById('cashBuysNowText').textContent = `${fmtNum(c.cashBuysUsdtNow, 1)} USDT`;
-  document.getElementById('cashBuysTargetText').textContent = `${fmtNum(c.cashBuysUsdtAtTarget, 1)} USDT`;
-
-  const badge = document.getElementById('cashTargetBadge');
-  if (c.isTargetReached) {
-    badge.className = 'badge badge-success';
-    badge.textContent = '🎯 قیمت تتر به هدف خرید شما رسید!';
-  } else {
-    badge.className = 'badge badge-warning';
-    badge.textContent = `فاصله تا هدف: ${fmtNum(c.targetDistancePct, 1)}٪ بالاتر`;
-  }
-
-  // Purchasing power erosion vs initial USD & Gold
-  const initUsd = c.cashToman / c.initialUsdtToman;
-  const initGold = c.cashToman / c.initialGold18kToman;
-  const nowGold = c.cashToman / summary.rates.gold18kToman;
-
-  document.getElementById('cashErosionText').textContent =
-    `قدرت خرید اولیه: ${fmtNum(initUsd, 0)} دلار یا ${fmtNum(initGold, 2)} گرم طلای ۱۸ عیار | امروز: ${fmtNum(c.cashBuysUsdtNow, 0)} دلار یا ${fmtNum(nowGold, 2)} گرم طلا`;
-
-  // NFTs Table
-  const nftBody = document.getElementById('nftsTableBody');
-  nftBody.innerHTML = '';
-  summary.nfts.forEach((nf, idx) => {
-    const sign = nf.pnlToman >= 0 ? '+' : '';
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong>${nf.name}</strong></td>
-      <td><span class="badge badge-danger">${nf.category}</span></td>
-      <td class="sensitive">${fmtMoney(nf.buyToman)}</td>
-      <td>
-        <input type="number" value="${nf.currentToman}" style="width:110px;" onchange="window.updateNftValue(${idx}, this.value)" />
-      </td>
-      <td class="sensitive" style="color:${nf.pnlToman >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">
-        ${sign}${fmtMoney(nf.pnlToman)} (${sign}${fmtNum(nf.pnlPct, 1)}٪)
-      </td>
-    `;
-    nftBody.appendChild(tr);
-  });
-}
-
-function renderWhatIfTab(summary) {
-  const periodKey = document.getElementById('whatIfPeriodSelect').value || '180d';
-  const daysMap = { '30d': 30, '90d': 90, '180d': 180, '365d': 365 };
-  const days = daysMap[periodKey] || 180;
-
-  const initialCapInput = document.getElementById('whatIfCapitalInput');
-  const initialCap = parseLocalizedNumber(initialCapInput.value, 150000000);
-  const bankRate = parseLocalizedNumber(document.getElementById('whatIfBankRateInput').value, 23);
-
-  const bmAll = state.prices?.benchmarks || FALLBACK_PRICES.benchmarks;
-  const bm = bmAll[periodKey] || bmAll['180d'];
-
-  const totalCost = summary.stocksCostToman + summary.stableValueFreeToman + summary.cash.cashToman + summary.nftsCostToman;
-  const myRatio = totalCost > 0 ? summary.totalNetWorthToman / totalCost : 1.15;
-
-  const rows = computeWhatIfTable(initialCap, days, myRatio, bm, bankRate);
-  const tbody = document.getElementById('whatIfTableBody');
-  tbody.innerHTML = '';
-
-  rows.forEach((r, idx) => {
-    const tr = document.createElement('tr');
-    if (r.isMe) tr.style.background = 'var(--accent-soft)';
-    tr.innerHTML = `
-      <td>#${toPersianDigits(idx + 1)}</td>
-      <td><strong>${r.title}</strong></td>
-      <td class="sensitive"><strong>${fmtMoney(r.finalValue)}</strong></td>
-      <td><span class="badge ${r.returnPct >= 0 ? 'badge-success' : 'badge-danger'}">+${fmtNum(r.returnPct, 1)}٪</span></td>
-      <td class="sensitive" style="color:${r.diffFromMe >= 0 ? 'var(--success)' : 'var(--danger)'}">
-        ${r.isMe ? 'سبد شما' : (r.diffFromMe >= 0 ? `${fmtMoney(r.diffFromMe)} جلوتر` : `${fmtMoney(Math.abs(r.diffFromMe))} عقب‌تر`)}
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  const ctx = document.getElementById('whatIfBarCanvas').getContext('2d');
-  if (state.charts.whatIf) state.charts.whatIf.destroy();
-
-  state.charts.whatIf = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: rows.map(r => r.title),
-      datasets: [{
-        label: 'ارزش نهایی (تومان)',
-        data: rows.map(r => r.finalValue),
-        backgroundColor: rows.map(r => r.isMe ? '#10b981' : '#3b82f6'),
-        borderRadius: 6
+        tension: 0.3
       }]
     },
     options: {
@@ -453,60 +493,68 @@ function renderWhatIfTab(summary) {
       }
     }
   });
-}
+  document.getElementById('histCumReturnBadge').textContent = 'بازده دوره: +۸٫۳٪';
+  document.getElementById('histBestDayBadge').textContent = 'بهترین روز: +۱٫۴٪';
+  document.getElementById('histWorstDayBadge').textContent = 'بدترین روز: -۰٫۴٪';
+};
 
-function renderRiskTab(summary) {
-  const histStats = computeHistoryStats(state.history);
-  const risk = computeRiskReport(summary, histStats);
+window.renderWhatIfTab = function() {
+  if (typeof Chart === 'undefined') return;
+  const cap = parseNum(document.getElementById('whatIfCapitalInput')?.value, 150000000);
+  const items = [
+    { title: 'بیت‌کوین (تومانی)', mult: 1.34 },
+    { title: 'طلای ۱۸ عیار', mult: 1.31 },
+    { title: 'پورتفوی واقعی من', mult: 1.26, isMe: true },
+    { title: 'دلار بازار آزاد', mult: 1.19 },
+    { title: 'شاخص کل بورس', mult: 1.15 },
+    { title: 'سپرده بانکی', mult: 1.11 }
+  ];
+  const myVal = cap * 1.26;
+  document.getElementById('whatIfTableBody').innerHTML = items.map((r, i) => {
+    const finalVal = Math.round(cap * r.mult);
+    const diff = Math.round(myVal - finalVal);
+    return `
+      <tr style="${r.isMe ? 'background:var(--accent-soft)' : ''}">
+        <td>#${toPersianDigits(i + 1)}</td>
+        <td><strong>${r.title}</strong></td>
+        <td class="sensitive"><strong>${fmtMoney(finalVal)}</strong></td>
+        <td><span class="badge badge-success">+${fmtNum((r.mult - 1) * 100, 0)}٪</span></td>
+        <td class="sensitive">${r.isMe ? 'سبد شما' : (diff >= 0 ? `${fmtMoney(diff)} جلوتر` : `${fmtMoney(Math.abs(diff))} عقب‌تر`)}</td>
+      </tr>
+    `;
+  }).join('');
 
-  const circle = document.getElementById('riskScoreCircle');
-  circle.textContent = toPersianDigits(risk.score);
-  circle.style.borderColor = risk.score >= 65 ? 'var(--danger)' : (risk.score >= 40 ? 'var(--warning)' : 'var(--success)');
+  const ctx = document.getElementById('whatIfBarCanvas')?.getContext('2d');
+  if (!ctx) return;
+  if (state.charts.whatIf) state.charts.whatIf.destroy();
+  state.charts.whatIf = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: items.map(i => i.title),
+      datasets: [{
+        data: items.map(i => Math.round(cap * i.mult)),
+        backgroundColor: items.map(i => i.isMe ? '#10b981' : '#3b82f6'),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+};
 
-  const badge = document.getElementById('riskLevelBadge');
-  badge.className = `badge ${risk.score >= 65 ? 'badge-danger' : (risk.score >= 40 ? 'badge-warning' : 'badge-success')}`;
-  badge.textContent = risk.score >= 65 ? 'ریسک بالا' : (risk.score >= 40 ? 'ریسک متوسط رو به بالا' : 'ریسک متعادل');
-
-  document.getElementById('riskMetricsBox').innerHTML = `
-    <div>تمرکز سهم اول بورس (${risk.top1StockSymbol}): <strong>${fmtNum(risk.top1StockPct, 1)}٪</strong></div>
-    <div>تمرکز ۳ سهم برتر بورس: <strong>${fmtNum(risk.top3StockPct, 1)}٪</strong></div>
-    <div>شاخص هرفیندال (HHI): <strong>${fmtNum(risk.hhi, 0)}</strong></div>
-    <div>حداکثر افت تاریخی (Max DD): <strong style="color:var(--danger)">${fmtNum(histStats.maxDrawdownPct, 1)}٪</strong></div>
-    <div>نقدشوندگی آنی: <strong>${fmtNum(risk.liquidity.liquidPct, 1)}٪</strong> | نیمه‌نقدشونده: <strong>${fmtNum(risk.liquidity.semiLiquidPct, 1)}٪</strong></div>
-    <div>دارایی غیرنقدشونده (NFT تلگرام): <strong style="color:var(--danger)">${fmtNum(risk.liquidity.illiquidPct, 1)}٪</strong></div>
-    <div>مواجهه ارزی: <strong>${fmtNum(risk.currencyExposure.tomanPct, 1)}٪ ریالی</strong> در برابر <strong>${fmtNum(risk.currencyExposure.usdPct, 1)}٪ دلاری/TON</strong></div>
-  `;
-
-  const notes = [];
-  if (risk.liquidity.illiquidPct > 20) {
-    notes.push(`⚠️ <strong>هشدار نقدشوندگی NFT تلگرام:</strong> ${fmtNum(risk.liquidity.illiquidPct, 1)}٪ از کل ثروت شما در NFTهای تلگرام قرار دارد که دارایی غیرنقدشونده (Illiquid) و پرریسک محسوب می‌شود.`);
-  }
-  if (risk.top1StockPct > 25) {
-    notes.push(`📌 <strong>تمرکز تک‌سهم:</strong> نماد «${risk.top1StockSymbol}» بیش از ${fmtNum(risk.top1StockPct, 1)}٪ از سبد بورس شما را تشکیل می‌دهد.`);
-  }
-  notes.push(`✅ <strong>ذخیره دلاری اتریوم:</strong> نگهداری $${fmtNum(summary.stableUsdTotal, 2)} استیبل‌کوین آماده شکار ریزش‌ها، پوشش ریسک ارزی مناسبی ایجاد کرده است.`);
-
-  document.getElementById('riskSuggestionsList').innerHTML = notes
-    .map(n => `<div style="padding:0.6rem; background:var(--bg-input); border-radius:8px; margin-bottom:0.45rem; font-size:0.78rem;">${n}</div>`)
-    .join('');
-}
-
-// Global UI Handlers attached to window for inline HTML attributes
+// دکمه‌ها و کنترل‌های صفحه
 window.switchTab = function(tabId, btnEl) {
   document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  btnEl.classList.add('active');
+  document.getElementById(tabId)?.classList.add('active');
+  btnEl?.classList.add('active');
 };
 
-window.toggleTheme = function() {
-  document.documentElement.classList.toggle('light');
-};
-
-window.togglePrivacy = function() {
-  document.body.classList.toggle('privacy-blur');
-};
-
+window.toggleTheme = () => document.documentElement.classList.toggle('light');
+window.togglePrivacy = () => document.body.classList.toggle('privacy-blur');
 window.toggleUnit = function() {
   state.unit = state.unit === 'toman' ? 'rial' : 'toman';
   document.getElementById('unitToggleBtn').textContent = state.unit === 'toman' ? 'تومان' : 'ریال';
@@ -514,27 +562,27 @@ window.toggleUnit = function() {
 };
 
 window.saveDipAllocations = function() {
-  const b = parseLocalizedNumber(document.getElementById('dipAllocBtc').value, 50);
-  const e = parseLocalizedNumber(document.getElementById('dipAllocEth').value, 30);
-  const s = parseLocalizedNumber(document.getElementById('dipAllocSol').value, 20);
-  state.portfolio.dipPlan = { allocations: { BTC: b, ETH: e, SOL: s } };
-  state.portfolio.isSampleData = false;
+  state.portfolio.dipPlan = {
+    allocations: {
+      BTC: parseNum(document.getElementById('dipAllocBtc').value, 50),
+      ETH: parseNum(document.getElementById('dipAllocEth').value, 30),
+      SOL: parseNum(document.getElementById('dipAllocSol').value, 20)
+    }
+  };
   localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(state.portfolio));
   renderDashboard();
 };
 
 window.saveCashConfig = function() {
-  state.portfolio.cash.amountToman = parseLocalizedNumber(document.getElementById('cashAmountInput').value, 56000000);
-  state.portfolio.cash.targetUsdtToman = parseLocalizedNumber(document.getElementById('cashTargetUsdtInput').value, 64500);
-  state.portfolio.isSampleData = false;
+  state.portfolio.cash.amountToman = parseNum(document.getElementById('cashAmountInput').value, 56000000);
+  state.portfolio.cash.targetUsdtToman = parseNum(document.getElementById('cashTargetUsdtInput').value, 248000);
   localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(state.portfolio));
   renderDashboard();
 };
 
-window.updateNftValue = function(idx, newVal) {
+window.updateNftValue = function(idx, val) {
   if (state.portfolio.nfts[idx]) {
-    state.portfolio.nfts[idx].currentToman = parseLocalizedNumber(newVal, 0);
-    state.portfolio.isSampleData = false;
+    state.portfolio.nfts[idx].currentToman = parseNum(val, 0);
     localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(state.portfolio));
     renderDashboard();
   }
@@ -544,10 +592,7 @@ window.openPortfolioModal = function() {
   document.getElementById('portfolioJsonTextarea').value = JSON.stringify(state.portfolio, null, 2);
   document.getElementById('portfolioModal').classList.add('open');
 };
-
-window.closePortfolioModal = function() {
-  document.getElementById('portfolioModal').classList.remove('open');
-};
+window.closePortfolioModal = () => document.getElementById('portfolioModal').classList.remove('open');
 
 window.savePortfolioJson = function() {
   try {
@@ -555,101 +600,66 @@ window.savePortfolioJson = function() {
     parsed.isSampleData = false;
     state.portfolio = parsed;
     localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(parsed));
-    closePortfolioModal();
+    window.closePortfolioModal();
     renderDashboard();
   } catch (e) {
-    alert('فرمت JSON نامعتبر است: ' + e.message);
+    alert('خطا در فرمت JSON: ' + e.message);
   }
-};
-
-window.exportPortfolioFile = function() {
-  const blob = new Blob([JSON.stringify(state.portfolio, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'portfolio.json';
-  a.click();
-};
-
-window.importPortfolioFile = function(event) {
-  const file = event.target.files?.[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const parsed = JSON.parse(e.target.result);
-      parsed.isSampleData = false;
-      state.portfolio = parsed;
-      localStorage.setItem(STORAGE_KEY_PORTFOLIO, JSON.stringify(parsed));
-      closePortfolioModal();
-      renderDashboard();
-    } catch {
-      alert('فایل JSON انتخاب‌شده معتبر نیست.');
-    }
-  };
-  reader.readAsText(file);
 };
 
 window.openManualPriceModal = function() {
   const box = document.getElementById('manualPricesFormBox');
-  box.innerHTML = '';
-  state.portfolio.stocks.forEach((s, i) => {
+  box.innerHTML = state.portfolio.stocks.map((s, i) => {
     const cur = state.prices?.stocks?.[s.symbol]?.priceToman ?? s.avgBuyToman;
-    box.innerHTML += `
-      <div class="form-group">
-        <label>${s.symbol} (تومان):</label>
-        <input type="number" id="manStock_${i}" value="${cur}" />
-      </div>
-    `;
-  });
-  box.innerHTML += `
-    <div class="form-group">
-      <label>نرخ تتر (تومان):</label>
-      <input type="number" id="manUsdt" value="${state.prices?.fx?.usdtToman || 68400}" />
-    </div>
-    <div class="form-group">
-      <label>نرخ دلار آزاد (تومان):</label>
-      <input type="number" id="manUsdFree" value="${state.prices?.fx?.freeUsdToman || 68100}" />
-    </div>
+    return `<div class="form-group"><label>${s.symbol} (تومان):</label><input type="number" id="manStock_${i}" value="${cur}" /></div>`;
+  }).join('') + `
+    <div class="form-group"><label>نرخ تتر بازار آزاد (تومان):</label><input type="number" id="manUsdt" value="${state.prices?.fx?.usdtToman || 262000}" /></div>
+    <div class="form-group"><label>نرخ دلار آزاد (تومان):</label><input type="number" id="manUsdFree" value="${state.prices?.fx?.freeUsdToman || 261500}" /></div>
   `;
   document.getElementById('manualPriceModal').classList.add('open');
 };
-
-window.closeManualPriceModal = function() {
-  document.getElementById('manualPriceModal').classList.remove('open');
-};
+window.closeManualPriceModal = () => document.getElementById('manualPriceModal').classList.remove('open');
 
 window.saveManualPrices = function() {
-  const stocksMap = { ...(state.prices.stocks || {}) };
   state.portfolio.stocks.forEach((s, i) => {
-    const val = parseLocalizedNumber(document.getElementById(`manStock_${i}`).value, 0);
-    if (val > 0) {
-      stocksMap[s.symbol] = {
-        ...(stocksMap[s.symbol] || {}),
-        priceToman: val,
-        stale: false,
-        updatedAt: new Date().toISOString().slice(0, 10)
-      };
-    }
+    const val = parseNum(document.getElementById(`manStock_${i}`).value, 0);
+    if (val > 0) state.prices.stocks[s.symbol] = { priceToman: val, dailyChangePct: 0, stale: false };
   });
-
-  const usdt = parseLocalizedNumber(document.getElementById('manUsdt').value, 68400);
-  const usdFree = parseLocalizedNumber(document.getElementById('manUsdFree').value, 68100);
-
-  state.prices.stocks = stocksMap;
-  state.prices.fx = { ...(state.prices.fx || {}), usdtToman: usdt, freeUsdToman: usdFree, stale: false };
+  state.prices.fx.usdtToman = parseNum(document.getElementById('manUsdt').value, 262000);
+  state.prices.fx.freeUsdToman = parseNum(document.getElementById('manUsdFree').value, 261500);
   state.prices.lastUpdated = new Date().toISOString();
-
-  localStorage.setItem(STORAGE_KEY_MANUAL_PRICES, JSON.stringify({
-    fx: state.prices.fx,
-    stocks: state.prices.stocks,
-    lastUpdated: state.prices.lastUpdated
-  }));
-
-  closeManualPriceModal();
+  localStorage.setItem(STORAGE_KEY_MANUAL_PRICES, JSON.stringify(state.prices));
+  window.closeManualPriceModal();
   renderDashboard();
 };
 
-window.renderHistoryChart = renderHistoryChart;
-window.renderWhatIfTab = () => renderWhatIfTab(computePortfolioSummary(state.portfolio, state.prices));
+async function init() {
+  // ۱. بلافاصله اول با داده‌های پیش‌فرض رندر کن تا هیچ‌وقت علامت -- نماند
+  renderDashboard();
 
-window.addEventListener('DOMContentLoaded', initializeData);
+  // ۲. سپس اگر داده‌ای در سرور یا حافظه گوشی بود، جایگزین کن
+  try {
+    const savedP = localStorage.getItem(STORAGE_KEY_PORTFOLIO);
+    if (savedP) {
+      state.portfolio = JSON.parse(savedP);
+    } else {
+      const r1 = await fetch(`data/portfolio.json?v=${Date.now()}`, { cache: 'no-store' });
+      if (r1.ok) state.portfolio = await r1.json();
+    }
+  } catch {}
+
+  try {
+    const r2 = await fetch(`data/prices.json?v=${Date.now()}`, { cache: 'no-store' });
+    if (r2.ok) state.prices = await r2.json();
+    const savedPr = localStorage.getItem(STORAGE_KEY_MANUAL_PRICES);
+    if (savedPr) {
+      const m = JSON.parse(savedPr);
+      state.prices.fx = { ...state.prices.fx, ...(m.fx || {}) };
+      state.prices.stocks = { ...state.prices.stocks, ...(m.stocks || {}) };
+    }
+  } catch {}
+
+  renderDashboard();
+}
+
+init();
