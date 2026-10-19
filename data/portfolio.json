@@ -98,9 +98,9 @@
   },
   "cash": {
     "amountToman": 56000000,
-    "targetUsdtToman": 64500,
-    "initialUsdtToman": 62000,
-    "initialGold18kToman": 4100000
+    "targetUsdtToman": 248000,
+    "initialUsdtToman": 235000,
+    "initialGold18kToman": 15900000
   },
   "nfts": [
     {
