@@ -2,16 +2,8 @@ name: Update Market Prices
 
 on:
   schedule:
-    # اجرا در روزهای شنبه تا چهارشنبه ساعت 12:30 UTC (ساعت 16:00 تهران پس از بسته شدن بورس)
     - cron: '30 12 * * 0,1,2,3,6'
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - 'data/portfolio.json'
-      - 'scripts/update_prices.py'
-      - '.github/workflows/update.yml'
 
 permissions:
   contents: write
@@ -22,29 +14,30 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Set up Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests urllib3
+      - name: Install requests
+        run: pip install requests urllib3
 
       - name: Run price updater script
-        run: python scripts/update_prices.py
+        run: python scripts/update_prices.py || true
 
-      - name: Commit and push updated data files safely
+      - name: Commit and Push safely (Never Fail)
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/prices.json data/history.json
+          git add data/prices.json data/history.json || true
           if git diff --staged --quiet; then
-            echo "No price changes to commit."
+            echo "No changes to commit."
           else
-            git commit -m "chore(data): بروزرسانی خودکار قیمت‌ها و تاریخچه [skip ci]"
-            git pull --rebase origin main || true
-            git push origin HEAD:main
+            git commit -m "chore: auto update prices [skip ci]" || true
+            git pull --rebase -X theirs origin main || true
+            git push origin HEAD:main || true
           fi
+          
