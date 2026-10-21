@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-10-20T13:16:12Z",
+  "lastUpdated": "2026-10-21T13:18:06Z",
   "fx": {
-    "usdtToman": 263500,
-    "freeUsdToman": 262446,
+    "usdtToman": 264003,
+    "freeUsdToman": 262947,
     "gold18kToman": 17850000,
     "stale": false
   },
@@ -64,7 +64,7 @@
   },
   "crypto": {
     "BTC": {
-      "priceUsd": 81343.0,
+      "priceUsd": 83736.0,
       "athUsd": 73750,
       "high1yUsd": 73750,
       "high90dUsd": 91869.12,
@@ -73,7 +73,7 @@
       "stale": false
     },
     "ETH": {
-      "priceUsd": 2390.45,
+      "priceUsd": 2482.25,
       "athUsd": 4878,
       "high1yUsd": 4878,
       "high90dUsd": 2695.3,
@@ -82,7 +82,7 @@
       "stale": false
     },
     "SOL": {
-      "priceUsd": 104.26,
+      "priceUsd": 107.34,
       "athUsd": 259.9,
       "high1yUsd": 259.9,
       "high90dUsd": 117.71,
