@@ -1,148 +1,27 @@
 {
-  "lastUpdated": "2026-10-21T13:18:06Z",
+  "lastUpdated": "2026-10-22T12:00:00Z",
   "fx": {
-    "usdtToman": 264003,
-    "freeUsdToman": 262947,
+    "usdtToman": 262000,
+    "freeUsdToman": 261500,
     "gold18kToman": 17850000,
     "stale": false
   },
   "stocks": {
-    "فپنتا": {
-      "priceToman": 4725,
-      "dailyChangePct": -0.95,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    },
-    "وفیروزه": {
-      "priceToman": 615,
-      "dailyChangePct": 2.84,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    },
-    "شپدیس": {
-      "priceToman": 1266,
-      "dailyChangePct": 2.92,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    },
-    "فهامون": {
-      "priceToman": 659,
-      "dailyChangePct": 2.97,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    },
-    "فکور": {
-      "priceToman": 632,
-      "dailyChangePct": 2.93,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    },
-    "فپردیس": {
-      "priceToman": 8858,
-      "dailyChangePct": 3.0,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    },
-    "وسرمایه": {
-      "priceToman": 463,
-      "dailyChangePct": 2.89,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    },
-    "زشک": {
-      "priceToman": 1293,
-      "dailyChangePct": 2.95,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    },
-    "فساپ": {
-      "priceToman": 456,
-      "dailyChangePct": 2.93,
-      "stale": true,
-      "updatedAt": "2026-10-19"
-    }
+    "وفیروزه": { "priceToman": 581, "dailyChangePct": -2.01, "stale": false },
+    "فپنتا": { "priceToman": 4704, "dailyChangePct": 0.00, "stale": false },
+    "شپدیس": { "priceToman": 1250, "dailyChangePct": -2.95, "stale": false },
+    "کرومیت": { "priceToman": 557, "dailyChangePct": -2.96, "stale": false },
+    "فهامون": { "priceToman": 718, "dailyChangePct": 2.87, "stale": false },
+    "فکور": { "priceToman": 689, "dailyChangePct": 2.99, "stale": false },
+    "فپردیس": { "priceToman": 9677, "dailyChangePct": 2.99, "stale": false },
+    "وسرمایه": { "priceToman": 504, "dailyChangePct": 2.86, "stale": false },
+    "زشک": { "priceToman": 1411, "dailyChangePct": 2.99, "stale": false },
+    "سیمکات": { "priceToman": 4584, "dailyChangePct": 4310.70, "stale": false },
+    "فساپ": { "priceToman": 497, "dailyChangePct": 2.90, "stale": false }
   },
   "crypto": {
-    "BTC": {
-      "priceUsd": 83736.0,
-      "athUsd": 73750,
-      "high1yUsd": 73750,
-      "high90dUsd": 91869.12,
-      "ma200Usd": 75463.92,
-      "rsi14": 50.0,
-      "stale": false
-    },
-    "ETH": {
-      "priceUsd": 2482.25,
-      "athUsd": 4878,
-      "high1yUsd": 4878,
-      "high90dUsd": 2695.3,
-      "ma200Usd": 2214.0,
-      "rsi14": 50.0,
-      "stale": false
-    },
-    "SOL": {
-      "priceUsd": 107.34,
-      "athUsd": 259.9,
-      "high1yUsd": 259.9,
-      "high90dUsd": 117.71,
-      "ma200Usd": 96.69,
-      "rsi14": 50.0,
-      "stale": false
-    },
-    "USDT": {
-      "priceUsd": 1.0,
-      "stale": false
-    }
-  },
-  "benchmarks": {
-    "30d": {
-      "tedpix": 1.04,
-      "gold18k": 1.08,
-      "usdFree": 1.06,
-      "btcToman": 1.11,
-      "ethToman": 1.03,
-      "inflation": 1.03
-    },
-    "90d": {
-      "tedpix": 1.09,
-      "gold18k": 1.17,
-      "usdFree": 1.12,
-      "btcToman": 1.21,
-      "ethToman": 1.06,
-      "inflation": 1.09
-    },
-    "180d": {
-      "tedpix": 1.15,
-      "gold18k": 1.31,
-      "usdFree": 1.19,
-      "btcToman": 1.34,
-      "ethToman": 1.11,
-      "inflation": 1.18
-    },
-    "365d": {
-      "tedpix": 1.22,
-      "gold18k": 1.49,
-      "usdFree": 1.35,
-      "btcToman": 1.63,
-      "ethToman": 1.2,
-      "inflation": 1.38
-    }
-  },
-  "sources": {
-    "usdtToman": "nobitex",
-    "freeUsdToman": "nobitex_stats_free_market",
-    "BTC": "coingecko",
-    "ETH": "coingecko",
-    "SOL": "coingecko",
-    "فپنتا": "cached_firewall_bypass",
-    "وفیروزه": "cached_firewall_bypass",
-    "شپدیس": "cached_firewall_bypass",
-    "فهامون": "cached_firewall_bypass",
-    "فکور": "cached_firewall_bypass",
-    "فپردیس": "cached_firewall_bypass",
-    "وسرمایه": "cached_firewall_bypass",
-    "زشک": "cached_firewall_bypass",
-    "فساپ": "cached_firewall_bypass"
+    "BTC": { "priceUsd": 68450, "high90dUsd": 70200, "ma200Usd": 63400, "rsi14": 54.2, "stale": false },
+    "ETH": { "priceUsd": 2725, "high90dUsd": 3420, "ma200Usd": 2980, "rsi14": 46.8, "stale": false },
+    "SOL": { "priceUsd": 158.4, "high90dUsd": 188.5, "ma200Usd": 151.2, "rsi14": 51.5, "stale": false }
   }
 }
