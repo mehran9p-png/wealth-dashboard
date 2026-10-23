@@ -1,0 +1,18 @@
+{
+  "name": "ترمینال هوشمند مدیریت ثروت",
+  "short_name": "ترمینال ثروت",
+  "description": "داشبورد شخصی مدیریت سبد بورس، وام، تحلیل CFO دلار و کریپتو",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#060913",
+  "theme_color": "#060913",
+  "dir": "rtl",
+  "lang": "fa-IR",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2830/2830284.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
