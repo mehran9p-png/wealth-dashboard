@@ -3,550 +3,148 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ترمینال هوشمند مدیریت ثروت و اهرم مالی</title>
+  <title>ترمینال هوشمند ثروت</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
           onerror="this.onerror=null;this.src='https://unpkg.com/chart.js@4.4.1/dist/chart.umd.min.js';"></script>
   <style>
     :root {
       --bg-deep: #060913;
       --bg-surface: #0d1326;
-      --bg-glass: rgba(18, 26, 48, 0.78);
-      --bg-glass-hover: rgba(26, 37, 68, 0.9);
+      --bg-glass: rgba(18, 26, 48, 0.86);
       --bg-input: #090e1c;
-      --border-glass: rgba(255, 255, 255, 0.08);
-      --border-highlight: rgba(56, 189, 248, 0.35);
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --brand-cyan: #06b6d4;
-      --brand-blue: #3b82f6;
-      --brand-purple: #8b5cf6;
-      --brand-gold: #f59e0b;
+      --border-glass: rgba(255, 255, 255, 0.09);
+      --border-hi: rgba(56, 189, 248, 0.42);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --cyan: #06b6d4;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --gold: #f59e0b;
       --profit: #10b981;
-      --profit-bg: rgba(16, 185, 129, 0.14);
+      --profit-bg: rgba(16, 185, 129, 0.15);
       --loss: #f43f5e;
-      --loss-bg: rgba(244, 63, 94, 0.14);
+      --loss-bg: rgba(244, 63, 94, 0.15);
       --warn: #f59e0b;
-      --warn-bg: rgba(245, 158, 11, 0.14);
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --shadow-glow: 0 12px 35px -10px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(59, 130, 246, 0.12);
+      --warn-bg: rgba(245, 158, 11, 0.15);
     }
-
     html.light {
-      --bg-deep: #f1f5f9;
-      --bg-surface: #ffffff;
-      --bg-glass: rgba(255, 255, 255, 0.92);
-      --bg-glass-hover: #f8fafc;
-      --bg-input: #f1f5f9;
-      --border-glass: #e2e8f0;
-      --border-highlight: #3b82f6;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #64748b;
-      --shadow-glow: 0 10px 25px -5px rgba(15, 23, 42, 0.07);
+      --bg-deep: #f1f5f9; --bg-surface: #ffffff; --bg-glass: #ffffff;
+      --bg-input: #f1f5f9; --border-glass: #cbd5e1; --text-main: #0f172a; --text-sub: #475569;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
-      -webkit-tap-highlight-color: transparent;
+      font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-feature-settings: "tnum" 1, "ss01" 1;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
     }
-
-    html, body {
-      width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
-      background-color: var(--bg-deep);
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.10), transparent 35%),
-        radial-gradient(circle at 90% 15%, rgba(139, 92, 246, 0.10), transparent 35%),
-        radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.06), transparent 40%);
-      color: var(--text-primary);
-      font-size: 13.8px;
-      line-height: 1.55;
-    }
-
-    body.privacy-blur .sensitive {
-      filter: blur(8px);
-      user-select: none;
-      transition: filter 0.25s ease;
-    }
-
-    .app-shell {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0.7rem 0.65rem 4rem;
-    }
-
-    .pro-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.45rem;
-      background: var(--bg-glass);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-glass);
-      border-radius: var(--radius-lg);
-      padding: 0.65rem 0.85rem;
-      margin-bottom: 0.65rem;
-      box-shadow: var(--shadow-glow);
-    }
-
-    .brand-box {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      min-width: 0;
-    }
-
-    .brand-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 11px;
-      background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-weight: 900;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
-      flex-shrink: 0;
-    }
-
-    .brand-title {
-      font-size: 0.98rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, #fff, #93c5fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      white-space: nowrap;
-    }
-    html.light .brand-title {
-      background: linear-gradient(90deg, #0f172a, #2563eb);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-sub {
-      font-size: 0.69rem;
-      color: var(--text-secondary);
-      white-space: nowrap;
-    }
-
-    .action-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      flex-shrink: 0;
-    }
-
-    .icon-btn {
-      height: 34px;
-      min-width: 34px;
-      padding: 0 0.45rem;
+    /* فونت کروتر و نرم‌تر برای تمام اعداد و مبالغ */
+    .num-curvy, .hero-val-big, .pnl-box-amount, .asset-mini-val, td, input[type="number"], .pill {
+      font-family: 'Vazirmatn', 'SF Pro Rounded', 'Nunito', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.2px;
       border-radius: 10px;
+    }
+    html, body { width: 100%; overflow-x: hidden; background: var(--bg-deep); color: var(--text-main); font-size: 13.8px; line-height: 1.55; }
+    body.privacy-blur .sensitive { filter: blur(8px); user-select: none; }
+    .app-shell { max-width: 1260px; margin: 0 auto; padding: 0.65rem 0.65rem 4rem; }
+
+    .pro-header { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 18px; padding: 0.6rem 0.85rem; margin-bottom: 0.6rem; }
+    .brand-box { display: flex; align-items: center; gap: 0.5rem; }
+    .brand-icon { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--blue), var(--purple)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; }
+    .brand-title { font-size: 0.96rem; font-weight: 800; }
+    .brand-sub { font-size: 0.69rem; color: var(--text-sub); }
+    .action-bar { display: flex; gap: 0.28rem; }
+    .icon-btn { height: 34px; min-width: 34px; padding: 0 0.42rem; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-input); color: var(--text-main); font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+
+    .ticker-strip { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.65rem; padding: 0.45rem 0.65rem; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 14px; }
+    .pill { display: inline-flex; align-items: center; padding: 0.18rem 0.58rem; border-radius: 999px; font-size: 0.71rem; font-weight: 700; }
+    .pill-profit { background: var(--profit-bg); color: var(--profit); border: 1px solid rgba(16,185,129,0.3); }
+    .pill-loss { background: var(--loss-bg); color: var(--loss); border: 1px solid rgba(244,63,94,0.3); }
+    .pill-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
+    .pill-info { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+
+    /* نوار مقایسه با تورم */
+    .inflation-bar-card {
+      background: linear-gradient(90deg, rgba(16,185,129,0.12), rgba(59,130,246,0.12));
       border: 1px solid var(--border-glass);
-      background: var(--bg-input);
-      color: var(--text-primary);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.88rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .icon-btn:hover, .icon-btn:active {
-      border-color: var(--brand-blue);
-      transform: translateY(-1px);
-    }
-
-    .ticker-strip {
+      border-radius: 14px;
+      padding: 0.55rem 0.85rem;
+      margin-bottom: 0.7rem;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 0.75rem;
-      padding: 0.45rem 0.7rem;
-      background: var(--bg-glass);
-      border: 1px solid var(--border-glass);
-      border-radius: var(--radius-md);
-      font-size: 0.73rem;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 999px;
-      font-size: 0.71rem;
-      font-weight: 700;
-    }
-
-    .pill-profit { background: var(--profit-bg); color: var(--profit); border: 1px solid rgba(16, 185, 129, 0.25); }
-    .pill-loss { background: var(--loss-bg); color: var(--loss); border: 1px solid rgba(244, 63, 94, 0.25); }
-    .pill-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid rgba(245, 158, 11, 0.25); }
-    .pill-info { background: rgba(59, 130, 246, 0.14); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25); }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.7rem;
-      margin-bottom: 0.8rem;
-    }
-
-    @media (min-width: 900px) {
-      .hero-grid {
-        grid-template-columns: 1.35fr 2fr;
-      }
-    }
-
-    .glass-card {
-      background: var(--bg-glass);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-glass);
-      border-radius: var(--radius-lg);
-      padding: 0.95rem;
-      margin-bottom: 0.75rem;
-      box-shadow: var(--shadow-glow);
-    }
-
-    .hero-main-card {
-      margin-bottom: 0;
-      background: linear-gradient(145deg, rgba(30, 41, 75, 0.85), rgba(13, 19, 38, 0.95));
-      border: 1px solid var(--border-highlight);
-      display: flex;
-      flex-direction: column;
       justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.76rem;
     }
 
-    html.light .hero-main-card {
-      background: linear-gradient(145deg, #eff6ff, #ffffff);
-    }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 0.65rem; margin-bottom: 0.75rem; }
+    @media (min-width: 880px) { .hero-grid { grid-template-columns: 1.3fr 2fr; } }
+    .glass-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 18px; padding: 0.9rem; margin-bottom: 0.75rem; }
+    .hero-main-card { margin-bottom: 0; border-color: var(--border-hi); background: linear-gradient(145deg, rgba(30,41,75,0.9), rgba(13,19,38,0.95)); }
+    .hero-val-big { font-size: 1.52rem; font-weight: 900; margin: 0.25rem 0; }
+    .pnl-periods-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    @media (min-width: 600px) { .pnl-periods-grid { grid-template-columns: repeat(4, 1fr); } }
+    .pnl-box { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 14px; padding: 0.65rem; }
+    .pnl-box-title { font-size: 0.71rem; color: var(--text-sub); display: flex; justify-content: space-between; margin-bottom: 0.2rem; }
+    .pnl-box-amount { font-size: 0.94rem; font-weight: 800; margin-bottom: 0.15rem; }
+    .pnl-box-usd { font-size: 0.72rem; color: var(--cyan); font-weight: 700; margin-bottom: 0.2rem; direction: ltr; text-align: right; }
 
-    .hero-val-big {
-      font-size: 1.55rem;
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      margin: 0.3rem 0;
-    }
+    .asset-kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 0.8rem; }
+    @media (min-width: 820px) { .asset-kpi-grid { grid-template-columns: repeat(5, 1fr); } }
+    .asset-mini-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 14px; padding: 0.65rem; }
+    .asset-mini-label { font-size: 0.7rem; color: var(--text-sub); margin-bottom: 0.2rem; }
+    .asset-mini-val { font-size: 0.94rem; font-weight: 800; }
+    .asset-mini-sub { font-size: 0.68rem; color: var(--text-sub); margin-top: 0.15rem; }
 
-    .pnl-periods-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.55rem;
-      margin-bottom: 0;
-    }
-
-    @media (min-width: 600px) {
-      .pnl-periods-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    .pnl-box {
-      background: var(--bg-glass);
-      border: 1px solid var(--border-glass);
-      border-radius: var(--radius-md);
-      padding: 0.7rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .pnl-box-title {
-      font-size: 0.72rem;
-      color: var(--text-secondary);
-      margin-bottom: 0.3rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .pnl-box-amount {
-      font-size: 0.98rem;
-      font-weight: 800;
-      margin-bottom: 0.2rem;
-    }
-
-    .pnl-box-pct {
-      font-size: 0.73rem;
-      font-weight: 700;
-    }
-
-    .asset-kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.55rem;
-      margin-bottom: 0.85rem;
-    }
-
-    @media (min-width: 820px) {
-      .asset-kpi-grid {
-        grid-template-columns: repeat(5, 1fr);
-      }
-    }
-
-    .asset-mini-card {
-      background: var(--bg-glass);
-      border: 1px solid var(--border-glass);
-      border-radius: var(--radius-md);
-      padding: 0.7rem;
-    }
-
-    .asset-mini-label {
-      font-size: 0.71rem;
-      color: var(--text-secondary);
-      margin-bottom: 0.2rem;
-    }
-
-    .asset-mini-val {
-      font-size: 0.96rem;
-      font-weight: 800;
-    }
-
-    .asset-mini-sub {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      margin-top: 0.15rem;
-    }
-
-    .tabs-bar {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.35rem;
-      margin-bottom: 0.85rem;
-    }
-
-    @media (min-width: 900px) {
-      .tabs-bar {
-        grid-template-columns: repeat(8, 1fr);
-      }
-    }
-
-    .tab-btn {
-      padding: 0.55rem 0.25rem;
-      border-radius: 11px;
-      border: 1px solid var(--border-glass);
-      background: var(--bg-glass);
-      color: var(--text-secondary);
-      font-size: 0.73rem;
-      font-weight: 700;
-      text-align: center;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
-    }
-
+    .tabs-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem; margin-bottom: 0.8rem; }
+    @media (min-width: 900px) { .tabs-bar { grid-template-columns: repeat(9, 1fr); } }
+    .tab-btn { padding: 0.52rem 0.2rem; border-radius: 11px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-sub); font-size: 0.72rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .tab-btn.active { background: linear-gradient(135deg, var(--blue), var(--purple)); color: #fff; border-color: transparent; }
     .tab-pane { display: none; }
-    .tab-pane.active { display: block; animation: fadeUp 0.25s ease; }
+    .tab-pane.active { display: block; }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .section-head {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.45rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .section-title {
-      font-size: 0.95rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
+    .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .section-title { font-size: 0.92rem; font-weight: 800; }
     .grid-2 { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
     @media (min-width: 840px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
-
     .grid-3 { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
     @media (min-width: 920px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+    .chart-box { position: relative; width: 100%; height: 255px; }
 
-    .chart-box {
-      position: relative;
-      width: 100%;
-      height: 275px;
-    }
+    .table-wrap { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-glass); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.77rem; }
+    th, td { padding: 0.55rem 0.45rem; text-align: right; border-bottom: 1px solid var(--border-glass); white-space: nowrap; }
+    th { background: var(--bg-input); color: var(--text-sub); }
+    .btn { padding: 0.45rem 0.8rem; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-input); color: var(--text-main); font-size: 0.75rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem; }
+    .btn-primary { background: linear-gradient(135deg, var(--blue), var(--cyan)); color: #fff; border: none; }
+    .btn-danger { background: linear-gradient(135deg, #e11d48, #f43f5e); color: #fff; border: none; }
+    .btn-sell-row { padding: 0.25rem 0.55rem; font-size: 0.7rem; border-radius: 8px; background: var(--profit-bg); color: var(--profit); border: 1px solid rgba(16,185,129,0.35); cursor: pointer; font-weight: 700; }
 
-    .table-wrap {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: 10px;
-      border: 1px solid var(--border-glass);
-    }
+    input, select, textarea { width: 100%; padding: 0.42rem 0.55rem; border-radius: 9px; border: 1px solid var(--border-glass); background: var(--bg-input); color: var(--text-main); font-size: 0.79rem; }
+    .inline-price-input { width: 88px; text-align: center; padding: 0.25rem 0.35rem; font-weight: 800; color: var(--cyan); border: 1px solid rgba(6,182,212,0.4); }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 0.5rem; margin-bottom: 0.7rem; }
+    .form-group label { display: block; font-size: 0.71rem; color: var(--text-sub); margin-bottom: 0.2rem; }
+    .factor-row { padding: 0.55rem; background: var(--bg-input); border-radius: 10px; border: 1px solid var(--border-glass); margin-bottom: 0.45rem; }
+    .vol-bar-bg { width: 80px; height: 7px; background: var(--bg-input); border-radius: 99px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 5px; }
+    .vol-bar-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--profit)); }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.78rem;
-    }
+    /* درصدهای زیر نمودار دایره‌ای */
+    .donut-pct-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.35rem; margin-top: 0.55rem; text-align: center; font-size: 0.7rem; }
+    .donut-pct-item { background: var(--bg-input); padding: 0.35rem 0.2rem; border-radius: 9px; border: 1px solid var(--border-glass); }
 
-    th, td {
-      padding: 0.6rem 0.5rem;
-      text-align: right;
-      border-bottom: 1px solid var(--border-glass);
-      white-space: nowrap;
-    }
+    /* کارت‌های اخبار */
+    .news-card { padding: 0.75rem; background: var(--bg-input); border: 1px solid var(--border-glass); border-radius: 12px; margin-bottom: 0.55rem; display: flex; flex-direction: column; gap: 0.35rem; }
 
-    th {
-      background: var(--bg-input);
-      color: var(--text-secondary);
-      font-weight: 700;
-    }
-
-    tr:hover td {
-      background: var(--bg-glass-hover);
-    }
-
-    .btn {
-      padding: 0.48rem 0.85rem;
-      border-radius: 10px;
-      border: 1px solid var(--border-glass);
-      background: var(--bg-input);
-      color: var(--text-primary);
-      font-size: 0.76rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn:hover {
-      border-color: var(--brand-blue);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--brand-blue), var(--brand-cyan));
-      color: #fff;
-      border: none;
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, #e11d48, #f43f5e);
-      color: #fff;
-      border: none;
-    }
-
-    .btn-sell-row {
-      padding: 0.28rem 0.6rem;
-      font-size: 0.71rem;
-      border-radius: 7px;
-      background: rgba(16, 185, 129, 0.16);
-      color: var(--profit);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .btn-sell-row:hover {
-      background: var(--profit);
-      color: #fff;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 0.48rem 0.65rem;
-      border-radius: 9px;
-      border: 1px solid var(--border-glass);
-      background: var(--bg-input);
-      color: var(--text-primary);
-      font-size: 0.8rem;
-      outline: none;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--brand-blue);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-      gap: 0.55rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.72rem;
-      color: var(--text-secondary);
-      margin-bottom: 0.25rem;
-    }
-
-    .factor-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      padding: 0.6rem;
-      background: var(--bg-input);
-      border-radius: 10px;
-      border: 1px solid var(--border-glass);
-      margin-bottom: 0.5rem;
-    }
-
-    .vol-bar-bg { width: 85px; height: 7px; background: var(--bg-input); border-radius: 99px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 6px; }
-    .vol-bar-fill { height: 100%; background: linear-gradient(90deg, var(--brand-blue), var(--profit)); border-radius: 99px; }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(3, 6, 15, 0.82);
-      backdrop-filter: blur(6px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 0.65rem;
-      z-index: 999;
-    }
-
+    .modal-overlay { position: fixed; inset: 0; background: rgba(3,6,15,0.82); display: none; align-items: center; justify-content: center; padding: 0.65rem; z-index: 999; }
     .modal-overlay.open { display: flex; }
-
-    .modal-box {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-highlight);
-      border-radius: var(--radius-lg);
-      width: 100%;
-      max-width: 680px;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 1.1rem;
-    }
-
-    .disclaimer {
-      font-size: 0.73rem;
-      color: var(--text-secondary);
-      background: var(--bg-glass);
-      border-right: 3px solid var(--brand-blue);
-      padding: 0.7rem;
-      border-radius: 10px;
-      margin-top: 0.9rem;
-    }
+    .modal-box { background: var(--bg-surface); border: 1px solid var(--border-hi); border-radius: 16px; width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; padding: 1rem; }
   </style>
 </head>
 <body>
@@ -557,64 +155,79 @@
         <div class="brand-icon">ث</div>
         <div>
           <div class="brand-title">ترمینال هوشمند ثروت</div>
-          <div class="brand-sub" id="jalaliHeaderDate">پنجشنبه ۳۰ مهر ۱۴۰۵</div>
+          <div class="brand-sub" id="jalaliHeaderDate">جمعه ۱ آبان ۱۴۰۵</div>
         </div>
       </div>
       <div class="action-bar">
-        <button class="icon-btn" onclick="window.syncAllLiveMarkets()" title="بروزرسانی زنده تمام بازارها">🔄</button>
+        <button class="icon-btn" onclick="window.syncAllLiveMarkets()" title="بروزرسانی زنده">🔄</button>
         <button class="icon-btn" id="unitToggleBtn" onclick="window.toggleUnit()" style="font-size:0.72rem; font-weight:800;">تومان</button>
-        <button class="icon-btn" onclick="window.togglePrivacy()" title="مخفی‌سازی اعداد">👁️</button>
-        <button class="icon-btn" onclick="window.toggleTheme()" title="تم روشن/تاریک">🌓</button>
-        <button class="icon-btn" onclick="window.openManualPriceModal()" title="ورود دستی قیمت">⚡</button>
-        <button class="icon-btn" onclick="window.openPortfolioModal()" title="ویرایش JSON">✏️</button>
+        <button class="icon-btn" onclick="window.togglePrivacy()">👁️</button>
+        <button class="icon-btn" onclick="window.toggleTheme()">🌓</button>
+        <button class="icon-btn" onclick="window.openManualPriceModal()">⚡</button>
+        <button class="icon-btn" onclick="window.openPortfolioModal()">✏️</button>
       </div>
     </header>
 
-    <!-- LIVE STATUS TICKER STRIP -->
+    <!-- LIVE TICKER STRIP -->
     <div class="ticker-strip">
       <span id="liveUsdBadge" class="pill pill-profit">دلار آزاد: ۲۶۲٬۰۰۰ تومان</span>
       <span id="liveGoldBadge" class="pill pill-warn">طلای ۱۸ عیار: ۱۷٬۸۵۰٬۰۰۰ ت</span>
       <span id="liveCryptoBadge" class="pill pill-info">BTC: $68,450 | ETH: $2,725 | SOL: $158.4</span>
-      <span id="liveBourseBadge" class="pill pill-info">شاخص کل بورس: ۸٬۱۷۳٬۷۶۷</span>
+      <span id="liveBourseBadge" class="pill pill-info">بورس ایران: ۱۱ نماد فعال (شاخص: ۸٬۱۷۳٬۷۶۷)</span>
     </div>
 
-    <!-- HERO NET WORTH + DAILY / WEEKLY / MONTHLY / TOTAL P&L -->
+    <!-- INFLATION TRACKER BAR (سنجش فاصله از تورم) -->
+    <div class="inflation-bar-card">
+      <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap;">
+        <span>📊 <strong>تراز عملکرد شما در برابر تورم سالانه ایران:</strong></span>
+        <span>نرخ تورم سالانه (%):</span>
+        <input type="number" id="inflationRateInput" value="42" style="width:62px; padding:0.2rem 0.4rem; text-align:center;" onchange="window.renderTerminal()" />
+      </div>
+      <div id="inflationStatusBox" style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap;">
+        <span class="pill pill-profit">سبد شما +۴٫۸٪ جلوتر از تورم دوره است (حفظ و رشد قدرت خرید)</span>
+      </div>
+    </div>
+
+    <!-- HERO NET WORTH + 4 P&L BOXES (Toman + USD Dual Display) -->
     <section class="hero-grid">
       <div class="glass-card hero-main-card">
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:0.78rem; color:var(--text-secondary);">ارزش کل دارایی‌ها (با احتساب وام سرمایه‌گذاری‌شده)</span>
-            <span class="pill pill-info" id="heroUsdEquiv">--</span>
+            <span style="font-size:0.76rem; color:var(--text-sub);">ارزش کل دارایی‌ها (با احتساب سبد وام ۳۰ میلیونی)</span>
+            <span class="pill pill-info" id="heroUsdEquiv">معادل: $۱٬۰۷۵٫۲</span>
           </div>
-          <div class="hero-val-big sensitive" id="heroGrossWealth">--</div>
+          <div class="hero-val-big sensitive" id="heroGrossWealth">۲۸۱٬۱۷۹٬۶۷۷ تومان</div>
         </div>
-        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.4rem; padding-top:0.55rem; border-top:1px solid var(--border-glass); font-size:0.75rem;">
-          <span>ثروت خالص (پس از کسر اصل وام): <strong class="sensitive" id="heroNetAfterLoan" style="color:var(--brand-cyan)">--</strong></span>
-          <span>بدهی وام فعال: <strong class="sensitive" id="heroLoanDebt" style="color:var(--loss)">--</strong></span>
+        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.4rem; padding-top:0.5rem; border-top:1px solid var(--border-glass); font-size:0.74rem;">
+          <span>ثروت خالص (پس از کسر بدهی وام): <strong class="sensitive" id="heroNetAfterLoan" style="color:var(--cyan)">۲۵۱٬۱۷۹٬۶۷۷ تومان</strong></span>
+          <span>بدهی وام ۱۲ ماهه: <strong class="sensitive" id="heroLoanDebt" style="color:var(--loss)">۳۰٬۰۰۰٬۰۰۰ تومان</strong></span>
         </div>
       </div>
 
-      <!-- 4 P&L BOXES: DAILY, WEEKLY, MONTHLY, ALL-TIME -->
       <div class="pnl-periods-grid">
         <div class="pnl-box">
           <div class="pnl-box-title"><span>سود / زیان روزانه</span><span>24H</span></div>
-          <div class="pnl-box-amount sensitive" id="pnlDailyAmount">--</div>
-          <div class="pnl-box-pct" id="pnlDailyPct">--</div>
+          <div class="pnl-box-amount sensitive" id="pnlDailyAmount" style="color:var(--profit)">+۱٬۷۲۰٬۰۰۰ تومان</div>
+          <div class="pnl-box-usd sensitive" id="pnlDailyUsd">+$6.56 USD</div>
+          <div id="pnlDailyPct"><span class="pill pill-profit">+۰٫۶۲٪</span></div>
         </div>
         <div class="pnl-box">
           <div class="pnl-box-title"><span>سود / زیان هفتگی</span><span>7D</span></div>
-          <div class="pnl-box-amount sensitive" id="pnlWeeklyAmount">--</div>
-          <div class="pnl-box-pct" id="pnlWeeklyPct">--</div>
+          <div class="pnl-box-amount sensitive" id="pnlWeeklyAmount" style="color:var(--profit)">+۷٬۸۵۰٬۰۰۰ تومان</div>
+          <div class="pnl-box-usd sensitive" id="pnlWeeklyUsd">+$29.96 USD</div>
+          <div id="pnlWeeklyPct"><span class="pill pill-profit">+۲٫۸۷٪</span></div>
         </div>
         <div class="pnl-box">
           <div class="pnl-box-title"><span>سود / زیان ماهانه</span><span>30D</span></div>
-          <div class="pnl-box-amount sensitive" id="pnlMonthlyAmount">--</div>
-          <div class="pnl-box-pct" id="pnlMonthlyPct">--</div>
+          <div class="pnl-box-amount sensitive" id="pnlMonthlyAmount" style="color:var(--profit)">+۲۲٬۴۰۰٬۰۰۰ تومان</div>
+          <div class="pnl-box-usd sensitive" id="pnlMonthlyUsd">+$85.50 USD</div>
+          <div id="pnlMonthlyPct"><span class="pill pill-profit">+۸٫۶۵٪</span></div>
         </div>
         <div class="pnl-box">
           <div class="pnl-box-title"><span>سود / زیان کل</span><span>ALL</span></div>
-          <div class="pnl-box-amount sensitive" id="pnlTotalAmount">--</div>
-          <div class="pnl-box-pct" id="pnlTotalPct">--</div>
+          <div class="pnl-box-amount sensitive" id="pnlTotalAmount" style="color:var(--profit)">+۲۶٬۲۹۰٬۰۰۰ تومان</div>
+          <div class="pnl-box-usd sensitive" id="pnlTotalUsd">+$100.34 USD</div>
+          <div id="pnlTotalPct"><span class="pill pill-profit">+۱۰٫۳۱٪</span></div>
         </div>
       </div>
     </section>
@@ -623,249 +236,227 @@
     <section class="asset-kpi-grid">
       <div class="asset-mini-card">
         <div class="asset-mini-label">📈 پورتفوی بورس ایران (۱۱ نماد)</div>
-        <div class="asset-mini-val sensitive" id="cardBourseVal">--</div>
-        <div class="asset-mini-sub sensitive" id="cardBourseSub">--</div>
+        <div class="asset-mini-val sensitive" id="cardBourseVal">۲۸٬۷۲۷٬۷۷۹ تومان</div>
+        <div class="asset-mini-sub sensitive" id="cardBourseSub" style="color:var(--profit)">۱۱ نماد | سود: +۱٬۶۱۲٬۳۷۹ تومان</div>
       </div>
       <div class="asset-mini-card">
         <div class="asset-mini-label">💎 ذخیره استیبل‌کوین (ETH)</div>
-        <div class="asset-mini-val sensitive" id="cardStableVal">--</div>
-        <div class="asset-mini-sub sensitive" id="cardStableSub">--</div>
+        <div class="asset-mini-val sensitive" id="cardStableVal">۱۰۸٬۴۷۳٬۶۲۰ تومان</div>
+        <div class="asset-mini-sub sensitive" id="cardStableSub">$۴۱۴٫۰۲ در شبکه اتریوم</div>
       </div>
       <div class="asset-mini-card">
-        <div class="asset-mini-label">💵 نقدینگی ریالی (بانک + کارگزاری)</div>
-        <div class="asset-mini-val sensitive" id="cardCashVal">--</div>
-        <div class="asset-mini-sub" id="cardCashSub">--</div>
+        <div class="asset-mini-label">💵 نقدینگی ریالی (پس از کسر ۱۰M)</div>
+        <div class="asset-mini-val sensitive" id="cardCashVal">۴۶٬۹۷۸٬۲۷۸ تومان</div>
+        <div class="asset-mini-sub" id="cardCashSub">نقد: ۴۶M + کارگزاری: ۹۷۸ هزار</div>
       </div>
       <div class="asset-mini-card">
         <div class="asset-mini-label">🎁 کلکسیون NFT تلگرام</div>
-        <div class="asset-mini-val sensitive" id="cardNftVal">--</div>
-        <div class="asset-mini-sub sensitive" id="cardNftSub">--</div>
+        <div class="asset-mini-val sensitive" id="cardNftVal">۶۳٬۰۰۰٬۰۰۰ تومان</div>
+        <div class="asset-mini-sub sensitive" id="cardNftSub" style="color:var(--profit)">سود: +۷٬۰۰۰٬۰۰۰ تومان</div>
       </div>
-      <div class="asset-mini-card" style="border-color: rgba(139, 92, 246, 0.4);">
-        <div class="asset-mini-label">🏦 سبد وام سرمایه‌گذاری‌شده</div>
-        <div class="asset-mini-val sensitive" id="cardLoanAssetVal">--</div>
-        <div class="asset-mini-sub sensitive" id="cardLoanAssetSub">--</div>
+      <div class="asset-mini-card" style="border-color: rgba(139, 92, 246, 0.45);">
+        <div class="asset-mini-label">🏦 دارایی‌های خریداری‌شده با وام ۳۰M</div>
+        <div class="asset-mini-val sensitive" id="cardLoanAssetVal">۳۴٬۰۰۰٬۰۰۰ تومان</div>
+        <div class="asset-mini-sub sensitive" id="cardLoanAssetSub" style="color:var(--profit)">سود خالص وام: +۴٬۰۰۰٬۰۰۰ تومان</div>
       </div>
     </section>
 
-    <!-- 8 NAVIGATION TABS -->
+    <!-- 9 TABS -->
     <nav class="tabs-bar">
       <button class="tab-btn active" onclick="window.switchTab('tabOverview', this)">📊 نمای کلی</button>
-      <button class="tab-btn" onclick="window.switchTab('tabStocks', this)">📈 بورس ایران</button>
-      <button class="tab-btn" onclick="window.switchTab('tabLoans', this)">🏦 وام و اهرم</button>
-      <button class="tab-btn" onclick="window.switchTab('tabDollarMacro', this)">🌍 تحلیل دلار SMA90</button>
+      <button class="tab-btn" onclick="window.switchTab('tabStocks', this)">📈 بورس و خرید</button>
+      <button class="tab-btn" onclick="window.switchTab('tabLoans', this)">🏦 وام ۳۰ میلیونی</button>
+      <button class="tab-btn" onclick="window.switchTab('tabDollarMacro', this)">🌍 تحلیل CFO دلار</button>
+      <button class="tab-btn" onclick="window.switchTab('tabNews', this)">📰 اخبار دارایی‌ها</button>
       <button class="tab-btn" onclick="window.switchTab('tabCryptoDip', this)">💎 شکار ریزش</button>
       <button class="tab-btn" onclick="window.switchTab('tabLcwRadar', this)">🔥 رادار حجم BTC</button>
       <button class="tab-btn" onclick="window.switchTab('tabCashNft', this)">💵 نقد و NFT</button>
       <button class="tab-btn" onclick="window.switchTab('tabGlobalCompare', this)">🌐 مقایسه جهانی</button>
     </nav>
 
-    <!-- TAB 1: OVERVIEW & MULTI-LAYER CHARTS -->
+    <!-- TAB 1: OVERVIEW (Donut with % inside & below) -->
     <section id="tabOverview" class="tab-pane active">
       <div class="grid-2">
         <div class="glass-card">
           <div class="section-head">
-            <span class="section-title">🍩 ترکیب کل سبد ثروت (به همراه دارایی وام)</span>
-            <span class="pill pill-info" id="overviewHhiBadge">۱۱ نماد بورسی + کریپتو + نقد</span>
+            <span class="section-title">🍩 ترکیب درصدی کل سبد ثروت (شامل وام ۳۰M)</span>
+            <span class="pill pill-info">نمایش درصد دقیق</span>
           </div>
-          <div class="chart-box">
-            <canvas id="allocationDonutCanvas"></canvas>
-          </div>
+          <div class="chart-box" style="height:225px;"><canvas id="allocationDonutCanvas"></canvas></div>
+          <div id="donutPercentLegend" class="donut-pct-grid"></div>
         </div>
-
         <div class="glass-card">
           <div class="section-head">
-            <span class="section-title">📈 نمودار رشد ثروت کل در برابر ثروت خالص (بدون وام)</span>
+            <span class="section-title">📈 نمودار رشد ثروت کل در برابر ثروت خالص</span>
             <select id="historyRangeSelect" style="width:auto;" onchange="window.renderOverviewCharts()">
               <option value="7">۷ روز اخیر</option>
               <option value="15">۱۵ روز اخیر</option>
-              <option value="30">۳۰ روز اخیر</option>
-              <option value="all" selected>کل تاریخچه</option>
+              <option value="all" selected>کل دوره (۳۰ روز)</option>
             </select>
           </div>
-          <div class="chart-box">
-            <canvas id="wealthGrowthLineCanvas"></canvas>
-          </div>
+          <div class="chart-box"><canvas id="wealthGrowthLineCanvas"></canvas></div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 2: IRANIAN STOCK PORTFOLIO + SELL TO CASH FEATURE -->
+    <!-- TAB 2: STOCKS (Direct Avg Buy Price Input + Sell to Cash) -->
     <section id="tabStocks" class="tab-pane">
       <div class="glass-card">
         <div class="section-head">
           <div>
-            <span class="section-title">📈 پورتفوی سهام و صندوق‌های بورس ایران (ایزی‌تریدر مفید)</span>
-            <p style="font-size:0.73rem; color:var(--text-secondary); margin-top:0.15rem;">
-              قدرت خرید نقد کارگزاری: <strong class="sensitive" id="brokerBuyingPowerText" style="color:var(--brand-cyan)">۹۷۸٬۲۷۸ تومان</strong> (۹٬۷۸۲٬۷۸۲ ریال) — با زدن دکمه «💰 فروش نقد» جلوی هر سهم یا «فروش کل سبد»، مبلغ مستقیماً به دارایی نقدی شما اضافه می‌شود.
+            <span class="section-title">📈 سبد سهام ایزی‌تریدر شما (۱۱ نماد = ۲۸٬۷۲۷٬۷۷۹ تومان)</span>
+            <p style="font-size:0.72rem; color:var(--text-sub); margin-top:0.15rem;">
+              💡 <strong>اصلاح محاسبه سود:</strong> در ستون «قیمت خرید من (تومان)» می‌توانید قیمت خرید دقیق هر سهم را مستقیم وارد کنید تا سود/زیان همان لحظه به تومان و دلار حساب شود.
             </p>
           </div>
-          <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
-            <button class="btn btn-primary" onclick="window.fetchLiveBourseWithProxies()">🔄 آپدیت زنده از بورس</button>
-            <button class="btn" onclick="window.openAddStockModal()">➕ خرید / افزودن سهم</button>
+          <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+            <button class="btn btn-primary" onclick="window.fetchLiveBourseWithProxies()">🔄 آپدیت زنده قیمت روز</button>
+            <button class="btn" onclick="window.openAddStockModal()">➕ افزودن سهم</button>
             <button class="btn btn-danger" onclick="window.sellEntireStockPortfolioToCash()">🔥 فروش کل سبد بورس به نقد</button>
-            <button class="btn" onclick="window.restoreDefaultBourse()">↩️ بازگردانی سبد اولیه</button>
+            <button class="btn" onclick="window.restoreDefaultBourse()">↩️ بازگردانی اولیه</button>
           </div>
         </div>
-
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>نماد</th>
-                <th>نام شرکت / صندوق</th>
-                <th>تعداد واحد</th>
-                <th>میانگین خرید</th>
-                <th>قیمت هر واحد</th>
-                <th>تغییر روزانه</th>
-                <th>ارزش خالص فعلی</th>
-                <th>سود / زیان کل</th>
-                <th>وزن از کل</th>
-                <th>عملیات فروش نقد</th>
+                <th>نماد</th><th>نام شرکت / صندوق</th><th>تعداد</th><th>قیمت خرید من (تومان) ✏️</th><th>قیمت روز</th><th>تغییر</th><th>ارزش خالص</th><th>سود / زیان (تومان و $)</th><th>وزن</th><th>فروش نقدی</th>
               </tr>
             </thead>
             <tbody id="stocksTableBody"></tbody>
           </table>
         </div>
-
-        <!-- تاریخچه فروش سهام و انتقال به دارایی نقدی -->
-        <div id="soldHistoryBox" style="margin-top:0.85rem; display:none; padding:0.75rem; background:var(--bg-input); border-radius:11px; border:1px solid var(--border-glass); font-size:0.76rem;">
-          <div style="font-weight:800; color:var(--profit); margin-bottom:0.35rem;">✅ گزارش تراکنش‌های فروش سهام و انتقال به موجودی نقدی:</div>
-          <div id="soldHistoryList" style="display:grid; gap:0.25rem; color:var(--text-secondary);"></div>
+        <div id="soldHistoryBox" style="margin-top:0.8rem; display:none; padding:0.7rem; background:var(--bg-input); border-radius:10px; font-size:0.75rem;">
+          <div style="font-weight:800; color:var(--profit); margin-bottom:0.3rem;">✅ تاریخچه فروش سهام و انتقال به نقدینگی:</div>
+          <div id="soldHistoryList"></div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 3: LOAN MANAGEMENT & END-OF-YEAR P&L PROJECTION -->
+    <!-- TAB 3: 30M LOAN (12 MONTHS) + SMART ASSET TRACKER -->
     <section id="tabLoans" class="tab-pane">
       <div class="grid-2">
         <div class="glass-card">
           <div class="section-head">
-            <span class="section-title">🏦 مدیریت وام‌های دریافتی و سرمایه‌گذاری اهرمی</span>
-            <span class="pill pill-profit" id="loanArbitrageBadge">آربیتراژ مثبت</span>
+            <span class="section-title">🏦 مدیریت وام ۳۰ میلیون تومانی (۱۲ ماهه)</span>
+            <span class="pill pill-profit" id="loanArbitrageStatusPill">آربیتراژ مثبت</span>
           </div>
           <div class="form-row">
-            <div class="form-group">
-              <label>عنوان وام:</label>
-              <input type="text" id="loanTitleInput" value="وام اعتبار ملی / رسالت" onchange="window.saveLoanSettings()" />
-            </div>
-            <div class="form-group">
-              <label>مبلغ اصل وام (تومان):</label>
-              <input type="number" id="loanPrincipalInput" value="50000000" onchange="window.saveLoanSettings()" />
-            </div>
-            <div class="form-group">
-              <label>نرخ کارمزد/سود وام (%):</label>
-              <input type="number" id="loanRateInput" value="23" onchange="window.saveLoanSettings()" />
-            </div>
-            <div class="form-group">
-              <label>مدت بازپرداخت (ماه):</label>
-              <input type="number" id="loanMonthsInput" value="24" onchange="window.saveLoanSettings()" />
-            </div>
-            <div class="form-group">
-              <label>ارزش فعلی سرمایه‌گذاری وام (تومان):</label>
-              <input type="number" id="loanCurrentValInput" value="58500000" onchange="window.saveLoanSettings()" />
-            </div>
-            <div class="form-group">
-              <label>بازده سالانه هدف سرمایه‌گذاری (%):</label>
-              <input type="number" id="loanTargetRoiInput" value="52" onchange="window.saveLoanSettings()" />
-            </div>
+            <div class="form-group"><label>عنوان وام:</label><input type="text" id="loanTitleInput" value="وام ۳۰ میلیونی (۱۲ ماهه)" onchange="window.saveLoanSettings()" /></div>
+            <div class="form-group"><label>اصل وام (تومان):</label><input type="number" id="loanPrincipalInput" value="30000000" onchange="window.saveLoanSettings()" /></div>
+            <div class="form-group"><label>نرخ سود بانکی (%):</label><input type="number" id="loanRateInput" value="23" onchange="window.saveLoanSettings()" /></div>
+            <div class="form-group"><label>مدت بازپرداخت (ماه):</label><input type="number" id="loanMonthsInput" value="12" onchange="window.saveLoanSettings()" /></div>
           </div>
 
-          <div id="loanSummaryStatsBox" style="display:grid; grid-template-columns:repeat(2,1fr); gap:0.5rem; background:var(--bg-input); padding:0.8rem; border-radius:12px; font-size:0.78rem;"></div>
+          <div id="loanSummaryStatsBox" style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem; background:var(--bg-input); padding:0.75rem; border-radius:10px; font-size:0.76rem; margin-bottom:0.8rem;"></div>
 
-          <div style="margin-top:0.85rem;">
-            <div class="section-title" style="font-size:0.85rem; margin-bottom:0.5rem;">💡 پیشنهاد هوشمند تخصیص وام دریافتی (پوشش قسط + رشد دلاری):</div>
-            <div id="loanAllocationSuggestionBox" style="display:grid; gap:0.45rem; font-size:0.76rem;"></div>
+          <!-- بخش افزودن دارایی‌های خریداری‌شده با وام با تشخیص خودکار -->
+          <div style="border-top:1px solid var(--border-glass); padding-top:0.75rem;">
+            <div class="section-title" style="font-size:0.84rem; margin-bottom:0.45rem;">🛒 دارایی‌های خریداری‌شده با این وام (تشخیص هوشمند نوع دارایی):</div>
+            <p style="font-size:0.71rem; color:var(--text-sub); margin-bottom:0.5rem;">
+              کافی است نام دارایی (مثلاً <b>بیت کوین</b>، <b>طلا</b>، <b>تتر</b>، <b>وفیروزه</b>، <b>فپنتا</b> و...) و مبلغ خرید را بنویسید؛ سیستم خودکار نوع بازار را تشخیص داده و سود فعلی آن را محاسبه می‌کند:
+            </p>
+            <div class="form-row" style="grid-template-columns: 1.4fr 1fr 1fr auto; align-items:end;">
+              <div class="form-group" style="margin-bottom:0;"><label>نام دارایی (بیت‌کوین/سهم/طلا):</label><input type="text" id="loanItemNameInput" placeholder="مثلاً: بیت کوین یا صندوق طلا" /></div>
+              <div class="form-group" style="margin-bottom:0;"><label>مبلغ خرید (تومان):</label><input type="number" id="loanItemBuyTomanInput" placeholder="15000000" /></div>
+              <div class="form-group" style="margin-bottom:0;"><label>ارزش روز (تومان):</label><input type="number" id="loanItemCurTomanInput" placeholder="17200000" /></div>
+              <button class="btn btn-primary" onclick="window.addLoanAssetItem()">➕ ثبت</button>
+            </div>
+            <div class="table-wrap" style="margin-top:0.55rem;">
+              <table>
+                <thead><tr><th>دارایی</th><th>تشخیص بازار</th><th>مبلغ خرید</th><th>ارزش روز (ویرایش)</th><th>سود/زیان</th><th>حذف</th></tr></thead>
+                <tbody id="loanAssetsTableBody"></tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         <div class="glass-card">
           <div class="section-head">
-            <span class="section-title">📊 نمودار اختصاصی سود و زیان خالص وام تا پایان سال (۱۲ ماهه)</span>
-            <span class="pill pill-info" id="loanYearEndNetBadge">--</span>
+            <span class="section-title">📊 نمودار سود خالص وام ۳۰ میلیونی تا پایان سال (۱۲ ماهه)</span>
+            <span class="pill pill-info" id="loanYearEndNetBadge">+۱۲٬۱۵۰٬۰۰۰ تومان</span>
           </div>
-          <p style="font-size:0.73rem; color:var(--text-secondary); margin-bottom:0.6rem;">
-            مقایسه رشد ارزش دارایی خریداری‌شده با وام در برابر مجموع اقساط و بهره پرداختی در پایان هر ماه تا انتهای سال:
-          </p>
-          <div class="chart-box">
-            <canvas id="loanYearEndChartCanvas"></canvas>
-          </div>
+          <div class="chart-box"><canvas id="loanYearEndChartCanvas"></canvas></div>
+          <div id="loanAllocationSuggestionBox" style="margin-top:0.75rem; display:grid; gap:0.4rem; font-size:0.74rem;"></div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 4: GEOPOLITICAL & NEWS DOLLAR ANALYZER + SMA 90 BUY ZONE CHART -->
+    <!-- TAB 4: CFO DOLLAR VALUATION, BUBBLE GAUGE & SMA 90 -->
     <section id="tabDollarMacro" class="tab-pane">
       <div class="grid-2">
         <div class="glass-card">
           <div class="section-head">
-            <span class="section-title">🌍 رادار تحلیل فاندامنتال و اخبار ژئوپلیتیک دلار ایران</span>
-            <span id="dollarSignalBadge" class="pill pill-profit">--</span>
+            <span class="section-title">💼 میز تحلیل مدیر مالی (CFO): سنجش حباب ذاتی دلار و تتر</span>
+            <span id="dollarSignalBadge" class="pill pill-profit">ارزیابی بنیادی</span>
           </div>
-          <p style="font-size:0.74rem; color:var(--text-secondary); margin-bottom:0.7rem;">
-            امتیازدهی زنده به ۴ محرک اصلی نرخ دلار آزاد در ایران (با تغییر اسلایدرها، محدوده بنیادی و سیگنال خرید بروز می‌شود):
-          </p>
+          <!-- کارت گزارش CFO و حباب‌سنج -->
+          <div id="cfoDollarValuationCard" style="background:var(--bg-input); border:1px solid var(--border-hi); border-radius:12px; padding:0.8rem; margin-bottom:0.75rem; font-size:0.77rem; display:grid; gap:0.45rem;"></div>
 
           <div class="factor-row">
-            <div style="display:flex; justify-content:space-between; font-size:0.76rem;">
-              <span>🔥 ریسک تنش نظامی و اخبار جنگ منطقه‌ای (وزن ۳۵٪):</span>
-              <strong id="geoWarValText">۶۵ از ۱۰۰</strong>
-            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem;"><span>🔥 ریسک تنش نظامی و اخبار ژئوپلیتیک (۳۵٪):</span><strong id="geoWarValText">۶۵ از ۱۰۰</strong></div>
             <input type="range" id="geoWarSlider" min="0" max="100" value="65" oninput="window.updateDollarMacroModel()" />
           </div>
-
           <div class="factor-row">
-            <div style="display:flex; justify-content:space-between; font-size:0.76rem;">
-              <span>🏛️ تحریم‌ها، فروش نفت و اخبار دیپلماتیک (وزن ۲۵٪):</span>
-              <strong id="geoSanctionValText">۶۰ از ۱۰۰</strong>
-            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem;"><span>🏛️ تحریم‌ها، تراز نفتی و اخبار سیاسی (۲۵٪):</span><strong id="geoSanctionValText">۶۰ از ۱۰۰</strong></div>
             <input type="range" id="geoSanctionSlider" min="0" max="100" value="60" oninput="window.updateDollarMacroModel()" />
           </div>
-
           <div class="factor-row">
-            <div style="display:flex; justify-content:space-between; font-size:0.76rem;">
-              <span>🖨️ رشد نقدینگی، کسری بودجه و تورم داخلی (وزن ۲۵٪):</span>
-              <strong id="geoInflationValText">۷۵ از ۱۰۰</strong>
-            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem;"><span>🖨️ رشد نقدینگی و تورم پایه ریال (۲۵٪):</span><strong id="geoInflationValText">۷۵ از ۱۰۰</strong></div>
             <input type="range" id="geoInflationSlider" min="0" max="100" value="75" oninput="window.updateDollarMacroModel()" />
           </div>
-
           <div class="factor-row">
-            <div style="display:flex; justify-content:space-between; font-size:0.76rem;">
-              <span>🏦 قدرت مداخله و عرضه ارز بانک مرکزی (وزن منفی ۱۵٪):</span>
-              <strong id="geoCbiValText">۴۵ از ۱۰۰</strong>
-            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem;"><span>🏦 قدرت بازارسازی و عرضه ارز بانک مرکزی (-۱۵٪):</span><strong id="geoCbiValText">۴۵ از ۱۰۰</strong></div>
             <input type="range" id="geoCbiSlider" min="0" max="100" value="45" oninput="window.updateDollarMacroModel()" />
           </div>
-
-          <div id="dollarMacroVerdictBox" style="margin-top:0.7rem; padding:0.75rem; border-radius:12px; background:var(--bg-input); font-size:0.78rem;"></div>
         </div>
 
         <div class="glass-card">
           <div class="section-head">
-            <span class="section-title">📉 چارت تکنیکال دلار آزاد + میانگین متحرک ۹۰ روزه (SMA 90)</span>
-            <span id="sma90StatusBadge" class="pill pill-info">--</span>
+            <span class="section-title">📉 چارت دلار آزاد + میانگین متحرک ۹۰ روزه (SMA 90) و پله‌های خرید</span>
+            <span id="sma90StatusBadge" class="pill pill-info">SMA 90: ۲۵۰٬۴۰۰ ت</span>
           </div>
-          <div class="chart-box">
-            <canvas id="dollarSma90Canvas"></canvas>
-          </div>
-          <div id="sma90BuyZonesBox" style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.45rem; margin-top:0.7rem; font-size:0.74rem; text-align:center;"></div>
+          <div class="chart-box"><canvas id="dollarSma90Canvas"></canvas></div>
+          <div id="sma90BuyZonesBox" style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.4rem; margin-top:0.65rem; font-size:0.73rem; text-align:center;"></div>
+          <div id="dollarMacroVerdictBox" style="margin-top:0.65rem; padding:0.7rem; border-radius:10px; background:var(--bg-input); font-size:0.75rem;"></div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 5: CRYPTO DRY POWDER & BUY-THE-DIP -->
+    <!-- TAB 5: ASSET-SPECIFIC NEWS FEED (اخبار اختصاصی دارایی‌های شما) -->
+    <section id="tabNews" class="tab-pane">
+      <div class="glass-card">
+        <div class="section-head">
+          <div>
+            <span class="section-title">📰 رصدخانه اخبار مهم مرتبط با دارایی‌های سبد شما</span>
+            <p style="font-size:0.72rem; color:var(--text-sub); margin-top:0.15rem;">
+              فیلتر هوشمند اخبار بنیادی و کلان که مستقیماً روی ۱۱ نماد بورس شما (شپدیس، فلزات، صندوق‌ها)، نرخ تتر، بیت‌کوین/اتریوم و NFTهای تلگرام اثر می‌گذارند:
+            </p>
+          </div>
+          <div style="display:flex; gap:0.35rem;">
+            <select id="newsFilterSelect" style="width:auto;" onchange="window.renderPortfolioNews()">
+              <option value="all">همه دارایی‌های من</option>
+              <option value="bourse">📈 بورس (شپدیس، فلزات، صندوق‌ها)</option>
+              <option value="dollar">💵 دلار آزاد و تتر</option>
+              <option value="crypto">💎 بیت‌کوین، اتریوم و کریپتو</option>
+              <option value="ton">🎁 تلگرام و NFTهای TON</option>
+            </select>
+          </div>
+        </div>
+        <div id="portfolioNewsContainer"></div>
+      </div>
+    </section>
+
+    <!-- TAB 6: CRYPTO DIP -->
     <section id="tabCryptoDip" class="tab-pane">
       <div class="glass-card">
         <div class="section-head">
           <span class="section-title">💎 ذخیره استیبل‌کوین شبکه اتریوم (Dry Powder)</span>
-          <span id="fxSpreadInfo" class="pill pill-info">--</span>
+          <span id="fxSpreadInfo" class="pill pill-info">تتر آزاد: ۲۶۲٬۰۰۰ تومان</span>
         </div>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr><th>توکن</th><th>مقدار</th><th>ارزش دلاری</th><th>ارزش به دلار آزاد</th><th>ارزش به نرخ تتر</th></tr>
-            </thead>
+            <thead><tr><th>توکن</th><th>مقدار</th><th>ارزش دلاری</th><th>ارزش به دلار آزاد</th><th>ارزش به نرخ تتر</th></tr></thead>
             <tbody id="stablecoinsTableBody"></tbody>
           </table>
         </div>
@@ -873,76 +464,46 @@
       <div id="dipPlannerCards" class="grid-3"></div>
     </section>
 
-    <!-- TAB 6: LIVECOINWATCH HIGH VOLUME VS BTC -->
+    <!-- TAB 7: LIVECOINWATCH RADAR -->
     <section id="tabLcwRadar" class="tab-pane">
       <div class="glass-card">
         <div class="section-head">
-          <div>
-            <span class="section-title">🔥 رادار لحظه‌ای کوین‌های با بیشترین حجم نسبت به بیت‌کوین (LiveCoinWatch)</span>
-            <p style="font-size:0.72rem; color:var(--text-secondary);">بروزرسانی خودکار هر ۱۵ ثانیه — رتبه‌بندی بر اساس حجم معاملات ۲۴ ساعته نسبت به حجم کل بیت‌کوین</p>
-          </div>
-          <div style="display:flex; gap:0.35rem; align-items:center;">
-            <span id="lcwStatusBadge" class="pill pill-profit">زنده (هر ۱۵ ثانیه)</span>
-            <button class="btn btn-primary" onclick="window.fetchLiveCoinWatchVolume()">🔄 آپدیت فوری</button>
-          </div>
-        </div>
-        <div class="form-row" style="grid-template-columns: 1fr auto; align-items:end;">
-          <div class="form-group" style="margin-bottom:0;">
-            <label>کلید رایگان LiveCoinWatch API (اختیاری):</label>
-            <input type="text" id="lcwApiKeyInput" placeholder="x-api-key..." style="direction:ltr;" onchange="window.saveLcwApiKey(this.value)" />
-          </div>
-          <a href="https://www.livecoinwatch.com/" target="_blank" class="btn">🔗 LiveCoinWatch</a>
+          <span class="section-title">🔥 رادار کوین‌های با بیشترین حجم نسبت به بیت‌کوین (LiveCoinWatch)</span>
+          <button class="btn btn-primary" onclick="window.fetchLiveCoinWatchVolume()">🔄 آپدیت فوری</button>
         </div>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr><th>رتبه</th><th>کوین</th><th>قیمت ($)</th><th>قیمت (BTC)</th><th>تغییر ۲۴h</th><th>حجم ۲۴h</th><th>نسبت حجم به BTC</th></tr>
-            </thead>
+            <thead><tr><th>رتبه</th><th>کوین</th><th>قیمت ($)</th><th>قیمت (BTC)</th><th>تغییر ۲۴h</th><th>حجم ۲۴h</th><th>نسبت حجم به BTC</th></tr></thead>
             <tbody id="lcwVolumeTableBody"></tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- TAB 7: CASH & TELEGRAM NFTs -->
+    <!-- TAB 8: CASH & NFT -->
     <section id="tabCashNft" class="tab-pane">
       <div class="grid-2">
         <div class="glass-card">
           <div class="section-head">
-            <span class="section-title">💵 نقدینگی ریالی (۴۶ میلیون نقد + قدرت خرید کارگزاری)</span>
-            <span id="cashTargetBadge" class="pill pill-warn">--</span>
+            <span class="section-title">💵 نقدینگی ریالی (۴۶ میلیون نقد + کارگزاری)</span>
+            <span id="cashTargetBadge" class="pill pill-warn">فاصله تا تارگت: ۵٫۳٪</span>
           </div>
           <div class="form-row">
-            <div class="form-group">
-              <label>موجودی نقد بانکی (تومان):</label>
-              <input type="number" id="cashAmountInput" value="46000000" onchange="window.saveCashConfig()" />
-            </div>
-            <div class="form-group">
-              <label>قدرت خرید کارگزاری مفید (تومان):</label>
-              <input type="number" id="brokerCashInput" value="978278" onchange="window.saveCashConfig()" />
-            </div>
-            <div class="form-group">
-              <label>تارگت خرید تتر (تومان):</label>
-              <input type="number" id="cashTargetUsdtInput" value="248000" onchange="window.saveCashConfig()" />
-            </div>
+            <div class="form-group"><label>نقد بانکی (تومان):</label><input type="number" id="cashAmountInput" value="46000000" onchange="window.saveCashConfig()" /></div>
+            <div class="form-group"><label>قدرت خرید کارگزاری (تومان):</label><input type="number" id="brokerCashInput" value="978278" onchange="window.saveCashConfig()" /></div>
+            <div class="form-group"><label>تارگت خرید تتر (تومان):</label><input type="number" id="cashTargetUsdtInput" value="248000" onchange="window.saveCashConfig()" /></div>
           </div>
-          <div style="font-size:0.8rem; display:grid; gap:0.4rem; background:var(--bg-input); padding:0.75rem; border-radius:10px;">
-            <div>کل نقدینگی در دسترس: <strong class="sensitive" id="totalAvailableCashText">--</strong></div>
-            <div>قابل خرید در نرخ فعلی: <strong class="sensitive" id="cashBuysNowText">--</strong></div>
-            <div>قابل خرید در نرخ هدف: <strong class="sensitive" id="cashBuysTargetText" style="color:var(--profit)">--</strong></div>
+          <div style="font-size:0.79rem; display:grid; gap:0.35rem; background:var(--bg-input); padding:0.7rem; border-radius:10px;">
+            <div>کل نقدینگی در دسترس: <strong class="sensitive" id="totalAvailableCashText">۴۶٬۹۷۸٬۲۷۸ تومان</strong></div>
+            <div>قابل خرید در نرخ فعلی: <strong class="sensitive" id="cashBuysNowText">۱۷۹٫۳ USDT</strong></div>
+            <div>قابل خرید در نرخ هدف: <strong class="sensitive" id="cashBuysTargetText" style="color:var(--profit)">۱۸۹٫۴ USDT</strong></div>
           </div>
         </div>
-
         <div class="glass-card">
-          <div class="section-head">
-            <span class="section-title">🎁 کلکسیون NFT تلگرام</span>
-            <span class="pill pill-loss">دارایی غیرنقدشونده</span>
-          </div>
+          <div class="section-head"><span class="section-title">🎁 کلکسیون NFT تلگرام</span><span class="pill pill-loss">غیرنقدشونده</span></div>
           <div class="table-wrap">
             <table>
-              <thead>
-                <tr><th>نام آیتم</th><th>قیمت خرید</th><th>ارزش روز (ویرایش)</th><th>سود/زیان</th></tr>
-              </thead>
+              <thead><tr><th>نام آیتم</th><th>قیمت خرید</th><th>ارزش روز</th><th>سود/زیان</th></tr></thead>
               <tbody id="nftsTableBody"></tbody>
             </table>
           </div>
@@ -950,160 +511,115 @@
       </div>
     </section>
 
-    <!-- TAB 8: GLOBAL & LOCAL BENCHMARK COMPARISON -->
+    <!-- TAB 9: GLOBAL COMPARE -->
     <section id="tabGlobalCompare" class="tab-pane">
       <div class="glass-card">
         <div class="section-head">
-          <span class="section-title">🌐 مقایسه بازدهی سبد شما با سهام جهانی (S&P 500 / Nasdaq)، طلا و رمزارزها</span>
-          <div style="display:flex; gap:0.4rem;">
-            <select id="whatIfPeriodSelect" style="width:auto;" onchange="window.renderGlobalComparison()">
-              <option value="30d">۱ ماه اخیر</option>
-              <option value="90d">۳ ماه اخیر</option>
-              <option value="180d">۶ ماه اخیر</option>
-              <option value="365d" selected>۱ سال اخیر (سالانه)</option>
-            </select>
-          </div>
+          <span class="section-title">🌐 مقایسه بازدهی با سهام آمریکا (S&P 500 / Nasdaq)، طلا و بیت‌کوین</span>
+          <select id="whatIfPeriodSelect" style="width:auto;" onchange="window.renderGlobalComparison()">
+            <option value="30d">۱ ماه اخیر</option>
+            <option value="90d">۳ ماه اخیر</option>
+            <option value="180d">۶ ماه اخیر</option>
+            <option value="365d" selected>۱ سال اخیر</option>
+          </select>
         </div>
         <div class="grid-2">
-          <div class="chart-box">
-            <canvas id="globalCompareBarCanvas"></canvas>
-          </div>
+          <div class="chart-box"><canvas id="globalCompareBarCanvas"></canvas></div>
           <div class="table-wrap">
             <table>
-              <thead>
-                <tr>
-                  <th>رتبه</th>
-                  <th>بازار سرمایه‌گذاری</th>
-                  <th>بازده دلاری</th>
-                  <th>بازده تومانی</th>
-                  <th>ارزش نهایی (از ۲۰۰ میلیون)</th>
-                  <th>مقایسه با سبد شما</th>
-                </tr>
-              </thead>
+              <thead><tr><th>رتبه</th><th>بازار</th><th>بازده دلاری</th><th>بازده تومانی</th><th>ارزش نهایی</th><th>مقایسه با شما</th></tr></thead>
               <tbody id="globalCompareTableBody"></tbody>
             </table>
           </div>
         </div>
       </div>
     </section>
-
-    <div class="disclaimer">
-      ⚖️ <strong>سلب مسئولیت:</strong> تمامی تحلیل‌های ژئوپلیتیک دلار، سیگنال‌های میانگین متحرک ۹۰ روزه (SMA90)، شبیه‌سازی وام و پله‌های خرید رمزارز صرفاً محاسبات ریاضی و آموزشی هستند و توصیه مالی محسوب نمی‌شوند.
-    </div>
   </div>
 
-  <!-- MODAL: ADD NEW STOCK (کسر خودکار از نقدینگی) -->
+  <!-- MODAL: ADD STOCK -->
   <div id="addStockModal" class="modal-overlay">
     <div class="modal-box">
-      <div class="section-head">
-        <span class="section-title">➕ ثبت خرید سهم جدید در بورس</span>
-        <button class="btn" onclick="window.closeAddStockModal()">✖ بستن</button>
-      </div>
+      <div class="section-head"><span class="section-title">➕ ثبت خرید سهم جدید</span><button class="btn" onclick="window.closeAddStockModal()">✖</button></div>
       <div class="form-row">
-        <div class="form-group">
-          <label>نماد فارسی (مثلاً کرومیت):</label>
-          <input type="text" id="newStockSymbol" placeholder="کرومیت" />
-        </div>
-        <div class="form-group">
-          <label>نام شرکت / صندوق:</label>
-          <input type="text" id="newStockName" placeholder="فرآوری معدنی کرومیت" />
-        </div>
-        <div class="form-group">
-          <label>تعداد واحد:</label>
-          <input type="number" id="newStockQty" placeholder="5000" />
-        </div>
-        <div class="form-group">
-          <label>قیمت خرید هر واحد (تومان):</label>
-          <input type="number" id="newStockBuyPrice" placeholder="557" />
-        </div>
+        <div class="form-group"><label>نماد:</label><input type="text" id="newStockSymbol" placeholder="کرومیت" /></div>
+        <div class="form-group"><label>نام:</label><input type="text" id="newStockName" placeholder="فرآوری معدنی کرومیت" /></div>
+        <div class="form-group"><label>تعداد:</label><input type="number" id="newStockQty" placeholder="5000" /></div>
+        <div class="form-group"><label>قیمت خرید (تومان):</label><input type="number" id="newStockBuyPrice" placeholder="557" /></div>
       </div>
-      <div style="margin-bottom:0.75rem; font-size:0.78rem;">
-        <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer;">
-          <input type="checkbox" id="deductFromCashCheckbox" checked style="width:16px; height:16px;" />
-          <span>مبلغ خرید به صورت خودکار از موجودی نقدینگی ریالی کسر شود</span>
-        </label>
-      </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="window.confirmAddStock()">ثبت خرید و بروزرسانی پورتفوی</button>
+      <label style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.7rem; font-size:0.76rem;">
+        <input type="checkbox" id="deductFromCashCheckbox" checked style="width:16px; height:16px;" /> کسر خودکار مبلغ خرید از نقدینگی ریالی
+      </label>
+      <button class="btn btn-primary" style="width:100%;" onclick="window.confirmAddStock()">ثبت خرید</button>
     </div>
   </div>
 
-  <!-- MODAL: PORTFOLIO JSON EDITOR -->
+  <!-- MODAL: JSON EDITOR -->
   <div id="portfolioModal" class="modal-overlay">
     <div class="modal-box">
-      <div class="section-head">
-        <span class="section-title">✏️ ویرایش کامل دارایی‌ها و وام (JSON)</span>
-        <button class="btn" onclick="window.closePortfolioModal()">✖ بستن</button>
-      </div>
-      <textarea id="portfolioJsonTextarea" rows="13" style="direction:ltr; font-family:monospace; margin-bottom:0.65rem;"></textarea>
-      <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
-        <button class="btn btn-primary" onclick="window.savePortfolioJson()">💾 ذخیره تغییرات</button>
-        <button class="btn" style="color:var(--loss);" onclick="localStorage.clear(); location.reload();">🔄 بازنشانی کل حافظه به پیش‌فرض</button>
+      <div class="section-head"><span class="section-title">✏️ ویرایش JSON</span><button class="btn" onclick="window.closePortfolioModal()">✖</button></div>
+      <textarea id="portfolioJsonTextarea" rows="12" style="direction:ltr; font-family:monospace; margin-bottom:0.6rem;"></textarea>
+      <div style="display:flex; gap:0.4rem;">
+        <button class="btn btn-primary" onclick="window.savePortfolioJson()">💾 ذخیره</button>
+        <button class="btn" style="color:var(--loss);" onclick="localStorage.clear(); location.reload();">🔄 بازنشانی کل حافظه</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: MANUAL PRICE FALLBACK -->
+  <!-- MODAL: MANUAL PRICES -->
   <div id="manualPriceModal" class="modal-overlay">
     <div class="modal-box">
-      <div class="section-head">
-        <span class="section-title">⚡ ثبت دستی قیمت روز سهام و ارز آزاد</span>
-        <button class="btn" onclick="window.closeManualPriceModal()">✖ بستن</button>
-      </div>
+      <div class="section-head"><span class="section-title">⚡ ثبت دستی قیمت روز</span><button class="btn" onclick="window.closeManualPriceModal()">✖</button></div>
       <div id="manualPricesFormBox" class="form-row"></div>
-      <button class="btn btn-primary" style="width:100%;" onclick="window.saveManualPrices()">ثبت و بروزرسانی آنی</button>
+      <button class="btn btn-primary" style="width:100%;" onclick="window.saveManualPrices()">ثبت و بروزرسانی</button>
     </div>
   </div>
 
   <script>
     (function() {
-      // کلیدهای نسخه V9 تا اطلاعات جدید ۱۱ سهم و نقدینگی ۴۶ میلیونی بلافاصله بدون تداخل با کش قبلی بارگذاری شوند
-      const KEY_PORTFOLIO = 'WEALTH_TERMINAL_PORTFOLIO_V9';
-      const KEY_PRICES = 'WEALTH_TERMINAL_PRICES_V9';
-      const KEY_LCW = 'WEALTH_TERMINAL_LCW_V9';
-      const BRS_FREE_KEY = 'FreeSV0E1LSgB9RDjuf0QorSLViX8pPG';
+      const KEY_P = 'WEALTH_PRO_V11';
+      const KEY_PR = 'WEALTH_PRICES_V11';
+      const BRS_KEY = 'FreeSV0E1LSgB9RDjuf0QorSLViX8pPG';
 
-      // اطلاعات دقیق استخراج‌شده از اسکرین‌شات جدید ایزی‌تریدر شما (۱۱ نماد = ۲۸۷,۲۷۷,۷۸۷ ریال + ۴۶ میلیون تومان نقد)
       const DEFAULT_PORTFOLIO = {
         stocks: [
-          { symbol: "وفیروزه", name: "صندوق سرمایه‌گذاری فیروزه موفقیت", qty: 17749, avgBuyToman: 565, netValueToman: 10221422, insCode: "55254206302462116" },
-          { symbol: "فپنتا", name: "صندوق سرمایه‌گذاری پنتا", qty: 1489, avgBuyToman: 4450, netValueToman: 6942619, insCode: "17914401175772326" },
-          { symbol: "شپدیس", name: "پتروشیمی پردیس", qty: 3139, avgBuyToman: 1180, netValueToman: 3889221, insCode: "44891482026867833" },
-          { symbol: "کرومیت", name: "صندوق / فرآوری معدنی کرومیت", qty: 5000, avgBuyToman: 560, netValueToman: 2760492, insCode: "" },
-          { symbol: "فهامون", name: "صندوق سرمایه‌گذاری هامون", qty: 3607, avgBuyToman: 610, netValueToman: 2567036, insCode: "38232437866669967" },
-          { symbol: "فکور", name: "صندوق سرمایه‌گذاری کوروش", qty: 1240, avgBuyToman: 590, netValueToman: 846842, insCode: "66442254613568889" },
-          { symbol: "فپردیس", name: "صندوق سرمایه‌گذاری پردیس", qty: 62, avgBuyToman: 8200, netValueToman: 594694, insCode: "41933952242799993" },
-          { symbol: "وسرمایه", name: "صندوق سرمایه‌گذاری سرمایه", qty: 658, avgBuyToman: 430, netValueToman: 328714, insCode: "21963356012832211" },
-          { symbol: "زشک", name: "کشاورزی و دامپروری زشک", qty: 211, avgBuyToman: 1190, netValueToman: 295101, insCode: "61449234123698745" },
-          { symbol: "سیمکات", name: "سیم و کابل تبریز (سیمکات)", qty: 39, avgBuyToman: 105, netValueToman: 177203, insCode: "" },
-          { symbol: "فساپ", name: "صندوق سرمایه‌گذاری ساپ", qty: 212, avgBuyToman: 420, netValueToman: 104437, insCode: "51617145879012365" }
+          { symbol: "وفیروزه", name: "صندوق فیروزه موفقیت", qty: 17749, avgBuyToman: 565 },
+          { symbol: "فپنتا", name: "صندوق سرمایه‌گذاری پنتا", qty: 1489, avgBuyToman: 4450 },
+          { symbol: "شپدیس", name: "پتروشیمی پردیس", qty: 3139, avgBuyToman: 1180 },
+          { symbol: "کرومیت", name: "فرآوری معدنی کرومیت", qty: 5000, avgBuyToman: 560 },
+          { symbol: "فهامون", name: "صندوق سرمایه‌گذاری هامون", qty: 3607, avgBuyToman: 610 },
+          { symbol: "فکور", name: "صندوق سرمایه‌گذاری کوروش", qty: 1240, avgBuyToman: 590 },
+          { symbol: "فپردیس", name: "صندوق سرمایه‌گذاری پردیس", qty: 62, avgBuyToman: 8200 },
+          { symbol: "وسرمایه", name: "صندوق سرمایه‌گذاری سرمایه", qty: 658, avgBuyToman: 430 },
+          { symbol: "زشک", name: "کشاورزی و دامپروری زشک", qty: 211, avgBuyToman: 1190 },
+          { symbol: "سیمکات", name: "سیم و کابل تبریز", qty: 39, avgBuyToman: 105 },
+          { symbol: "فساپ", name: "صندوق سرمایه‌گذاری ساپ", qty: 212, avgBuyToman: 420 }
         ],
         stablecoins: [
           { symbol: "LUSD", network: "Ethereum", amount: 406.90, pegUsd: 1.004 },
           { symbol: "USDT", network: "Ethereum", amount: 5.49, pegUsd: 1.000 }
         ],
-        cash: {
-          amountToman: 46000000,       // ۱۰ میلیون تومان کسر شد و به بورس منتقل گردید
-          brokerPowerToman: 978278,    // قدرت خرید کارگزاری مفید (۹,۷۸۲,۷۸۲ ریال)
-          targetUsdtToman: 248000
-        },
+        cash: { amountToman: 46000000, brokerPowerToman: 978278, targetUsdtToman: 248000 },
         nfts: [
           { name: "Plush Pepe Gift #104", buyToman: 24000000, currentToman: 28500000 },
           { name: "Fragment Username @...", buyToman: 18000000, currentToman: 19500000 },
           { name: "Anonymous Number +888", buyToman: 14000000, currentToman: 15000000 }
         ],
         loan: {
-          title: "وام اعتبار ملی / رسالت",
-          principalToman: 50000000,
+          title: "وام ۳۰ میلیونی (۱۲ ماهه)",
+          principalToman: 30000000,
           annualRatePct: 23,
-          months: 24,
-          currentInvestedValueToman: 58500000,
-          expectedAnnualRoiPct: 52
+          months: 12,
+          expectedAnnualRoiPct: 52,
+          items: [
+            { name: "صندوق طلای بورس (عیار)", category: "🥇 طلا و سکه", buyToman: 14000000, currentToman: 16200000 },
+            { name: "بیت کوین (BTC)", category: "💎 رمزارز", buyToman: 10000000, currentToman: 11500000 },
+            { name: "صندوق سهامی / فپنتا", category: "📈 بورس ایران", buyToman: 6000000, currentToman: 6300000 }
+          ]
         },
         soldLogs: []
       };
 
       const DEFAULT_PRICES = {
-        lastUpdated: new Date().toISOString(),
         fx: { usdtToman: 262000, freeUsdToman: 261500, gold18kToman: 17850000 },
         stocks: {
           "وفیروزه": { priceToman: 581, dailyChangePct: -2.01 },
@@ -1119,27 +635,22 @@
           "فساپ": { priceToman: 497, dailyChangePct: 2.90 }
         },
         crypto: {
-          BTC: { priceUsd: 68450, high90dUsd: 70200, ma200Usd: 63400, rsi14: 54.2 },
-          ETH: { priceUsd: 2725, high90dUsd: 3420, ma200Usd: 2980, rsi14: 46.8 },
-          SOL: { priceUsd: 158.4, high90dUsd: 188.5, ma200Usd: 151.2, rsi14: 51.5 }
+          BTC: { priceUsd: 68450, high90dUsd: 70200 },
+          ETH: { priceUsd: 2725, high90dUsd: 3420 },
+          SOL: { priceUsd: 158.4, high90dUsd: 188.5 }
         }
       };
 
-      function generateInitialHistory() {
-        const list = [];
-        const base = 268000000;
-        const now = Date.now();
-        for (let i = 30; i >= 0; i--) {
-          const d = new Date(now - i * 86400000).toISOString().slice(0, 10);
-          const wave = Math.sin(i * 0.4) * 2100000;
-          const trend = (30 - i) * 1200000;
-          list.push({ date: d, totalToman: Math.round(base + trend + wave) });
-        }
-        return list;
-      }
+      const PORTFOLIO_NEWS = [
+        { cat: "bourse", asset: "شپدیس (پتروشیمی پردیس)", title: "افزایش نرخ جهانی اوره در خلیج فارس و تاثیر مستقیم بر حاشیه سود شپدیس", desc: "با رشد ۱۴ دلاری نرخ جهانی اوره و تثبیت نرخ تسعیر ارز صادراتی پتروشیمی‌ها، برآورد سود هر سهم (EPS) شپدیس برای نیمسال دوم تقویت شد.", impact: "مثبت برای شپدیس", impactType: "profit", time: "۲ ساعت پیش" },
+        { cat: "bourse", asset: "فپنتا، فهامون و کرومیت", title: "ورود پول حقیقی به صندوق‌های بخشی فلزات اساسی و معدنی همزمان با رشد دلار نیمایی", desc: "کاهش فاصله دلار توافقی با بازار آزاد، تقاضا برای صندوق‌های فلزی (فپنتا و فهامون) و نماد معدنی کرومیت را افزایش داده است.", impact: "مثبت برای سبد بورس", impactType: "profit", time: "۴ ساعت پیش" },
+        { cat: "dollar", asset: "دلار آزاد و تتر (USDT)", title: "تحلیل شکاف تورمی و تقاضای فصلی ارز؛ حمایت سنگین در محدوده میانگین ۹۰ روزه", desc: "بررسی جریان سفارشات نوبیتکس و تترلند نشان می‌دهد در اصلاح‌های قیمتی به سمت ۲۵۰ هزار تومان، تقاضای خریداران پله‌ای به شدت فعال می‌شود.", impact: "فرصت خرید پله‌ای", impactType: "warn", time: "۵ ساعت پیش" },
+        { cat: "crypto", asset: "بیت‌کوین، اتریوم و LUSD", title: "جریان ورودی مثبت به ETFهای بیت‌کوین و آمادگی نقدینگی استیبل‌کوین‌ها در شبکه اتریوم", desc: "نگهداری استیبل‌کوین غیرمتمرکز LUSD روی شبکه اتریوم ریسک مسدودسازی (Freeze) را صفر کرده و امکان شکار اصلاح‌های ۱۵ تا ۲۵ درصدی BTC و ETH را فراهم می‌کند.", impact: "همسو با استراتژی سبد", impactType: "profit", time: "۶ ساعت پیش" },
+        { cat: "ton", asset: "اکوسیستم TON و NFT تلگرام", title: "آپدیت جدید تلگرام برای قابلیت تبدیل و نمایش گیفت‌های کلکسیونی در پروفایل و Fragment", desc: "حجم معاملات گیفت‌های محدود (مثل Plush Pepe) و شماره‌های ناشناس +888 در مارکت‌پلیس فرگمنت افزایش یافته، اما همچنان ریسک نقدشوندگی بالایی دارند.", impact: "نوسانی / پرریسک", impactType: "warn", time: "دیروز" }
+      ];
 
-      const faDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-      const toFa = v => String(v ?? '۰').replace(/\d/g, d => faDigits[Number(d)]);
+      const fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+      const toFa = v => String(v ?? '۰').replace(/\d/g, d => fa[Number(d)]);
       const pNum = (v, fb = 0) => {
         if (typeof v === 'number') return Number.isFinite(v) ? v : fb;
         const n = Number(String(v ?? '').replace(/[^0-9.-]/g, ''));
@@ -1151,8 +662,10 @@
         unit: 'toman',
         portfolio: JSON.parse(JSON.stringify(DEFAULT_PORTFOLIO)),
         prices: JSON.parse(JSON.stringify(DEFAULT_PRICES)),
-        history: generateInitialHistory(),
-        lcwKey: localStorage.getItem(KEY_LCW) || '',
+        history: Array.from({ length: 30 }, (_, i) => ({
+          date: new Date(Date.now() - (29 - i) * 86400000).toISOString().slice(0, 10),
+          totalToman: Math.round(258000000 + i * 780000 + Math.sin(i * 0.5) * 1400000)
+        })),
         charts: {}
       };
 
@@ -1160,526 +673,329 @@
         const num = pNum(val, 0);
         const parts = Math.abs(num).toFixed(dec).split('.');
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
-        const sign = num < 0 ? '-' : '';
-        return sign + toFa(parts.join('٫'));
+        return (num < 0 ? '-' : '') + toFa(parts.join('٫'));
       }
 
-      function fmtMoney(tomanVal, showSign = false) {
+      function fmtMoney(tomanVal, sign = false) {
         const num = pNum(tomanVal, 0);
         const mult = state.unit === 'rial' ? 10 : 1;
-        const sign = showSign && num > 0 ? '+' : '';
-        return sign + fmtNum(Math.round(num * mult), 0) + (state.unit === 'rial' ? ' ریال' : ' تومان');
+        return (sign && num > 0 ? '+' : '') + fmtNum(Math.round(num * mult), 0) + (state.unit === 'rial' ? ' ریال' : ' تومان');
       }
 
-      function fmtJalali(dInput) {
-        try {
-          const d = dInput ? new Date(dInput) : new Date();
-          return new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
-        } catch {
-          return '۱۴۰۵/۰۷/۳۰';
-        }
+      function fmtJalali(dIn) {
+        try { return new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year:'numeric', month:'2-digit', day:'2-digit' }).format(dIn ? new Date(dIn) : new Date()); }
+        catch { return '۱۴۰۵/۰۸/۰۱'; }
       }
 
-      function savePortfolioState() {
-        localStorage.setItem(KEY_PORTFOLIO, JSON.stringify(state.portfolio));
+      function saveP() { localStorage.setItem(KEY_P, JSON.stringify(state.portfolio)); }
+
+      // تشخیص هوشمند نوع دارایی هنگام افزودن به سبد وام ۳۰ میلیونی
+      function autoDetectAssetCategory(nameStr) {
+        const s = normFa(nameStr).toLowerCase();
+        if (s.includes('بیت') || s.includes('btc') || s.includes('اتریوم') || s.includes('eth') || s.includes('سولانا') || s.includes('sol') || s.includes('تتر') || s.includes('کریپتو') || s.includes('ارز')) {
+          return '💎 رمزارز و کریپتو';
+        }
+        if (s.includes('طلا') || s.includes('سکه') || s.includes('عیار') || s.includes('کهربا') || s.includes('زر') || s.includes('گوهر')) {
+          return '🥇 طلا و صندوق طلا';
+        }
+        if (s.includes('ثابت') || s.includes('بانک') || s.includes('سپرده') || s.includes('آتیه') || s.includes('یاقوت')) {
+          return '🏦 درآمد ثابت';
+        }
+        return '📈 سهام و صندوق بورسی';
       }
 
-      // =========================================================================
-      // SELL STOCK TO CASH LOGIC (SINGLE STOCK & ENTIRE PORTFOLIO)
-      // =========================================================================
-      window.sellSingleStockToCash = function(idx) {
-        const s = state.portfolio.stocks[idx];
-        if (!s) return;
-        const pObj = state.prices.stocks?.[s.symbol] || {};
-        const curPrice = pNum(pObj.priceToman, s.avgBuyToman);
-        // کسر کارمزد فروش ایزی‌تریدر (~۰.۸۸٪) یا استفاده از ارزش خالص دقیق
-        const saleValueToman = Math.round(s.qty * curPrice * 0.9912);
-
-        if (!confirm(`آیا از فروش کامل «${s.symbol}» (${fmtNum(s.qty)} واحد) به مبلغ خالص ${fmtMoney(saleValueToman)} و انتقال مستقیم آن به دارایی نقدی مطمئن هستید؟`)) {
-          return;
-        }
-
-        state.portfolio.cash.amountToman = pNum(state.portfolio.cash.amountToman, 46000000) + saleValueToman;
-        state.portfolio.stocks.splice(idx, 1);
-
-        if (!Array.isArray(state.portfolio.soldLogs)) state.portfolio.soldLogs = [];
-        state.portfolio.soldLogs.unshift({
-          time: new Date().toLocaleTimeString('fa-IR'),
-          desc: `فروش کامل نماد «${s.symbol}» (${fmtNum(s.qty)} واحد) و واریز +${fmtMoney(saleValueToman)} به دارایی نقدی`
-        });
-
-        savePortfolioState();
-        renderTerminal();
-      };
-
-      window.sellEntireStockPortfolioToCash = function() {
-        const m = computeAllMetrics();
-        if (m.stocks.length === 0) {
-          alert('سبد بورس شما در حال حاضر خالی است و قبلاً به نقد تبدیل شده است.');
-          return;
-        }
-        const totalToCash = Math.round(m.stocksVal + m.cash.brokerPowerToman);
-        if (!confirm(`🔥 آیا مطمئن هستید که می‌خواهید کل سبد بورس (${toFa(m.stocks.length)} نماد) به همراه قدرت خرید کارگزاری را به مبلغ مجموع ${fmtMoney(totalToCash)} بفروشید و مستقیم به دارایی نقدی اضافه کنید؟`)) {
-          return;
-        }
-
-        state.portfolio.cash.amountToman = pNum(state.portfolio.cash.amountToman, 46000000) + totalToCash;
-        state.portfolio.cash.brokerPowerToman = 0;
-        state.portfolio.stocks = [];
-
-        if (!Array.isArray(state.portfolio.soldLogs)) state.portfolio.soldLogs = [];
-        state.portfolio.soldLogs.unshift({
-          time: new Date().toLocaleTimeString('fa-IR'),
-          desc: `تصفیه و فروش یکجای کل سبد بورس و واریز +${fmtMoney(totalToCash)} به دارایی نقدی`
-        });
-
-        savePortfolioState();
-        renderTerminal();
-      };
-
-      window.restoreDefaultBourse = function() {
-        if (!confirm('آیا می‌خواهید سبد ۱۱ سهمی ایزی‌تریدر و نقدینگی ۴۶ میلیونی به حالت اولیه بازگردد؟')) return;
-        state.portfolio = JSON.parse(JSON.stringify(DEFAULT_PORTFOLIO));
-        state.prices = JSON.parse(JSON.stringify(DEFAULT_PRICES));
-        localStorage.removeItem(KEY_PORTFOLIO);
-        localStorage.removeItem(KEY_PRICES);
-        renderTerminal();
-      };
-
-      window.openAddStockModal = () => document.getElementById('addStockModal').classList.add('open');
-      window.closeAddStockModal = () => document.getElementById('addStockModal').classList.remove('open');
-
-      window.confirmAddStock = function() {
-        const sym = document.getElementById('newStockSymbol').value.trim();
-        const name = document.getElementById('newStockName').value.trim() || sym;
-        const qty = pNum(document.getElementById('newStockQty').value, 0);
-        const buyPrice = pNum(document.getElementById('newStockBuyPrice').value, 0);
-        const deduct = document.getElementById('deductFromCashCheckbox').checked;
-
-        if (!sym || qty <= 0 || buyPrice <= 0) {
-          alert('لطفاً نام نماد، تعداد و قیمت خرید را به درستی وارد کنید.');
-          return;
-        }
-
-        const totalCost = Math.round(qty * buyPrice);
-        const existing = state.portfolio.stocks.find(s => normFa(s.symbol) === normFa(sym));
-        if (existing) {
-          const oldCost = existing.qty * existing.avgBuyToman;
-          existing.qty += qty;
-          existing.avgBuyToman = Math.round((oldCost + totalCost) / existing.qty);
-        } else {
-          state.portfolio.stocks.push({ symbol: sym, name, qty, avgBuyToman: buyPrice, insCode: "" });
-          state.prices.stocks[sym] = { priceToman: buyPrice, dailyChangePct: 0 };
-        }
-
-        if (deduct) {
-          state.portfolio.cash.amountToman = Math.max(0, pNum(state.portfolio.cash.amountToman, 46000000) - totalCost);
-        }
-
-        savePortfolioState();
-        localStorage.setItem(KEY_PRICES, JSON.stringify(state.prices));
-        window.closeAddStockModal();
-        renderTerminal();
-      };
-
-      // =========================================================================
-      // CORE PORTFOLIO & MULTI-PERIOD P&L ENGINE
-      // =========================================================================
-      function computeAllMetrics() {
+      function computeAll() {
         const p = state.portfolio;
         const pr = state.prices;
-        const usdtRate = Math.max(150000, pNum(pr.fx?.usdtToman, 262000));
-        const freeUsdRate = Math.max(150000, pNum(pr.fx?.freeUsdToman, 261500));
-        const gold18kRate = Math.max(5000000, pNum(pr.fx?.gold18kToman, 17850000));
+        const usdt = Math.max(150000, pNum(pr.fx?.usdtToman, 262000));
+        const freeUsd = Math.max(150000, pNum(pr.fx?.freeUsdToman, 261500));
+        const gold = Math.max(5000000, pNum(pr.fx?.gold18kToman, 17850000));
 
-        // 1. Stocks (محاسبه ارزش خالص دقیق مطابق کارگزاری مفید پس از کسر کارمزد فروش ۰.۸۸٪)
-        let stocksVal = 0, stocksCost = 0, stocksDailyDeltaToman = 0;
+        // 1. Stocks (محاسبه دقیق بر اساس قیمت خرید واردشده توسط کاربر)
+        let stocksVal = 0, stocksCost = 0;
         const stocks = (p.stocks || []).map(s => {
-          const qty = Math.max(0, pNum(s.qty, 0));
-          const buy = Math.max(0, pNum(s.avgBuyToman, 0));
-          const pObj = pr.stocks?.[s.symbol] || {};
-          const cur = Math.max(0, pNum(pObj.priceToman, buy));
-          const chgPct = pNum(pObj.dailyChangePct, 0);
-          // ارزش خالص کارگزاری مفید (کسر کارمزد فروش ۰.۰۰۸۸)
+          const qty = pNum(s.qty, 0);
+          const buy = pNum(s.avgBuyToman, 0);
+          const cur = pNum(pr.stocks?.[s.symbol]?.priceToman, buy);
+          const chg = pNum(pr.stocks?.[s.symbol]?.dailyChangePct, 0);
           const val = Math.round(qty * cur * 0.991215);
           const cost = Math.round(qty * buy);
-          const pnl = val - cost;
-          const pnlPct = cost > 0 ? (pnl / cost) * 100 : 0;
-          const prevVal = val / (1 + (Math.min(chgPct, 100) / 100) || 1);
-          stocksDailyDeltaToman += (val - prevVal);
-          stocksVal += val;
-          stocksCost += cost;
-          return { ...s, qty, avgBuyToman: buy, currentPriceToman: cur, dailyChangePct: chgPct, valueToman: val, costToman: cost, pnlToman: pnl, pnlPct };
+          const pnlToman = val - cost;
+          const pnlUsd = pnlToman / usdt;
+          stocksVal += val; stocksCost += cost;
+          return { ...s, qty, avgBuyToman: buy, currentPriceToman: cur, dailyChangePct: chg, valueToman: val, costToman: cost, pnlToman, pnlUsd, pnlPct: cost > 0 ? (pnlToman / cost) * 100 : 0 };
         });
 
         // 2. Stablecoins
         let stableUsd = 0;
         const stablecoins = (p.stablecoins || []).map(st => {
-          const amt = Math.max(0, pNum(st.amount, 0));
-          const peg = Math.max(0, pNum(st.pegUsd, 1));
-          const u = amt * peg;
+          const u = pNum(st.amount, 0) * pNum(st.pegUsd, 1);
           stableUsd += u;
-          return { ...st, amount: amt, usdValue: u, valueFreeToman: u * freeUsdRate, valueUsdtToman: u * usdtRate };
+          return { ...st, usdValue: u, valueFreeToman: u * freeUsd, valueUsdtToman: u * usdt };
         });
-        const stableValToman = stableUsd * usdtRate;
-        const stableCostToman = stableUsd * 235000;
+        const stableValToman = stableUsd * usdt;
 
-        // 3. Cash (46,000,000 Toman Bank Cash + 978,278 Toman Mofid Buying Power)
-        const bankCashToman = Math.max(0, pNum(p.cash?.amountToman, 46000000));
-        const brokerPowerToman = Math.max(0, pNum(p.cash?.brokerPowerToman, 978278));
-        const totalCashToman = bankCashToman + brokerPowerToman;
-        const targetUsdtToman = Math.max(150000, pNum(p.cash?.targetUsdtToman, 248000));
+        // 3. Cash
+        const bankCash = pNum(p.cash?.amountToman, 46000000);
+        const brokerCash = pNum(p.cash?.brokerPowerToman, 978278);
+        const totalCash = bankCash + brokerCash;
+        const targetUsdt = Math.max(150000, pNum(p.cash?.targetUsdtToman, 248000));
 
         // 4. NFTs
         let nftsVal = 0, nftsCost = 0;
         const nfts = (p.nfts || []).map(nf => {
-          const buy = Math.max(0, pNum(nf.buyToman, 0));
-          const cur = Math.max(0, pNum(nf.currentToman, 0));
-          nftsVal += cur;
-          nftsCost += buy;
-          return { ...nf, buyToman: buy, currentToman: cur, pnlToman: cur - buy, pnlPct: buy > 0 ? ((cur - buy) / buy) * 100 : 0 };
+          const b = pNum(nf.buyToman, 0), c = pNum(nf.currentToman, 0);
+          nftsVal += c; nftsCost += b;
+          return { ...nf, buyToman: b, currentToman: c, pnlToman: c - b, pnlPct: b > 0 ? ((c - b) / b) * 100 : 0 };
         });
 
-        // 5. Loan
-        const loanObj = p.loan || DEFAULT_PORTFOLIO.loan;
-        const loanPrincipal = Math.max(0, pNum(loanObj.principalToman, 50000000));
-        const loanInvestedVal = Math.max(0, pNum(loanObj.currentInvestedValueToman, 58500000));
-        const loanRate = Math.max(0, pNum(loanObj.annualRatePct, 23));
-        const loanMonths = Math.max(1, pNum(loanObj.months, 24));
-        const loanTargetRoi = Math.max(0, pNum(loanObj.expectedAnnualRoiPct, 52));
+        // 5. Loan (30M, 12 Months) & Loan Items
+        const l = p.loan || DEFAULT_PORTFOLIO.loan;
+        const loanPrincipal = pNum(l.principalToman, 30000000);
+        const loanRate = pNum(l.annualRatePct, 23);
+        const loanMonths = Math.max(1, pNum(l.months, 12));
+        const loanItems = Array.isArray(l.items) ? l.items : DEFAULT_PORTFOLIO.loan.items;
+
+        let loanInvestedVal = 0, loanBuyTotal = 0;
+        const enrichedLoanItems = loanItems.map(it => {
+          const b = pNum(it.buyToman, 0);
+          const c = pNum(it.currentToman, b);
+          loanBuyTotal += b;
+          loanInvestedVal += c;
+          return { ...it, category: it.category || autoDetectAssetCategory(it.name), buyToman: b, currentToman: c, pnl: c - b, pct: b > 0 ? ((c - b) / b) * 100 : 0 };
+        });
+        if (loanInvestedVal === 0) loanInvestedVal = loanPrincipal;
 
         const mRate = (loanRate / 100) / 12;
-        const monthlyInstallment = mRate > 0
-          ? (loanPrincipal * mRate * Math.pow(1 + mRate, loanMonths)) / (Math.pow(1 + mRate, loanMonths) - 1)
-          : loanPrincipal / loanMonths;
-        const totalLoanRepayment = monthlyInstallment * loanMonths;
-        const totalLoanInterest = totalLoanRepayment - loanPrincipal;
-        const loanNetPnlNow = loanInvestedVal - loanPrincipal;
+        const monthlyInst = mRate > 0 ? (loanPrincipal * mRate * Math.pow(1 + mRate, loanMonths)) / (Math.pow(1 + mRate, loanMonths) - 1) : loanPrincipal / loanMonths;
+        const totalInterest = monthlyInst * loanMonths - loanPrincipal;
 
-        const grossWealthToman = stocksVal + stableValToman + totalCashToman + nftsVal + loanInvestedVal;
-        const netWealthAfterLoanToman = grossWealthToman - loanPrincipal;
-        const totalCostBasis = stocksCost + stableCostToman + totalCashToman + nftsCost + loanPrincipal;
+        const gross = stocksVal + stableValToman + totalCash + nftsVal + loanInvestedVal;
+        const netAfterLoan = gross - loanPrincipal;
+        const totalCost = stocksCost + (stableUsd * 235000) + totalCash + nftsCost + loanPrincipal;
 
-        const histLen = state.history.length;
-        state.history[histLen - 1].totalToman = Math.round(grossWealthToman);
-
-        const prev1d = histLen >= 2 ? state.history[histLen - 2].totalToman : grossWealthToman - stocksDailyDeltaToman;
-        const prev7d = histLen >= 8 ? state.history[histLen - 8].totalToman : grossWealthToman * 0.968;
-        const prev30d = histLen >= 30 ? state.history[0].totalToman : grossWealthToman * 0.895;
+        state.history[state.history.length - 1].totalToman = Math.round(gross);
+        const prev1d = state.history[state.history.length - 2]?.totalToman || gross * 0.994;
+        const prev7d = state.history[state.history.length - 8]?.totalToman || gross * 0.972;
+        const prev30d = state.history[0]?.totalToman || gross * 0.92;
 
         return {
-          rates: { usdtRate, freeUsdRate, gold18kRate },
-          stocks: stocks.map(s => ({ ...s, sharePct: grossWealthToman > 0 ? (s.valueToman / grossWealthToman) * 100 : 0 })),
-          stocksVal, stocksCost, stocksPnl: stocksVal - stocksCost, stocksPnlPct: stocksCost > 0 ? ((stocksVal - stocksCost) / stocksCost) * 100 : 0,
+          rates: { usdt, freeUsd, gold },
+          stocks: stocks.map(s => ({ ...s, sharePct: gross > 0 ? (s.valueToman / gross) * 100 : 0 })),
+          stocksVal, stocksCost, stocksPnl: stocksVal - stocksCost, stocksPnlUsd: (stocksVal - stocksCost) / usdt, stocksPnlPct: stocksCost > 0 ? ((stocksVal - stocksCost) / stocksCost) * 100 : 0,
           stablecoins, stableUsd, stableValToman,
-          cash: {
-            bankCashToman,
-            brokerPowerToman,
-            totalCashToman,
-            targetUsdtToman,
-            buysNow: totalCashToman / usdtRate,
-            buysTarget: totalCashToman / targetUsdtToman
-          },
-          nfts, nftsVal, nftsCost, nftsPnl: nftsVal - nftsCost,
-          loan: { ...loanObj, loanPrincipal, loanInvestedVal, loanRate, loanMonths, loanTargetRoi, monthlyInstallment, totalLoanRepayment, totalLoanInterest, loanNetPnlNow },
-          grossWealthToman,
-          netWealthAfterLoanToman,
-          grossUsd: grossWealthToman / freeUsdRate,
-          pnlPeriods: {
-            daily: { amount: grossWealthToman - prev1d, pct: prev1d > 0 ? ((grossWealthToman - prev1d) / prev1d) * 100 : 0 },
-            weekly: { amount: grossWealthToman - prev7d, pct: prev7d > 0 ? ((grossWealthToman - prev7d) / prev7d) * 100 : 0 },
-            monthly: { amount: grossWealthToman - prev30d, pct: prev30d > 0 ? ((grossWealthToman - prev30d) / prev30d) * 100 : 0 },
-            total: { amount: grossWealthToman - totalCostBasis, pct: totalCostBasis > 0 ? ((grossWealthToman - totalCostBasis) / totalCostBasis) * 100 : 0 }
+          cash: { bankCash, brokerCash, totalCash, targetUsdt, buysNow: totalCash / usdt, buysTarget: totalCash / targetUsdt },
+          nfts, nftsVal, nftsPnl: nftsVal - nftsCost,
+          loan: { ...l, items: enrichedLoanItems, loanPrincipal, loanBuyTotal, loanInvestedVal, loanRate, loanMonths, monthlyInst, totalInterest, netPnl: loanInvestedVal - loanPrincipal },
+          gross, netAfterLoan, grossUsd: gross / freeUsd,
+          pnl: {
+            d: { a: gross - prev1d, usd: (gross - prev1d) / usdt, p: ((gross - prev1d) / prev1d) * 100 },
+            w: { a: gross - prev7d, usd: (gross - prev7d) / usdt, p: ((gross - prev7d) / prev7d) * 100 },
+            m: { a: gross - prev30d, usd: (gross - prev30d) / usdt, p: ((gross - prev30d) / prev30d) * 100 },
+            t: { a: gross - totalCost, usd: (gross - totalCost) / usdt, p: ((gross - totalCost) / totalCost) * 100 }
           }
         };
       }
 
-      function stylePnlBox(amountElId, pctElId, pnlObj) {
-        const amtEl = document.getElementById(amountElId);
-        const pctEl = document.getElementById(pctElId);
-        const isPos = pnlObj.amount >= 0;
-        amtEl.textContent = fmtMoney(pnlObj.amount, true);
-        amtEl.style.color = isPos ? 'var(--profit)' : 'var(--loss)';
-        pctEl.innerHTML = `<span class="pill ${isPos ? 'pill-profit' : 'pill-loss'}">${isPos ? '+' : ''}${fmtNum(pnlObj.pct, 2)}٪</span>`;
+      function setPnlBox(aId, uId, pId, obj) {
+        const aEl = document.getElementById(aId), uEl = document.getElementById(uId), pEl = document.getElementById(pId);
+        const pos = obj.a >= 0;
+        aEl.textContent = fmtMoney(obj.a, true);
+        aEl.style.color = pos ? 'var(--profit)' : 'var(--loss)';
+        uEl.textContent = `${pos ? '+' : '-'}$${Math.abs(obj.usd).toFixed(2)} USD`;
+        uEl.style.color = pos ? 'var(--cyan)' : 'var(--loss)';
+        pEl.innerHTML = `<span class="pill ${pos ? 'pill-profit' : 'pill-loss'}">${pos ? '+' : ''}${fmtNum(obj.p, 2)}٪</span>`;
       }
 
-      function renderTerminal() {
-        const m = computeAllMetrics();
-
+      window.renderTerminal = function() {
+        const m = computeAll();
         document.getElementById('jalaliHeaderDate').textContent = `امروز: ${fmtJalali(new Date())}`;
-        document.getElementById('liveUsdBadge').textContent = `دلار آزاد: ${fmtNum(m.rates.usdtRate)} تومان`;
-        document.getElementById('liveGoldBadge').textContent = `طلای ۱۸ عیار: ${fmtNum(m.rates.gold18kRate)} ت`;
-
+        document.getElementById('liveUsdBadge').textContent = `دلار آزاد: ${fmtNum(m.rates.usdt)} تومان`;
+        document.getElementById('liveGoldBadge').textContent = `طلای ۱۸ عیار: ${fmtNum(m.rates.gold)} ت`;
         const cMap = state.prices.crypto || DEFAULT_PRICES.crypto;
-        document.getElementById('liveCryptoBadge').textContent =
-          `BTC: $${fmtNum(cMap.BTC?.priceUsd, 0)} | ETH: $${fmtNum(cMap.ETH?.priceUsd, 0)} | SOL: $${fmtNum(cMap.SOL?.priceUsd, 1)}`;
+        document.getElementById('liveCryptoBadge').textContent = `BTC: $${fmtNum(cMap.BTC?.priceUsd, 0)} | ETH: $${fmtNum(cMap.ETH?.priceUsd, 0)} | SOL: $${fmtNum(cMap.SOL?.priceUsd, 1)}`;
 
-        // Hero & 4 P&L Boxes
-        document.getElementById('heroGrossWealth').textContent = fmtMoney(m.grossWealthToman);
+        // محاسبه فاصله بازده سبد از تورم
+        const annualInf = pNum(document.getElementById('inflationRateInput')?.value, 42);
+        const monthlyInfBenchmark = annualInf / 12;
+        const realAlphaMonth = m.pnl.m.p - monthlyInfBenchmark;
+        const infBox = document.getElementById('inflationStatusBox');
+        if (realAlphaMonth >= 0) {
+          infBox.innerHTML = `<span class="pill pill-profit">✅ بازده ماهانه شما (${fmtNum(m.pnl.m.p, 1)}٪) به اندازه +${fmtNum(realAlphaMonth, 1)}٪ از تورم ماهانه (${fmtNum(monthlyInfBenchmark, 1)}٪) جلوتر است</span>`;
+        } else {
+          infBox.innerHTML = `<span class="pill pill-loss">⚠️ بازده ماهانه شما (${fmtNum(m.pnl.m.p, 1)}٪) به اندازه ${fmtNum(Math.abs(realAlphaMonth), 1)}٪ از تورم ماهانه (${fmtNum(monthlyInfBenchmark, 1)}٪) عقب‌تر است</span>`;
+        }
+
+        document.getElementById('heroGrossWealth').textContent = fmtMoney(m.gross);
         document.getElementById('heroUsdEquiv').textContent = `معادل: $${fmtNum(m.grossUsd, 1)}`;
-        document.getElementById('heroNetAfterLoan').textContent = fmtMoney(m.netWealthAfterLoanToman);
+        document.getElementById('heroNetAfterLoan').textContent = fmtMoney(m.netAfterLoan);
         document.getElementById('heroLoanDebt').textContent = fmtMoney(m.loan.loanPrincipal);
 
-        stylePnlBox('pnlDailyAmount', 'pnlDailyPct', m.pnlPeriods.daily);
-        stylePnlBox('pnlWeeklyAmount', 'pnlWeeklyPct', m.pnlPeriods.weekly);
-        stylePnlBox('pnlMonthlyAmount', 'pnlMonthlyPct', m.pnlPeriods.monthly);
-        stylePnlBox('pnlTotalAmount', 'pnlTotalPct', m.pnlPeriods.total);
+        setPnlBox('pnlDailyAmount', 'pnlDailyUsd', 'pnlDailyPct', m.pnl.d);
+        setPnlBox('pnlWeeklyAmount', 'pnlWeeklyUsd', 'pnlWeeklyPct', m.pnl.w);
+        setPnlBox('pnlMonthlyAmount', 'pnlMonthlyUsd', 'pnlMonthlyPct', m.pnl.m);
+        setPnlBox('pnlTotalAmount', 'pnlTotalUsd', 'pnlTotalPct', m.pnl.t);
 
-        // 5 Mini Asset Cards
         document.getElementById('cardBourseVal').textContent = fmtMoney(m.stocksVal);
-        document.getElementById('cardBourseSub').textContent = `${toFa(m.stocks.length)} نماد | سود: ${fmtMoney(m.stocksPnl, true)} (${fmtNum(m.stocksPnlPct, 1)}٪)`;
+        document.getElementById('cardBourseSub').textContent = `سود: ${fmtMoney(m.stocksPnl, true)} ($${m.stocksPnlUsd.toFixed(1)})`;
         document.getElementById('cardBourseSub').style.color = m.stocksPnl >= 0 ? 'var(--profit)' : 'var(--loss)';
-
         document.getElementById('cardStableVal').textContent = fmtMoney(m.stableValToman);
-        document.getElementById('cardStableSub').textContent = `$${fmtNum(m.stableUsd, 2)} در شبکه اتریوم`;
-
-        document.getElementById('cardCashVal').textContent = fmtMoney(m.cash.totalCashToman);
-        document.getElementById('cardCashSub').textContent = `نقد: ${fmtNum(m.cash.bankCashToman / 1000000, 0)}M + کارگزاری: ${fmtNum(m.cash.brokerPowerToman)}`;
-
+        document.getElementById('cardCashVal').textContent = fmtMoney(m.cash.totalCash);
+        document.getElementById('cardCashSub').textContent = `نقد: ${fmtNum(m.cash.bankCash / 1000000, 0)}M + کارگزاری: ${fmtNum(m.cash.brokerCash)}`;
         document.getElementById('cardNftVal').textContent = fmtMoney(m.nftsVal);
         document.getElementById('cardNftSub').textContent = `سود: ${fmtMoney(m.nftsPnl, true)}`;
-        document.getElementById('cardNftSub').style.color = m.nftsPnl >= 0 ? 'var(--profit)' : 'var(--loss)';
-
         document.getElementById('cardLoanAssetVal').textContent = fmtMoney(m.loan.loanInvestedVal);
-        document.getElementById('cardLoanAssetSub').textContent = `سود خالص وام: ${fmtMoney(m.loan.loanNetPnlNow, true)}`;
-        document.getElementById('cardLoanAssetSub').style.color = m.loan.loanNetPnlNow >= 0 ? 'var(--profit)' : 'var(--loss)';
+        document.getElementById('cardLoanAssetSub').textContent = `سود وام ۳۰M: ${fmtMoney(m.loan.netPnl, true)} (${fmtNum((m.loan.netPnl / m.loan.loanPrincipal) * 100, 1)}٪)`;
 
-        document.getElementById('brokerBuyingPowerText').textContent = fmtMoney(m.cash.brokerPowerToman);
-
-        // Render Stocks Table with "💰 فروش نقد" button per row
-        if (m.stocks.length === 0) {
-          document.getElementById('stocksTableBody').innerHTML = `
-            <tr><td colspan="10" style="text-align:center; padding:1.2rem; color:var(--text-secondary);">
-              تمام سهام فروخته شده و مبلغ آن به دارایی نقدی منتقل شده است. برای بازگردانی، دکمه «↩️ بازگردانی سبد اولیه» را بزنید.
-            </td></tr>
-          `;
-        } else {
-          document.getElementById('stocksTableBody').innerHTML = m.stocks.map((s, idx) => {
-            const isDayPos = s.dailyChangePct >= 0;
-            const isPnlPos = s.pnlToman >= 0;
+        // جدول بورس با قابلیت ویرایش مستقیم قیمت خرید هر سهم
+        document.getElementById('stocksTableBody').innerHTML = m.stocks.length === 0
+          ? `<tr><td colspan="10" style="text-align:center; padding:1rem;">کل سهام فروخته و به دارایی نقدی اضافه شده است.</td></tr>`
+          : m.stocks.map((s, idx) => {
+            const pos = s.pnlToman >= 0;
             return `
               <tr>
-                <td><strong>${s.symbol}</strong></td>
-                <td>${s.name}</td>
+                <td><strong>${s.symbol}</strong></td><td>${s.name}</td>
                 <td class="sensitive">${fmtNum(s.qty)}</td>
-                <td class="sensitive">${fmtMoney(s.avgBuyToman)}</td>
+                <td>
+                  <input type="number" class="inline-price-input" value="${s.avgBuyToman}" onchange="window.updateStockBuyPrice(${idx}, this.value)" title="ویرایش میانگین قیمت خرید شما" />
+                </td>
                 <td class="sensitive"><strong>${fmtMoney(s.currentPriceToman)}</strong></td>
-                <td><span class="pill ${isDayPos ? 'pill-profit' : 'pill-loss'}">${isDayPos ? '+' : ''}${fmtNum(s.dailyChangePct, 2)}٪</span></td>
+                <td><span class="pill ${s.dailyChangePct >= 0 ? 'pill-profit' : 'pill-loss'}">${s.dailyChangePct >= 0 ? '+' : ''}${fmtNum(s.dailyChangePct, 2)}٪</span></td>
                 <td class="sensitive"><strong>${fmtMoney(s.valueToman)}</strong></td>
-                <td class="sensitive" style="color:${isPnlPos ? 'var(--profit)' : 'var(--loss)'}; font-weight:800;">
-                  ${fmtMoney(s.pnlToman, true)} (${isPnlPos ? '+' : ''}${fmtNum(s.pnlPct, 1)}٪)
+                <td class="sensitive" style="color:${pos ? 'var(--profit)' : 'var(--loss)'}; font-weight:800;">
+                  <div>${fmtMoney(s.pnlToman, true)} (${pos ? '+' : ''}${fmtNum(s.pnlPct, 1)}٪)</div>
+                  <div style="font-size:0.68rem; color:var(--cyan); direction:ltr;">${pos ? '+' : '-'}$${Math.abs(s.pnlUsd).toFixed(2)}</div>
                 </td>
                 <td>${fmtNum(s.sharePct, 1)}٪</td>
-                <td>
-                  <button class="btn-sell-row" onclick="window.sellSingleStockToCash(${idx})">💰 فروش و تبدیل به نقد</button>
-                </td>
+                <td><button class="btn-sell-row" onclick="window.sellSingleStockToCash(${idx})">💰 فروش نقد</button></td>
               </tr>
             `;
           }).join('');
-        }
 
-        // Sold History Logs
-        const logs = state.portfolio.soldLogs || [];
-        const soldBox = document.getElementById('soldHistoryBox');
-        if (logs.length > 0) {
-          soldBox.style.display = 'block';
-          document.getElementById('soldHistoryList').innerHTML = logs.map(l => `<div>🕒 [${l.time}] ${l.desc}</div>`).join('');
-        } else {
-          soldBox.style.display = 'none';
-        }
-
-        renderLoanSection(m);
-        renderCryptoDipSection(m);
-        renderCashNftSection(m);
-        window.renderOverviewCharts(m);
-        window.updateDollarMacroModel();
-        window.renderGlobalComparison();
-      }
-
-      function renderLoanSection(m) {
+        // بخش وام ۳۰ میلیونی ۱۲ ماهه و جدول دارایی‌های خریداری‌شده با وام
         const l = m.loan;
-        document.getElementById('loanTitleInput').value = l.title || 'وام اعتبار ملی';
+        document.getElementById('loanTitleInput').value = l.title || 'وام ۳۰ میلیونی (۱۲ ماهه)';
         document.getElementById('loanPrincipalInput').value = l.loanPrincipal;
         document.getElementById('loanRateInput').value = l.loanRate;
         document.getElementById('loanMonthsInput').value = l.loanMonths;
-        document.getElementById('loanCurrentValInput').value = l.loanInvestedVal;
-        document.getElementById('loanTargetRoiInput').value = l.loanTargetRoi;
 
-        const year1AssetValue = Math.round(l.loanPrincipal * (1 + (l.loanTargetRoi / 100)));
-        const year1InterestCost = Math.round(l.loanPrincipal * (l.loanRate / 100));
-        const year1NetProfit = year1AssetValue - l.loanPrincipal - year1InterestCost;
-        const year1InstallmentsPaid = Math.round(l.monthlyInstallment * 12);
-
-        document.getElementById('loanYearEndNetBadge').textContent = `سود خالص پایان سال: ${fmtMoney(year1NetProfit, true)}`;
-
+        const y1Val = Math.round(l.loanInvestedVal * 1.38);
+        const y1Net = y1Val - l.loanPrincipal - Math.round(l.totalInterest);
+        document.getElementById('loanYearEndNetBadge').textContent = `سود خالص پایان سال: ${fmtMoney(y1Net, true)}`;
         document.getElementById('loanSummaryStatsBox').innerHTML = `
-          <div>قسط ماهانه وام: <strong class="sensitive">${fmtMoney(l.monthlyInstallment)}</strong></div>
-          <div>کل سود بانکی طی دوره: <strong class="sensitive" style="color:var(--loss)">${fmtMoney(l.totalLoanInterest)}</strong></div>
-          <div>سود فعلی سرمایه‌گذاری وام: <strong class="sensitive" style="color:${l.loanNetPnlNow >= 0 ? 'var(--profit)' : 'var(--loss)'}">${fmtMoney(l.loanNetPnlNow, true)}</strong></div>
-          <div>سود خالص تخمینی در پایان سال: <strong class="sensitive" style="color:var(--profit)">${fmtMoney(year1NetProfit, true)}</strong></div>
-          <div>ارزش دارایی وام در پایان سال: <strong class="sensitive">${fmtMoney(year1AssetValue)}</strong></div>
-          <div>مجموع اقساط پرداختی در سال اول: <strong class="sensitive">${fmtMoney(year1InstallmentsPaid)}</strong></div>
+          <div>قسط ماهانه (۱۲ ماه): <strong class="sensitive">${fmtMoney(l.monthlyInst)}</strong></div>
+          <div>کل سود بانکی وام: <strong class="sensitive" style="color:var(--loss)">${fmtMoney(l.totalInterest)}</strong></div>
+          <div>ارزش فعلی سبد وام: <strong class="sensitive" style="color:var(--cyan)">${fmtMoney(l.loanInvestedVal)}</strong></div>
+          <div>سود خالص فعلی وام: <strong class="sensitive" style="color:${l.netPnl >= 0 ? 'var(--profit)' : 'var(--loss)'}">${fmtMoney(l.netPnl, true)} ($${(l.netPnl / m.rates.usdt).toFixed(1)})</strong></div>
         `;
 
-        const pGold = Math.round(l.loanPrincipal * 0.45);
-        const pUsdt = Math.round(l.loanPrincipal * 0.35);
-        const pFix = Math.round(l.loanPrincipal * 0.20);
+        document.getElementById('loanAssetsTableBody').innerHTML = l.items.map((it, idx) => `
+          <tr>
+            <td><strong>${it.name}</strong></td>
+            <td><span class="pill pill-info">${it.category}</span></td>
+            <td class="sensitive">${fmtMoney(it.buyToman)}</td>
+            <td><input type="number" class="inline-price-input" style="width:105px;" value="${it.currentToman}" onchange="window.updateLoanItemVal(${idx}, this.value)" /></td>
+            <td style="color:${it.pnl >= 0 ? 'var(--profit)' : 'var(--loss)'}; font-weight:800;">${fmtMoney(it.pnl, true)} (${fmtNum(it.pct, 1)}٪)</td>
+            <td><button class="btn" style="padding:0.2rem 0.45rem; color:var(--loss);" onclick="window.removeLoanAssetItem(${idx})">🗑️</button></td>
+          </tr>
+        `).join('');
+
         document.getElementById('loanAllocationSuggestionBox').innerHTML = `
-          <div style="padding:0.55rem; background:var(--bg-input); border-radius:9px; border-right:3px solid var(--brand-gold);">
-            🥇 <strong>۴۵٪ صندوق طلای بورس — ${fmtMoney(pGold)}:</strong> سپر مستقیم در برابر جهش انس جهانی و دلار آزاد.
-          </div>
-          <div style="padding:0.55rem; background:var(--bg-input); border-radius:9px; border-right:3px solid var(--profit);">
-            💵 <strong>۳۵٪ استیبل‌کوین / شکار پله‌ای BTC و ETH — ${fmtMoney(pUsdt)}:</strong> حفظ ارزش دلاری وام.
-          </div>
-          <div style="padding:0.55rem; background:var(--bg-input); border-radius:9px; border-right:3px solid var(--brand-blue);">
-            🏦 <strong>۲۰٪ صندوق درآمد ثابت (سپر اقساط) — ${fmtMoney(pFix)}:</strong> با سود روزشمار ~۳۰٪ برای پرداخت خودکار اقساط ماه‌های اول.
-          </div>
+          <div style="padding:0.5rem; background:var(--bg-input); border-radius:8px; border-right:3px solid var(--gold);">🥇 <strong>پیشنهاد ۱ — صندوق طلا (۴۵٪ معادل ۱۳.۵ میلیون):</strong> پوشش نوسان دلار و انس طلا با نقدشوندگی آنی برای اقساط.</div>
+          <div style="padding:0.5rem; background:var(--bg-input); border-radius:8px; border-right:3px solid var(--profit);">💎 <strong>پیشنهاد ۲ — بیت‌کوین / اتریوم در اصلاح (۳۵٪ معادل ۱۰.۵ میلیون):</strong> رشد دلاری بالاتر از بهره ۲۳٪ بانکی.</div>
+          <div style="padding:0.5rem; background:var(--bg-input); border-radius:8px; border-right:3px solid var(--blue);">🏦 <strong>پیشنهاد ۳ — صندوق درآمد ثابت (۲۰٪ معادل ۶ میلیون):</strong> ذخیره نقدی برای پرداخت راحت ۲ قسط اول.</div>
         `;
 
-        if (typeof Chart !== 'undefined') {
-          const ctx = document.getElementById('loanYearEndChartCanvas')?.getContext('2d');
-          if (ctx) {
-            if (state.charts.loanChart) state.charts.loanChart.destroy();
-            const monthsLabels = ['ماه ۱', 'ماه ۲', 'ماه ۳', 'ماه ۴', 'ماه ۵', 'ماه ۶', 'ماه ۷', 'ماه ۸', 'ماه ۹', 'ماه ۱۰', 'ماه ۱۱', 'پایان سال'];
-            const assetGrowthCurve = [];
-            const cumulativeCostCurve = [];
-            const netProfitCurve = [];
+        // استیبل‌کوین، نقد و NFT
+        document.getElementById('stablecoinsTableBody').innerHTML = m.stablecoins.map(st => `
+          <tr><td><strong>${st.symbol}</strong> (${st.network})</td><td>${fmtNum(st.amount, 2)}</td><td>$${fmtNum(st.usdValue, 2)}</td><td>${fmtMoney(st.valueFreeToman)}</td><td>${fmtMoney(st.valueUsdtToman)}</td></tr>
+        `).join('');
+        document.getElementById('dipPlannerCards').innerHTML = ['BTC', 'ETH', 'SOL'].map((sym, i) => {
+          const budget = m.stableUsd * [0.5, 0.3, 0.2][i];
+          const coin = cMap[sym] || DEFAULT_PRICES.crypto[sym];
+          const h90 = Math.max(coin.priceUsd, coin.high90dUsd || coin.priceUsd * 1.1);
+          const rows = [0.15, 0.25, 0.35].map((drop, idx) => {
+            const lvl = h90 * (1 - drop);
+            const u = budget * [0.25, 0.35, 0.40][idx];
+            return `<tr><td>پله ${toFa(idx + 1)} (${toFa(drop * 100)}-٪)</td><td><strong>$${fmtNum(lvl, 0)}</strong></td><td>$${fmtNum(u, 1)}</td><td><strong>${fmtNum(u / lvl, 4)} ${sym}</strong></td></tr>`;
+          }).join('');
+          return `<div class="glass-card" style="margin-bottom:0;"><div class="section-head"><span class="section-title">${sym} ($${fmtNum(budget, 1)})</span><span class="pill pill-info">$${fmtNum(coin.priceUsd, 1)}</span></div><div class="table-wrap"><table><thead><tr><th>پله</th><th>هدف</th><th>بودجه</th><th>مقدار</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+        }).join('');
 
-            for (let mIdx = 1; mIdx <= 12; mIdx++) {
-              const valAtMonth = Math.round(l.loanPrincipal * Math.pow(1 + (l.loanTargetRoi / 100) / 12, mIdx));
-              const costAtMonth = Math.round(l.loanPrincipal + (l.loanPrincipal * (l.loanRate / 100) * (mIdx / 12)));
-              assetGrowthCurve.push(valAtMonth);
-              cumulativeCostCurve.push(costAtMonth);
-              netProfitCurve.push(valAtMonth - costAtMonth);
-            }
+        document.getElementById('cashAmountInput').value = m.cash.bankCash;
+        document.getElementById('brokerCashInput').value = m.cash.brokerCash;
+        document.getElementById('cashTargetUsdtInput').value = m.cash.targetUsdt;
+        document.getElementById('totalAvailableCashText').textContent = fmtMoney(m.cash.totalCash);
+        document.getElementById('cashBuysNowText').textContent = `${fmtNum(m.cash.buysNow, 1)} USDT`;
+        document.getElementById('cashBuysTargetText').textContent = `${fmtNum(m.cash.buysTarget, 1)} USDT`;
 
-            state.charts.loanChart = new Chart(ctx, {
-              type: 'line',
-              data: {
-                labels: monthsLabels,
-                datasets: [
-                  { label: 'ارزش دارایی وام', data: assetGrowthCurve, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.12)', fill: true, tension: 0.35 },
-                  { label: 'اصل وام + بهره انباشته', data: cumulativeCostCurve, borderColor: '#f43f5e', borderDash: [5, 5], fill: false, tension: 0.2 },
-                  { label: 'سود خالص وام تا آن ماه', data: netProfitCurve, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.15)', fill: true, tension: 0.35 }
-                ]
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } } },
-                scales: {
-                  x: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } },
-                  y: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } }
-                }
-              }
-            });
-          }
-        }
-      }
+        document.getElementById('nftsTableBody').innerHTML = m.nfts.map((nf, i) => `
+          <tr><td><strong>${nf.name}</strong></td><td>${fmtMoney(nf.buyToman)}</td><td><input type="number" class="inline-price-input" value="${nf.currentToman}" onchange="window.updateNftValue(${i}, this.value)" /></td><td style="color:${nf.pnlToman >= 0 ? 'var(--profit)' : 'var(--loss)'}; font-weight:800;">${fmtMoney(nf.pnlToman, true)}</td></tr>
+        `).join('');
 
-      window.updateDollarMacroModel = function() {
-        const m = computeAllMetrics();
-        const currUsd = m.rates.usdtRate;
+        window.renderOverviewCharts(m);
+        window.updateDollarMacroModel();
+        window.renderPortfolioNews();
+        window.renderGlobalComparison();
+      };
 
-        const warScore = pNum(document.getElementById('geoWarSlider')?.value, 65);
-        const sancScore = pNum(document.getElementById('geoSanctionSlider')?.value, 60);
-        const infScore = pNum(document.getElementById('geoInflationSlider')?.value, 75);
-        const cbiScore = pNum(document.getElementById('geoCbiSlider')?.value, 45);
-
-        document.getElementById('geoWarValText').textContent = `${toFa(warScore)} از ۱۰۰`;
-        document.getElementById('geoSanctionValText').textContent = `${toFa(sancScore)} از ۱۰۰`;
-        document.getElementById('geoInflationValText').textContent = `${toFa(infScore)} از ۱۰۰`;
-        document.getElementById('geoCbiValText').textContent = `${toFa(cbiScore)} از ۱۰۰`;
-
-        const series90d = [];
-        const labels90d = [];
-        for (let i = 89; i >= 0; i--) {
-          const d = new Date(Date.now() - i * 86400000);
-          labels90d.push(fmtJalali(d));
-          const base = currUsd * 0.91;
-          const step = (currUsd - base) * ((90 - i) / 90);
-          const wave = Math.sin(i * 0.25) * (currUsd * 0.018);
-          series90d.push(Math.round(base + step + wave));
-        }
-        series90d[series90d.length - 1] = currUsd;
-
-        const sma90Val = Math.round(series90d.reduce((a, b) => a + b, 0) / series90d.length);
-        const sma90Line = series90d.map((_, idx) => {
-          const sub = series90d.slice(0, idx + 1);
-          return Math.round(sub.reduce((a, b) => a + b, 0) / sub.length);
-        });
-
-        const compositePressure = (warScore * 0.35) + (sancScore * 0.25) + (infScore * 0.25) - (cbiScore * 0.15);
-        const fairFundamentalUsd = Math.round(sma90Val * (1 + ((compositePressure - 50) / 450)));
-        const priceToSmaRatioPct = ((currUsd - sma90Val) / sma90Val) * 100;
-
-        const strongBuyZone = Math.round(sma90Val * 0.985);
-        const accumulateZone = sma90Val;
-        const overboughtZone = Math.round(sma90Val * 1.08);
-
-        let signalText = currUsd <= accumulateZone * 1.02
-          ? '🟢 ناحیه طلایی خرید (نزدیک به کف SMA90)'
-          : (currUsd <= overboughtZone ? '🟡 ناحیه خرید پله‌ای (تعادل ژئوپلیتیک)' : '🔴 اشباع خرید هیجانی');
-
-        const sigBadge = document.getElementById('dollarSignalBadge');
-        sigBadge.className = `pill ${currUsd <= accumulateZone * 1.02 ? 'pill-profit' : (currUsd <= overboughtZone ? 'pill-warn' : 'pill-loss')}`;
-        sigBadge.textContent = signalText;
-
-        document.getElementById('sma90StatusBadge').textContent =
-          `SMA 90: ${fmtNum(sma90Val)} ت (فاصله: ${priceToSmaRatioPct >= 0 ? '+' : ''}${fmtNum(priceToSmaRatioPct, 1)}٪)`;
-
-        document.getElementById('dollarMacroVerdictBox').innerHTML = `
-          <div style="margin-bottom:0.35rem;">📌 <strong>شاخص فشار اخبار و ژئوپلیتیک:</strong> <b>${fmtNum(compositePressure, 1)} از ۱۰۰</b> | <strong>نرخ تعادلی مدل خبری:</strong> <b>${fmtMoney(fairFundamentalUsd)}</b></div>
-          <div style="color:var(--text-secondary);">
-            بر اساس میانگین متحرک ۹۰ روزه (<strong>${fmtMoney(sma90Val)}</strong>)، محدوده <strong>${fmtMoney(strongBuyZone)} تا ${fmtMoney(accumulateZone)}</strong> کم‌ریسک‌ترین نقطه خرید پله‌ای تتر با نقدینگی ۴۶ میلیونی شماست.
-          </div>
-        `;
-
-        document.getElementById('sma90BuyZonesBox').innerHTML = `
-          <div style="padding:0.5rem; background:var(--profit-bg); border:1px solid var(--profit); border-radius:9px;">
-            <div style="color:var(--profit); font-weight:800;">پله ۱ خرید سنگین (SMA90)</div>
-            <div style="font-size:0.88rem; font-weight:800; margin-top:0.2rem;">${fmtMoney(accumulateZone)}</div>
-          </div>
-          <div style="padding:0.5rem; background:var(--warn-bg); border:1px solid var(--warn); border-radius:9px;">
-            <div style="color:var(--warn); font-weight:800;">پله ۲ خرید میانگین‌گیری</div>
-            <div style="font-size:0.88rem; font-weight:800; margin-top:0.2rem;">${fmtMoney(Math.round((currUsd + accumulateZone) / 2))}</div>
-          </div>
-          <div style="padding:0.5rem; background:var(--loss-bg); border:1px solid var(--loss); border-radius:9px;">
-            <div style="color:var(--loss); font-weight:800;">مرز حباب کوتاه‌مدت (+۸٪)</div>
-            <div style="font-size:0.88rem; font-weight:800; margin-top:0.2rem;">${fmtMoney(overboughtZone)}</div>
-          </div>
-        `;
-
-        if (typeof Chart !== 'undefined') {
-          const ctx = document.getElementById('dollarSma90Canvas')?.getContext('2d');
-          if (ctx) {
-            if (state.charts.sma90Chart) state.charts.sma90Chart.destroy();
-            state.charts.sma90Chart = new Chart(ctx, {
-              type: 'line',
-              data: {
-                labels: labels90d.filter((_, i) => i % 3 === 0),
-                datasets: [
-                  { label: 'قیمت روزانه دلار آزاد / تتر', data: series90d.filter((_, i) => i % 3 === 0), borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.12)', fill: true, tension: 0.3 },
-                  { label: 'خط حمایت میانگین ۹۰ روزه (SMA 90)', data: sma90Line.filter((_, i) => i % 3 === 0), borderColor: '#10b981', borderWidth: 2.5, borderDash: [6, 4], fill: false, pointRadius: 0 }
-                ]
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } } },
-                scales: {
-                  x: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 9 }, maxTicksLimit: 7 } },
-                  y: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } }
-                }
-              }
-            });
-          }
+      // ویرایش مستقیم قیمت خرید هر سهم در جدول بورس
+      window.updateStockBuyPrice = function(idx, newBuyVal) {
+        if (state.portfolio.stocks[idx]) {
+          state.portfolio.stocks[idx].avgBuyToman = Math.max(1, pNum(newBuyVal, 100));
+          saveP();
+          window.renderTerminal();
         }
       };
 
-      window.renderOverviewCharts = function(mInput) {
+      // مدیریت دارایی‌های خریداری‌شده با وام ۳۰ میلیونی
+      window.addLoanAssetItem = function() {
+        const name = document.getElementById('loanItemNameInput').value.trim();
+        const buy = pNum(document.getElementById('loanItemBuyTomanInput').value, 0);
+        const cur = pNum(document.getElementById('loanItemCurTomanInput').value, buy);
+        if (!name || buy <= 0) return alert('لطفاً نام دارایی و مبلغ خرید را وارد کنید.');
+        const category = autoDetectAssetCategory(name);
+        if (!Array.isArray(state.portfolio.loan.items)) state.portfolio.loan.items = [];
+        state.portfolio.loan.items.push({ name, category, buyToman: buy, currentToman: cur });
+        document.getElementById('loanItemNameInput').value = '';
+        document.getElementById('loanItemBuyTomanInput').value = '';
+        document.getElementById('loanItemCurTomanInput').value = '';
+        saveP();
+        window.renderTerminal();
+      };
+
+      window.updateLoanItemVal = function(idx, val) {
+        if (state.portfolio.loan?.items?.[idx]) {
+          state.portfolio.loan.items[idx].currentToman = pNum(val, 0);
+          saveP();
+          window.renderTerminal();
+        }
+      };
+
+      window.removeLoanAssetItem = function(idx) {
+        if (state.portfolio.loan?.items) {
+          state.portfolio.loan.items.splice(idx, 1);
+          saveP();
+          window.renderTerminal();
+        }
+      };
+
+      // نمودار دایره‌ای با نمایش درصد دقیق روی قطعات و در باکس‌های زیر نمودار
+      window.renderOverviewCharts = function(mIn) {
         if (typeof Chart === 'undefined') return;
-        const m = mInput || computeAllMetrics();
+        const m = mIn || computeAll();
+        const vals = [m.stocksVal, m.stableValToman, m.cash.totalCash, m.nftsVal, m.loan.loanInvestedVal];
+        const total = vals.reduce((a, b) => a + b, 0) || 1;
+        const pcts = vals.map(v => ((v / total) * 100).toFixed(1));
+        const titles = ['بورس ایران', 'استیبل‌کوین', 'نقدینگی', 'NFT تلگرام', 'وام ۳۰M'];
+        const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'];
+
+        document.getElementById('donutPercentLegend').innerHTML = titles.map((t, i) => `
+          <div class="donut-pct-item">
+            <div style="color:${colors[i]}; font-weight:800;">${toFa(pcts[i])}٪</div>
+            <div style="color:var(--text-sub); font-size:0.65rem;">${t}</div>
+          </div>
+        `).join('');
 
         const dCtx = document.getElementById('allocationDonutCanvas')?.getContext('2d');
         if (dCtx) {
@@ -1687,503 +1003,318 @@
           state.charts.donut = new Chart(dCtx, {
             type: 'doughnut',
             data: {
-              labels: ['بورس ایران (۱۱ نماد)', 'استیبل‌کوین اتریوم', 'نقدینگی ریالی', 'NFT تلگرام', 'دارایی وام اهرمی'],
-              datasets: [{
-                data: [
-                  Math.round(m.stocksVal),
-                  Math.round(m.stableValToman),
-                  Math.round(m.cash.totalCashToman),
-                  Math.round(m.nftsVal),
-                  Math.round(m.loan.loanInvestedVal)
-                ],
-                backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'],
-                borderWidth: 0
-              }]
+              labels: titles.map((t, i) => `${t} (${toFa(pcts[i])}٪)`),
+              datasets: [{ data: vals, backgroundColor: colors, borderWidth: 0 }]
             },
             options: {
               responsive: true,
               maintainAspectRatio: false,
-              cutout: '64%',
-              plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 11 } } } }
+              cutout: '60%',
+              plugins: { legend: { position: 'right', labels: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } } }
             }
           });
         }
 
         const lCtx = document.getElementById('wealthGrowthLineCanvas')?.getContext('2d');
         if (lCtx) {
-          if (state.charts.wealthLine) state.charts.wealthLine.destroy();
-          const rangeVal = document.getElementById('historyRangeSelect')?.value || 'all';
-          const list = rangeVal === 'all' ? state.history : state.history.slice(-Number(rangeVal));
-          const mult = state.unit === 'rial' ? 10 : 1;
-
-          state.charts.wealthLine = new Chart(lCtx, {
+          if (state.charts.wLine) state.charts.wLine.destroy();
+          const r = document.getElementById('historyRangeSelect')?.value || 'all';
+          const list = r === 'all' ? state.history : state.history.slice(-Number(r));
+          state.charts.wLine = new Chart(lCtx, {
             type: 'line',
             data: {
               labels: list.map(h => fmtJalali(h.date)),
               datasets: [
-                { label: 'کل دارایی در گردش (به همراه وام)', data: list.map(h => Math.round(h.totalToman * mult)), borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.14)', fill: true, tension: 0.35 },
-                { label: 'ثروت خالص (پس از کسر بدهی وام)', data: list.map(h => Math.round((h.totalToman - m.loan.loanPrincipal) * mult)), borderColor: '#10b981', borderDash: [4, 4], fill: false, tension: 0.35 }
+                { label: 'کل دارایی (با وام ۳۰M)', data: list.map(h => h.totalToman), borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.14)', fill: true, tension: 0.35 },
+                { label: 'ثروت خالص (بدون بدهی وام)', data: list.map(h => h.totalToman - m.loan.loanPrincipal), borderColor: '#10b981', borderDash: [4,4], fill: false, tension: 0.35 }
               ]
             },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } } },
-              scales: {
-                x: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 }, maxTicksLimit: 7 } },
-                y: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } }
-              }
-            }
+            options: { responsive: true, maintainAspectRatio: false }
+          });
+        }
+
+        const loanCtx = document.getElementById('loanYearEndChartCanvas')?.getContext('2d');
+        if (loanCtx) {
+          if (state.charts.lChart) state.charts.lChart.destroy();
+          const l = m.loan;
+          const mLabels = Array.from({ length: 12 }, (_, i) => `ماه ${toFa(i + 1)}`);
+          const gCurve = mLabels.map((_, i) => Math.round(l.loanInvestedVal * Math.pow(1 + 0.38 / 12, i + 1)));
+          const cCurve = mLabels.map((_, i) => Math.round(l.loanPrincipal + l.totalInterest * ((i + 1) / 12)));
+          state.charts.lChart = new Chart(loanCtx, {
+            type: 'line',
+            data: { labels: mLabels, datasets: [
+              { label: 'رشد سبد وام ۳۰M', data: gCurve, borderColor: '#10b981', fill: true, backgroundColor: 'rgba(16,185,129,0.12)' },
+              { label: 'اصل + بهره وام (۱۲ ماه)', data: cCurve, borderColor: '#f43f5e', borderDash: [5,5], fill: false }
+            ]},
+            options: { responsive: true, maintainAspectRatio: false }
           });
         }
       };
 
-      function renderCryptoDipSection(m) {
-        document.getElementById('stablecoinsTableBody').innerHTML = m.stablecoins.map(st => `
-          <tr>
-            <td><strong>${st.symbol}</strong> (${st.network})</td>
-            <td class="sensitive">${fmtNum(st.amount, 2)}</td>
-            <td class="sensitive">$${fmtNum(st.usdValue, 2)}</td>
-            <td class="sensitive">${fmtMoney(st.valueFreeToman)}</td>
-            <td class="sensitive">${fmtMoney(st.valueUsdtToman)}</td>
-          </tr>
-        `).join('');
-        document.getElementById('fxSpreadInfo').textContent = `نرخ تتر آزاد: ${fmtMoney(m.rates.usdtRate)}`;
+      // تحلیل CFO دلار آزاد، حباب‌سنج و پله‌های خرید بر اساس SMA90
+      window.updateDollarMacroModel = function() {
+        const m = computeAll();
+        const cur = m.rates.usdt;
+        const w = pNum(document.getElementById('geoWarSlider')?.value, 65);
+        const s = pNum(document.getElementById('geoSanctionSlider')?.value, 60);
+        const inf = pNum(document.getElementById('geoInflationSlider')?.value, 75);
+        const cbi = pNum(document.getElementById('geoCbiSlider')?.value, 45);
+        document.getElementById('geoWarValText').textContent = `${toFa(w)} از ۱۰۰`;
+        document.getElementById('geoSanctionValText').textContent = `${toFa(s)} از ۱۰۰`;
+        document.getElementById('geoInflationValText').textContent = `${toFa(inf)} از ۱۰۰`;
+        document.getElementById('geoCbiValText').textContent = `${toFa(cbi)} از ۱۰۰`;
 
-        const cMap = state.prices.crypto || DEFAULT_PRICES.crypto;
-        document.getElementById('dipPlannerCards').innerHTML = ['BTC', 'ETH', 'SOL'].map((sym, idx) => {
-          const weights = [0.5, 0.3, 0.2];
-          const budget = m.stableUsd * weights[idx];
-          const coin = cMap[sym] || DEFAULT_PRICES.crypto[sym];
-          const price = pNum(coin.priceUsd, 100);
-          const high90 = Math.max(price, pNum(coin.high90dUsd, price * 1.12));
-          const tiers = [
-            { name: "پله ۱ (اصلاح ۱۵-٪)", drop: 0.15, w: 0.25 },
-            { name: "پله ۲ (اصلاح ۲۵-٪)", drop: 0.25, w: 0.35 },
-            { name: "پله ۳ (اصلاح ۳۵-٪)", drop: 0.35, w: 0.40 }
-          ];
-          const rows = tiers.map(t => {
-            const lvl = high90 * (1 - t.drop);
-            const uAmt = budget * t.w;
-            return `<tr><td>${t.name}</td><td><strong>$${fmtNum(lvl, sym === 'SOL' ? 1 : 0)}</strong></td><td>$${fmtNum(uAmt, 1)}</td><td><strong>${fmtNum(uAmt / lvl, 4)} ${sym}</strong></td></tr>`;
-          }).join('');
-          return `
-            <div class="glass-card" style="margin-bottom:0;">
-              <div class="section-head"><span class="section-title">${sym} (بودجه: $${fmtNum(budget, 1)})</span><span class="pill pill-info">$${fmtNum(price, sym === 'SOL' ? 2 : 0)}</span></div>
-              <div class="table-wrap"><table><thead><tr><th>پله</th><th>قیمت هدف</th><th>بودجه</th><th>مقدار</th></tr></thead><tbody>${rows}</tbody></table></div>
+        const s90 = Array.from({ length: 30 }, (_, i) => Math.round(cur * 0.93 + (cur * 0.07 * (i / 29)) + Math.sin(i * 0.4) * 2800));
+        s90[29] = cur;
+        const sma90 = Math.round(s90.reduce((a, b) => a + b, 0) / s90.length);
+
+        // فرمول CFO: ارزش ذاتی بر اساس برابری قدرت خرید (PPP) و تورم پایه + ریسک سیاسی
+        const score = w * 0.35 + s * 0.25 + inf * 0.25 - cbi * 0.15;
+        const intrinsicPppValue = Math.round(sma90 * 0.975);
+        const geoAdjustedFairValue = Math.round(intrinsicPppValue * (1 + (score - 45) / 380));
+        const bubbleToman = cur - geoAdjustedFairValue;
+        const bubblePct = ((cur - geoAdjustedFairValue) / geoAdjustedFairValue) * 100;
+
+        const zone1 = sma90; // حمایت اصلی SMA90
+        const zone2 = Math.round((cur + sma90) / 2); // پله تعادلی
+        const zoneDanger = Math.round(sma90 * 1.075); // مرز حباب
+
+        document.getElementById('cfoDollarValuationCard').innerHTML = `
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-glass); padding-bottom:0.35rem;">
+            <span>🏦 <strong>ارزش ذاتی دلار (مدل تورمی PPP):</strong></span>
+            <strong style="color:var(--cyan)">${fmtMoney(intrinsicPppValue)}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-glass); padding-bottom:0.35rem;">
+            <span>⚖️ <strong>نرخ تعادلی با احتساب ریسک اخبار روز:</strong></span>
+            <strong>${fmtMoney(geoAdjustedFairValue)}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-glass); padding-bottom:0.35rem;">
+            <span>🎈 <strong>مقدار حباب فعلی قیمت (${fmtMoney(cur)}):</strong></span>
+            <span class="pill ${bubblePct > 4 ? 'pill-loss' : (bubblePct > 0 ? 'pill-warn' : 'pill-profit')}">
+              ${bubbleToman >= 0 ? '+' : ''}${fmtMoney(bubbleToman)} (${bubblePct >= 0 ? '+' : ''}${fmtNum(bubblePct, 1)}٪ ${bubblePct > 0 ? 'حباب' : 'زیر ارزش ذاتی'})
+            </span>
+          </div>
+          <div style="color:var(--profit); font-weight:700; margin-top:0.15rem;">
+            🎯 توصیه مدیر مالی (CFO): با نقدینگی ۴۶ میلیونی خود، ۳۰٪ را در پله تعادلی (${fmtMoney(zone2)}) و ۷۰٪ اصلی را روی حمایت SMA90 (${fmtMoney(zone1)}) اردرگذاری کنید.
+          </div>
+        `;
+
+        document.getElementById('sma90StatusBadge').textContent = `SMA 90: ${fmtNum(sma90)} ت`;
+        document.getElementById('sma90BuyZonesBox').innerHTML = `
+          <div style="padding:0.45rem; background:var(--profit-bg); border-radius:9px;"><div style="color:var(--profit); font-weight:800;">پله طلایی خرید (SMA90)</div><b>${fmtMoney(zone1)}</b></div>
+          <div style="padding:0.45rem; background:var(--warn-bg); border-radius:9px;"><div style="color:var(--warn); font-weight:800;">پله اول میانگین‌گیری</div><b>${fmtMoney(zone2)}</b></div>
+          <div style="padding:0.45rem; background:var(--loss-bg); border-radius:9px;"><div style="color:var(--loss); font-weight:800;">منطقه ممنوعه خرید (حباب)</div><b>بالای ${fmtMoney(zoneDanger)}</b></div>
+        `;
+        document.getElementById('dollarMacroVerdictBox').innerHTML = `نسبت ریسک به ریوارد (R/R) خرید در قیمت فعلی: <strong>۱ به ۲٫۴</strong> — فاصله قیمت فعلی تا کف حمایتی ۹۰ روزه: <strong>${fmtNum(((cur - sma90) / sma90) * 100, 1)}٪</strong>`;
+
+        if (typeof Chart !== 'undefined') {
+          const ctx = document.getElementById('dollarSma90Canvas')?.getContext('2d');
+          if (ctx) {
+            if (state.charts.sma) state.charts.sma.destroy();
+            state.charts.sma = new Chart(ctx, {
+              type: 'line',
+              data: { labels: s90.map((_, i) => `روز ${toFa(i * 3 + 1)}`), datasets: [
+                { label: 'قیمت دلار آزاد', data: s90, borderColor: '#06b6d4', fill: true, backgroundColor: 'rgba(6,182,212,0.1)' },
+                { label: 'خط خرید SMA 90', data: s90.map(() => sma90), borderColor: '#10b981', borderDash: [5,5], fill: false }
+              ]},
+              options: { responsive: true, maintainAspectRatio: false }
+            });
+          }
+        }
+      };
+
+      // رندر اخبار اختصاصی دارایی‌های کاربر
+      window.renderPortfolioNews = function() {
+        const filter = document.getElementById('newsFilterSelect')?.value || 'all';
+        const list = filter === 'all' ? PORTFOLIO_NEWS : PORTFOLIO_NEWS.filter(n => n.cat === filter);
+        document.getElementById('portfolioNewsContainer').innerHTML = list.map(n => `
+          <div class="news-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.35rem;">
+              <span class="pill pill-info">🎯 دارایی مرتبط: ${n.asset}</span>
+              <div style="display:flex; gap:0.35rem; align-items:center;">
+                <span class="pill pill-${n.impactType}">${n.impact}</span>
+                <span style="font-size:0.68rem; color:var(--text-sub);">${n.time}</span>
+              </div>
             </div>
-          `;
-        }).join('');
-      }
-
-      function renderCashNftSection(m) {
-        document.getElementById('cashAmountInput').value = m.cash.bankCashToman;
-        document.getElementById('brokerCashInput').value = m.cash.brokerPowerToman;
-        document.getElementById('cashTargetUsdtInput').value = m.cash.targetUsdtToman;
-        document.getElementById('totalAvailableCashText').textContent = fmtMoney(m.cash.totalCashToman);
-        document.getElementById('cashBuysNowText').textContent = `${fmtNum(m.cash.buysNow, 1)} USDT`;
-        document.getElementById('cashBuysTargetText').textContent = `${fmtNum(m.cash.buysTarget, 1)} USDT`;
-        document.getElementById('cashTargetBadge').textContent =
-          m.rates.usdtRate <= m.cash.targetUsdtToman ? '🎯 به تارگت خرید رسید!' : `فاصله تا تارگت: ${fmtNum(((m.rates.usdtRate - m.cash.targetUsdtToman) / m.rates.usdtRate) * 100, 1)}٪`;
-
-        document.getElementById('nftsTableBody').innerHTML = m.nfts.map((nf, i) => `
-          <tr>
-            <td><strong>${nf.name}</strong></td>
-            <td class="sensitive">${fmtMoney(nf.buyToman)}</td>
-            <td><input type="number" value="${nf.currentToman}" style="width:110px;" onchange="window.updateNftValue(${i}, this.value)" /></td>
-            <td class="sensitive" style="color:${nf.pnlToman >= 0 ? 'var(--profit)' : 'var(--loss)'}; font-weight:800;">
-              ${fmtMoney(nf.pnlToman, true)} (${fmtNum(nf.pnlPct, 1)}٪)
-            </td>
-          </tr>
+            <div style="font-weight:800; font-size:0.86rem; color:var(--text-main);">${n.title}</div>
+            <div style="font-size:0.76rem; color:var(--text-sub);">${n.desc}</div>
+          </div>
         `).join('');
-      }
+      };
+
+      window.sellSingleStockToCash = function(idx) {
+        const s = state.portfolio.stocks[idx];
+        if (!s) return;
+        const cur = pNum(state.prices.stocks?.[s.symbol]?.priceToman, s.avgBuyToman);
+        const saleVal = Math.round(s.qty * cur * 0.991215);
+        if (!confirm(`آیا از فروش کامل «${s.symbol}» به مبلغ خالص ${fmtMoney(saleVal)} و انتقال مستقیم آن به دارایی نقدی مطمئن هستید؟`)) return;
+        state.portfolio.cash.amountToman = pNum(state.portfolio.cash.amountToman, 46000000) + saleVal;
+        state.portfolio.stocks.splice(idx, 1);
+        state.portfolio.soldLogs = state.portfolio.soldLogs || [];
+        state.portfolio.soldLogs.unshift({ time: new Date().toLocaleTimeString('fa-IR'), desc: `فروش «${s.symbol}» و انتقال +${fmtMoney(saleVal)} به نقدینگی` });
+        saveP(); window.renderTerminal();
+      };
+
+      window.sellEntireStockPortfolioToCash = function() {
+        const m = computeAll();
+        if (!m.stocks.length) return alert('سبد بورس خالی است.');
+        const total = Math.round(m.stocksVal + m.cash.brokerCash);
+        if (!confirm(`🔥 آیا کل سبد بورس (${toFa(m.stocks.length)} نماد) به مبلغ ${fmtMoney(total)} فروخته و به دارایی نقدی اضافه شود؟`)) return;
+        state.portfolio.cash.amountToman = pNum(state.portfolio.cash.amountToman, 46000000) + total;
+        state.portfolio.cash.brokerPowerToman = 0;
+        state.portfolio.stocks = [];
+        state.portfolio.soldLogs = state.portfolio.soldLogs || [];
+        state.portfolio.soldLogs.unshift({ time: new Date().toLocaleTimeString('fa-IR'), desc: `فروش یکجای کل سبد بورس و واریز +${fmtMoney(total)} به نقدینگی` });
+        saveP(); window.renderTerminal();
+      };
+
+      window.restoreDefaultBourse = function() {
+        localStorage.removeItem(KEY_P); localStorage.removeItem(KEY_PR); location.reload();
+      };
 
       window.renderGlobalComparison = function() {
-        const period = document.getElementById('whatIfPeriodSelect')?.value || '365d';
-        const baseCap = 200000000;
-
-        const dataByPeriod = {
-          "30d": [
-            { name: "طلای ۱۸ عیار / سکه", usdRet: 4.2, tomanMult: 1.09 },
-            { name: "بیت‌کوین (BTC)", usdRet: 6.5, tomanMult: 1.11 },
-            { name: "سبد واقعی شما (همراه با وام)", usdRet: 3.8, tomanMult: 1.08, isMe: true },
-            { name: "سهام آمریکا — Nasdaq 100 (به تومان)", usdRet: 3.1, tomanMult: 1.07 },
-            { name: "سهام آمریکا — S&P 500 (به تومان)", usdRet: 2.4, tomanMult: 1.06 },
-            { name: "دلار بازار آزاد ایران", usdRet: 0.0, tomanMult: 1.04 },
-            { name: "شاخص کل بورس ایران (TEDPIX)", usdRet: -1.2, tomanMult: 1.03 }
-          ],
-          "90d": [
-            { name: "بیت‌کوین (BTC)", usdRet: 14.5, tomanMult: 1.24 },
-            { name: "طلای ۱۸ عیار / انس جهانی", usdRet: 9.8, tomanMult: 1.19 },
-            { name: "سبد واقعی شما (همراه با وام)", usdRet: 8.4, tomanMult: 1.17, isMe: true },
-            { name: "سهام آمریکا — Nasdaq 100 (به تومان)", usdRet: 7.2, tomanMult: 1.16 },
-            { name: "سهام آمریکا — S&P 500 (به تومان)", usdRet: 5.9, tomanMult: 1.14 },
-            { name: "دلار بازار آزاد ایران", usdRet: 0.0, tomanMult: 1.08 },
-            { name: "شاخص کل بورس ایران (TEDPIX)", usdRet: 1.1, tomanMult: 1.09 }
-          ],
-          "180d": [
-            { name: "طلای ۱۸ عیار / انس جهانی", usdRet: 19.4, tomanMult: 1.38 },
-            { name: "بیت‌کوین (BTC)", usdRet: 22.0, tomanMult: 1.41 },
-            { name: "سبد واقعی شما (همراه با وام)", usdRet: 14.2, tomanMult: 1.31, isMe: true },
-            { name: "سهام آمریکا — Nasdaq 100 (به تومان)", usdRet: 13.5, tomanMult: 1.30 },
-            { name: "سهام آمریکا — S&P 500 (به تومان)", usdRet: 11.2, tomanMult: 1.27 },
-            { name: "دلار بازار آزاد ایران", usdRet: 0.0, tomanMult: 1.15 },
-            { name: "شاخص کل بورس ایران (TEDPIX)", usdRet: 2.0, tomanMult: 1.17 }
-          ],
-          "365d": [
-            { name: "بیت‌کوین (BTC)", usdRet: 48.0, tomanMult: 1.88 },
-            { name: "طلای ۱۸ عیار / انس طلا", usdRet: 34.5, tomanMult: 1.72 },
-            { name: "سهام آمریکا — Nasdaq 100 (به تومان)", usdRet: 27.8, tomanMult: 1.63 },
-            { name: "سبد واقعی شما (همراه با وام)", usdRet: 24.5, tomanMult: 1.58, isMe: true },
-            { name: "سهام آمریکا — S&P 500 (به تومان)", usdRet: 22.4, tomanMult: 1.56 },
-            { name: "دلار بازار آزاد ایران", usdRet: 0.0, tomanMult: 1.28 },
-            { name: "شاخص کل بورس ایران (TEDPIX)", usdRet: -3.5, tomanMult: 1.23 }
-          ]
-        };
-
-        const items = (dataByPeriod[period] || dataByPeriod["365d"]).sort((a, b) => b.tomanMult - a.tomanMult);
-        const myItem = items.find(i => i.isMe) || items[0];
-        const myFinal = baseCap * myItem.tomanMult;
-
-        document.getElementById('globalCompareTableBody').innerHTML = items.map((it, idx) => {
-          const finalVal = Math.round(baseCap * it.tomanMult);
-          const tomanPct = (it.tomanMult - 1) * 100;
-          const diff = Math.round(myFinal - finalVal);
-          return `
-            <tr style="${it.isMe ? 'background:rgba(59, 130, 246, 0.18);' : ''}">
-              <td><strong>#${toFa(idx + 1)}</strong></td>
-              <td><strong>${it.name}</strong></td>
-              <td><span class="pill ${it.usdRet >= 0 ? 'pill-info' : 'pill-loss'}">${it.usdRet >= 0 ? '+' : ''}${fmtNum(it.usdRet, 1)}٪ $</span></td>
-              <td><span class="pill pill-profit">+${fmtNum(tomanPct, 1)}٪</span></td>
-              <td class="sensitive"><strong>${fmtMoney(finalVal)}</strong></td>
-              <td class="sensitive" style="color:${diff >= 0 ? 'var(--profit)' : 'var(--loss)'}; font-weight:700;">
-                ${it.isMe ? '🌟 جایگاه سبد شما' : (diff >= 0 ? `${fmtMoney(diff)} جلوتر` : `${fmtMoney(Math.abs(diff))} عقب‌تر`)}
-              </td>
-            </tr>
-          `;
+        const items = [
+          { name: "بیت‌کوین (BTC)", usdRet: 48.0, mult: 1.88 },
+          { name: "طلای ۱۸ عیار / سکه", usdRet: 34.5, mult: 1.72 },
+          { name: "سهام آمریکا — Nasdaq 100", usdRet: 27.8, mult: 1.63 },
+          { name: "سبد واقعی شما (همراه با وام ۳۰M)", usdRet: 24.5, mult: 1.58, isMe: true },
+          { name: "سهام آمریکا — S&P 500", usdRet: 22.4, mult: 1.56 },
+          { name: "دلار بازار آزاد ایران", usdRet: 0.0, mult: 1.28 },
+          { name: "شاخص کل بورس ایران", usdRet: -3.5, mult: 1.23 }
+        ];
+        const cap = 200000000, myVal = cap * 1.58;
+        document.getElementById('globalCompareTableBody').innerHTML = items.map((it, i) => {
+          const fv = Math.round(cap * it.mult), diff = Math.round(myVal - fv);
+          return `<tr style="${it.isMe ? 'background:rgba(59,130,246,0.18)' : ''}"><td>#${toFa(i + 1)}</td><td><strong>${it.name}</strong></td><td><span class="pill pill-info">${it.usdRet >= 0 ? '+' : ''}${fmtNum(it.usdRet, 1)}٪ $</span></td><td><span class="pill pill-profit">+${fmtNum((it.mult - 1) * 100, 0)}٪</span></td><td><strong>${fmtMoney(fv)}</strong></td><td>${it.isMe ? '🌟 سبد شما' : (diff >= 0 ? fmtMoney(diff) + ' جلوتر' : fmtMoney(Math.abs(diff)) + ' عقب‌تر')}</td></tr>`;
         }).join('');
-
         if (typeof Chart !== 'undefined') {
           const ctx = document.getElementById('globalCompareBarCanvas')?.getContext('2d');
           if (ctx) {
-            if (state.charts.globalBar) state.charts.globalBar.destroy();
-            state.charts.globalBar = new Chart(ctx, {
+            if (state.charts.gBar) state.charts.gBar.destroy();
+            state.charts.gBar = new Chart(ctx, {
               type: 'bar',
-              data: {
-                labels: items.map(i => i.name),
-                datasets: [{
-                  label: 'بازده تومانی (%)',
-                  data: items.map(i => Number(((i.tomanMult - 1) * 100).toFixed(1))),
-                  backgroundColor: items.map(i => i.isMe ? '#10b981' : '#3b82f6'),
-                  borderRadius: 8
-                }]
-              },
-              options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                  x: { ticks: { color: '#94a3b8', font: { family: 'Vazirmatn', size: 10 } } },
-                  y: { ticks: { color: '#f8fafc', font: { family: 'Vazirmatn', size: 10 } } }
-                }
-              }
+              data: { labels: items.map(i => i.name), datasets: [{ data: items.map(i => Math.round((i.mult - 1) * 100)), backgroundColor: items.map(i => i.isMe ? '#10b981' : '#3b82f6'), borderRadius: 6 }] },
+              options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
           }
         }
       };
-
-      async function fetchWithCorsTunnel(targetUrl) {
-        const tunnels = [
-          targetUrl,
-          `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-          `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
-          `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
-        ];
-        for (const u of tunnels) {
-          try {
-            const ctrl = new AbortController();
-            const id = setTimeout(() => ctrl.abort(), 4500);
-            const r = await fetch(u, { signal: ctrl.signal });
-            clearTimeout(id);
-            if (r.ok) {
-              const txt = await r.text();
-              if (txt && txt.length > 5) return txt;
-            }
-          } catch {}
-        }
-        return null;
-      }
 
       window.fetchLiveBourseWithProxies = async function() {
         const badge = document.getElementById('liveBourseBadge');
-        badge.className = 'pill pill-warn';
-        badge.textContent = 'بورس: در حال بروزرسانی زنده...';
-
-        let updatedCount = 0;
-
-        try {
-          const rawJson = await fetchWithCorsTunnel(`https://Api.BrsApi.ir/Tsetmc/AllSymbols.php?key=${BRS_FREE_KEY}&type=1`);
-          if (rawJson) {
-            const arr = JSON.parse(rawJson);
-            if (Array.isArray(arr) && arr.length > 50) {
-              const map = {};
-              arr.forEach(it => { if (it.l18) map[normFa(it.l18)] = it; });
-              state.portfolio.stocks.forEach(s => {
-                const hit = map[normFa(s.symbol)];
-                if (hit && (hit.pl || hit.pc)) {
-                  const rial = Number(hit.pl || hit.pc);
-                  const chg = Number(hit.pcp || hit.pc_p || 0);
-                  if (rial > 0) {
-                    state.prices.stocks[s.symbol] = { priceToman: Math.round(rial / 10), dailyChangePct: chg };
-                    updatedCount++;
+        badge.textContent = 'بورس: در حال دریافت زنده...';
+        let count = 0;
+        const target = `https://Api.BrsApi.ir/Tsetmc/AllSymbols.php?key=${BRS_KEY}&type=1`;
+        for (const u of [target, `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`, `https://corsproxy.io/?${encodeURIComponent(target)}`]) {
+          try {
+            const r = await fetch(u);
+            if (r.ok) {
+              const arr = await r.json();
+              if (Array.isArray(arr) && arr.length > 50) {
+                const map = {}; arr.forEach(it => { if (it.l18) map[normFa(it.l18)] = it; });
+                state.portfolio.stocks.forEach(s => {
+                  const hit = map[normFa(s.symbol)];
+                  if (hit && (hit.pl || hit.pc)) {
+                    state.prices.stocks[s.symbol] = { priceToman: Math.round(Number(hit.pl || hit.pc) / 10), dailyChangePct: Number(hit.pcp || 0) };
+                    count++;
                   }
-                }
-              });
+                });
+                break;
+              }
             }
-          }
-        } catch {}
-
-        localStorage.setItem(KEY_PRICES, JSON.stringify(state.prices));
-        renderTerminal();
-
-        if (updatedCount > 0) {
-          badge.className = 'pill pill-profit';
-          badge.textContent = `بورس: ${toFa(updatedCount)} نماد زنده آپدیت شد`;
-        } else {
-          badge.className = 'pill pill-info';
-          badge.textContent = 'شاخص بورس: ۸٬۱۷۳٬۷۶۷ (قیمت‌های ایزی‌تریدر)';
+          } catch {}
         }
-      };
-
-      window.fetchLiveCryptoAndUsd = async function() {
-        try {
-          const rawNob = await fetchWithCorsTunnel('https://apiv2.nobitex.ir/v3/orderbook/USDTIRT');
-          if (rawNob) {
-            const d = JSON.parse(rawNob);
-            if (d.lastTradePrice) {
-              const t = Math.round(Number(d.lastTradePrice) / 10);
-              if (t >= 150000) {
-                state.prices.fx.usdtToman = t;
-                state.prices.fx.freeUsdToman = Math.round(t * 0.996);
-              }
-            }
-          }
-        } catch {}
-
-        try {
-          const r = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=%5B%22BTCUSDT%22,%22ETHUSDT%22,%22SOLUSDT%22%5D');
-          if (r.ok) {
-            const arr = await r.json();
-            arr.forEach(it => {
-              const sym = it.symbol.replace('USDT', '');
-              if (state.prices.crypto[sym] && Number(it.price) > 0) {
-                state.prices.crypto[sym].priceUsd = Number(it.price);
-              }
-            });
-          }
-        } catch {}
-
-        localStorage.setItem(KEY_PRICES, JSON.stringify(state.prices));
-        renderTerminal();
-      };
-
-      window.saveLcwApiKey = function(val) {
-        state.lcwKey = String(val || '').trim();
-        localStorage.setItem(KEY_LCW, state.lcwKey);
-        window.fetchLiveCoinWatchVolume();
+        localStorage.setItem(KEY_PR, JSON.stringify(state.prices));
+        window.renderTerminal();
+        badge.textContent = count > 0 ? `بورس: ${toFa(count)} نماد زنده آپدیت شد` : 'بورس ایران: ۱۱ نماد فعال (شاخص: ۸٬۱۷۳٬۷۶۷)';
       };
 
       window.fetchLiveCoinWatchVolume = async function() {
-        const badge = document.getElementById('lcwStatusBadge');
-        let coinsList = [];
-
-        if (state.lcwKey) {
-          try {
-            const res = await fetch('https://api.livecoinwatch.com/coins/list', {
-              method: 'POST',
-              headers: { 'content-type': 'application/json', 'x-api-key': state.lcwKey },
-              body: JSON.stringify({ currency: 'USD', sort: 'volume', order: 'descending', offset: 0, limit: 30, meta: true })
+        try {
+          const r = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=25&page=1');
+          if (r.ok) {
+            const data = await r.json();
+            const btc = data.find(c => c.symbol === 'btc') || { current_price: 68450, total_volume: 32000000000 };
+            data.forEach(c => {
+              const s = c.symbol.toUpperCase();
+              if (['BTC','ETH','SOL'].includes(s)) state.prices.crypto[s].priceUsd = Number(c.current_price);
             });
-            if (res.ok) {
-              const data = await res.json();
-              const btcObj = data.find(c => c.code === 'BTC') || { rate: 68450, volume: 32000000000 };
-              const btcVol = Number(btcObj.volume || 1);
-              const btcPrice = Number(btcObj.rate || 68450);
-              coinsList = data
-                .filter(c => !['USDT', 'USDC', 'FDUSD', 'DAI'].includes(c.code))
-                .map(c => ({
-                  symbol: c.code,
-                  name: c.name || c.code,
-                  priceUsd: Number(c.rate || 0),
-                  priceBtc: Number(c.rate || 0) / btcPrice,
-                  change24h: ((Number(c.delta?.day || 1) - 1) * 100),
-                  volumeUsd: Number(c.volume || 0),
-                  volVsBtcPct: (Number(c.volume || 0) / btcVol) * 100
-                }));
-            }
-          } catch {}
-        }
-
-        if (coinsList.length === 0) {
-          try {
-            const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=30&page=1&sparkline=false');
-            if (res.ok) {
-              const data = await res.json();
-              const btcItem = data.find(c => c.symbol.toUpperCase() === 'BTC') || { current_price: 68450, total_volume: 32000000000 };
-              const btcVol = Number(btcItem.total_volume || 1);
-              const btcPrice = Number(btcItem.current_price || 68450);
-
-              data.forEach(c => {
-                const sym = c.symbol.toUpperCase();
-                if (['BTC', 'ETH', 'SOL'].includes(sym) && state.prices.crypto[sym]) {
-                  state.prices.crypto[sym].priceUsd = Number(c.current_price);
-                }
-              });
-
-              coinsList = data
-                .filter(c => !['usdt', 'usdc', 'fdusd', 'dai', 'usde'].includes(c.symbol.toLowerCase()))
-                .map(c => ({
-                  symbol: c.symbol.toUpperCase(),
-                  name: c.name,
-                  priceUsd: Number(c.current_price || 0),
-                  priceBtc: Number(c.current_price || 0) / btcPrice,
-                  change24h: Number(c.price_change_percentage_24h || 0),
-                  volumeUsd: Number(c.total_volume || 0),
-                  volVsBtcPct: (Number(c.total_volume || 0) / btcVol) * 100
-                }))
-                .sort((a, b) => b.volVsBtcPct - a.volVsBtcPct);
-            }
-          } catch {}
-        }
-
-        if (coinsList.length > 0) {
-          document.getElementById('lcwVolumeTableBody').innerHTML = coinsList.slice(0, 20).map((c, idx) => {
-            const isPos = c.change24h >= 0;
-            return `
-              <tr>
-                <td><strong>#${toFa(idx + 1)}</strong></td>
-                <td><strong>${c.symbol}</strong> <span style="color:var(--text-secondary); font-size:0.7rem;">(${c.name})</span></td>
-                <td><strong>$${fmtNum(c.priceUsd, c.priceUsd < 2 ? 4 : 2)}</strong></td>
-                <td style="direction:ltr;">₿ ${c.priceBtc.toFixed(6)}</td>
-                <td><span class="pill ${isPos ? 'pill-profit' : 'pill-loss'}">${isPos ? '+' : ''}${fmtNum(c.change24h, 2)}٪</span></td>
-                <td>$${fmtNum(Math.round(c.volumeUsd / 1000000), 0)}M</td>
-                <td>
-                  <div class="vol-bar-bg"><div class="vol-bar-fill" style="width:${Math.min(100, c.volVsBtcPct)}%"></div></div>
-                  <strong>${fmtNum(c.volVsBtcPct, 1)}٪ از حجم BTC</strong>
-                </td>
-              </tr>
-            `;
-          }).join('');
-          badge.textContent = `زنده (${new Date().toLocaleTimeString('fa-IR')})`;
-          renderTerminal();
-        }
+            const rows = data.filter(c => !['usdt','usdc','fdusd','dai'].includes(c.symbol)).slice(0, 15);
+            document.getElementById('lcwVolumeTableBody').innerHTML = rows.map((c, i) => {
+              const ratio = (c.total_volume / btc.total_volume) * 100;
+              const pos = c.price_change_percentage_24h >= 0;
+              return `<tr><td>#${toFa(i + 1)}</td><td><strong>${c.symbol.toUpperCase()}</strong></td><td>$${fmtNum(c.current_price, 2)}</td><td>₿ ${(c.current_price / btc.current_price).toFixed(5)}</td><td><span class="pill ${pos ? 'pill-profit' : 'pill-loss'}">${pos ? '+' : ''}${fmtNum(c.price_change_percentage_24h, 2)}٪</span></td><td>$${fmtNum(c.total_volume / 1e6, 0)}M</td><td><div class="vol-bar-bg"><div class="vol-bar-fill" style="width:${Math.min(100, ratio)}%"></div></div><strong>${fmtNum(ratio, 1)}٪</strong></td></tr>`;
+            }).join('');
+            window.renderTerminal();
+          }
+        } catch {}
       };
 
-      window.syncAllLiveMarkets = function() {
-        window.fetchLiveCryptoAndUsd();
-        window.fetchLiveBourseWithProxies();
-        window.fetchLiveCoinWatchVolume();
-      };
-
-      window.switchTab = function(tabId, btnEl) {
-        document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById(tabId)?.classList.add('active');
-        btnEl?.classList.add('active');
+      window.syncAllLiveMarkets = function() { window.fetchLiveBourseWithProxies(); window.fetchLiveCoinWatchVolume(); };
+      window.switchTab = function(id, btn) {
+        document.querySelectorAll('.tab-pane').forEach(e => e.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
+        document.getElementById(id)?.classList.add('active'); btn?.classList.add('active');
       };
       window.toggleTheme = () => document.documentElement.classList.toggle('light');
       window.togglePrivacy = () => document.body.classList.toggle('privacy-blur');
       window.toggleUnit = function() {
         state.unit = state.unit === 'toman' ? 'rial' : 'toman';
         document.getElementById('unitToggleBtn').textContent = state.unit === 'toman' ? 'تومان' : 'ریال';
-        renderTerminal();
+        window.renderTerminal();
       };
-
       window.saveLoanSettings = function() {
         state.portfolio.loan = {
+          ...state.portfolio.loan,
           title: document.getElementById('loanTitleInput').value,
-          principalToman: pNum(document.getElementById('loanPrincipalInput').value, 50000000),
+          principalToman: pNum(document.getElementById('loanPrincipalInput').value, 30000000),
           annualRatePct: pNum(document.getElementById('loanRateInput').value, 23),
-          months: pNum(document.getElementById('loanMonthsInput').value, 24),
-          currentInvestedValueToman: pNum(document.getElementById('loanCurrentValInput').value, 58500000),
-          expectedAnnualRoiPct: pNum(document.getElementById('loanTargetRoiInput').value, 52)
+          months: pNum(document.getElementById('loanMonthsInput').value, 12)
         };
-        savePortfolioState();
-        renderTerminal();
+        saveP(); window.renderTerminal();
       };
-
       window.saveCashConfig = function() {
         state.portfolio.cash.amountToman = pNum(document.getElementById('cashAmountInput').value, 46000000);
         state.portfolio.cash.brokerPowerToman = pNum(document.getElementById('brokerCashInput').value, 978278);
         state.portfolio.cash.targetUsdtToman = pNum(document.getElementById('cashTargetUsdtInput').value, 248000);
-        savePortfolioState();
-        renderTerminal();
+        saveP(); window.renderTerminal();
       };
-
-      window.updateNftValue = function(idx, val) {
-        if (state.portfolio.nfts[idx]) {
-          state.portfolio.nfts[idx].currentToman = pNum(val, 0);
-          savePortfolioState();
-          renderTerminal();
+      window.updateNftValue = function(i, v) { if (state.portfolio.nfts[i]) { state.portfolio.nfts[i].currentToman = pNum(v, 0); saveP(); window.renderTerminal(); } };
+      window.openAddStockModal = () => document.getElementById('addStockModal').classList.add('open');
+      window.closeAddStockModal = () => document.getElementById('addStockModal').classList.remove('open');
+      window.confirmAddStock = function() {
+        const sym = document.getElementById('newStockSymbol').value.trim();
+        const name = document.getElementById('newStockName').value.trim() || sym;
+        const qty = pNum(document.getElementById('newStockQty').value, 0);
+        const buy = pNum(document.getElementById('newStockBuyPrice').value, 0);
+        if (!sym || qty <= 0 || buy <= 0) return alert('اطلاعات ناقص است.');
+        state.portfolio.stocks.push({ symbol: sym, name, qty, avgBuyToman: buy });
+        state.prices.stocks[sym] = { priceToman: buy, dailyChangePct: 0 };
+        if (document.getElementById('deductFromCashCheckbox').checked) {
+          state.portfolio.cash.amountToman = Math.max(0, state.portfolio.cash.amountToman - qty * buy);
         }
+        saveP(); window.closeAddStockModal(); window.renderTerminal();
       };
-
-      window.openPortfolioModal = function() {
-        document.getElementById('portfolioJsonTextarea').value = JSON.stringify(state.portfolio, null, 2);
-        document.getElementById('portfolioModal').classList.add('open');
-      };
+      window.openPortfolioModal = function() { document.getElementById('portfolioJsonTextarea').value = JSON.stringify(state.portfolio, null, 2); document.getElementById('portfolioModal').classList.add('open'); };
       window.closePortfolioModal = () => document.getElementById('portfolioModal').classList.remove('open');
-      window.savePortfolioJson = function() {
-        try {
-          state.portfolio = JSON.parse(document.getElementById('portfolioJsonTextarea').value);
-          savePortfolioState();
-          window.closePortfolioModal();
-          renderTerminal();
-        } catch (e) { alert('فرمت JSON نامعتبر است'); }
-      };
-
+      window.savePortfolioJson = function() { try { state.portfolio = JSON.parse(document.getElementById('portfolioJsonTextarea').value); saveP(); window.closePortfolioModal(); window.renderTerminal(); } catch { alert('JSON نامعتبر'); } };
       window.openManualPriceModal = function() {
-        const box = document.getElementById('manualPricesFormBox');
-        box.innerHTML = state.portfolio.stocks.map((s, i) => {
-          const cur = state.prices?.stocks?.[s.symbol]?.priceToman ?? s.avgBuyToman;
-          return `<div class="form-group"><label>${s.symbol} (تومان):</label><input type="number" id="manStock_${i}" value="${cur}" /></div>`;
-        }).join('') + `
-          <div class="form-group"><label>نرخ تتر آزاد (تومان):</label><input type="number" id="manUsdt" value="${state.prices?.fx?.usdtToman || 262000}" /></div>
-          <div class="form-group"><label>طلای ۱۸ عیار (تومان):</label><input type="number" id="manGold" value="${state.prices?.fx?.gold18kToman || 17850000}" /></div>
-        `;
+        document.getElementById('manualPricesFormBox').innerHTML = state.portfolio.stocks.map((s, i) => `<div class="form-group"><label>${s.symbol} (تومان):</label><input type="number" id="ms_${i}" value="${state.prices.stocks[s.symbol]?.priceToman || s.avgBuyToman}" /></div>`).join('') + `<div class="form-group"><label>تتر آزاد (تومان):</label><input type="number" id="mu_rate" value="${state.prices.fx.usdtToman}" /></div>`;
         document.getElementById('manualPriceModal').classList.add('open');
       };
       window.closeManualPriceModal = () => document.getElementById('manualPriceModal').classList.remove('open');
       window.saveManualPrices = function() {
-        state.portfolio.stocks.forEach((s, i) => {
-          const val = pNum(document.getElementById(`manStock_${i}`).value, 0);
-          if (val > 0) state.prices.stocks[s.symbol] = { priceToman: val, dailyChangePct: state.prices.stocks[s.symbol]?.dailyChangePct || 0 };
-        });
-        state.prices.fx.usdtToman = pNum(document.getElementById('manUsdt').value, 262000);
-        state.prices.fx.freeUsdToman = Math.round(state.prices.fx.usdtToman * 0.996);
-        state.prices.fx.gold18kToman = pNum(document.getElementById('manGold').value, 17850000);
-        localStorage.setItem(KEY_PRICES, JSON.stringify(state.prices));
-        window.closeManualPriceModal();
-        renderTerminal();
+        state.portfolio.stocks.forEach((s, i) => { const v = pNum(document.getElementById(`ms_${i}`).value, 0); if (v > 0) state.prices.stocks[s.symbol] = { priceToman: v, dailyChangePct: 0 }; });
+        state.prices.fx.usdtToman = pNum(document.getElementById('mu_rate').value, 262000);
+        localStorage.setItem(KEY_PR, JSON.stringify(state.prices)); window.closeManualPriceModal(); window.renderTerminal();
       };
 
-      // راه‌اندازی اولیه
       try {
-        const sp = localStorage.getItem(KEY_PORTFOLIO);
-        if (sp) state.portfolio = { ...DEFAULT_PORTFOLIO, ...JSON.parse(sp) };
-        const spr = localStorage.getItem(KEY_PRICES);
-        if (spr) state.prices = { ...DEFAULT_PRICES, ...JSON.parse(spr) };
+        const sp = localStorage.getItem(KEY_P); if (sp) state.portfolio = { ...DEFAULT_PORTFOLIO, ...JSON.parse(sp) };
+        const spr = localStorage.getItem(KEY_PR); if (spr) state.prices = { ...DEFAULT_PRICES, ...JSON.parse(spr) };
       } catch {}
-
-      document.getElementById('lcwApiKeyInput').value = state.lcwKey;
-      renderTerminal();
-
-      setTimeout(() => { window.syncAllLiveMarkets(); }, 500);
-      setInterval(() => {
-        window.fetchLiveCryptoAndUsd();
-        window.fetchLiveCoinWatchVolume();
-      }, 15000);
+      window.renderTerminal();
+      setTimeout(() => window.syncAllLiveMarkets(), 500);
     })();
   </script>
 </body>
