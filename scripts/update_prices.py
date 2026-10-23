@@ -16,7 +16,7 @@ PRICES_FILE = os.path.join(ROOT_DIR, "data", "prices.json")
 HISTORY_FILE = os.path.join(ROOT_DIR, "data", "history.json")
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36",
     "Accept": "application/json, text/plain, */*"
 }
 BRS_KEY = "FreeSV0E1LSgB9RDjuf0QorSLViX8pPG"
@@ -46,7 +46,7 @@ def save_json(path, data):
 def fetch_usdt():
     for url in ["https://apiv2.nobitex.ir/v3/orderbook/USDTIRT", "https://api.tetherland.com/currencies"]:
         try:
-            r = requests.get(url, headers=HEADERS, timeout=5, verify=False)
+            r = requests.get(url, headers=HEADERS, timeout=6, verify=False)
             if r.status_code == 200:
                 d = r.json()
                 if "lastTradePrice" in d:
@@ -135,7 +135,7 @@ def main():
     save_json(PRICES_FILE, prices)
 
     stable_usd = sum(float(x.get("amount", 0)) * float(x.get("pegUsd", 1)) for x in portfolio.get("stablecoins", []))
-    cash_t = float(portfolio.get("cash", {}).get("amountToman", 56000000))
+    cash_t = float(portfolio.get("cash", {}).get("amountToman", 46000000))
     nfts_t = sum(float(x.get("currentToman", 0)) for x in portfolio.get("nfts", []))
     net_worth = round(total_stocks + (stable_usd * final_usdt) + cash_t + nfts_t)
 
