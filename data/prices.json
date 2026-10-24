@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-10-24T13:08:40Z",
+  "lastUpdated": "2026-10-24T16:43:18Z",
   "fx": {
-    "usdtToman": 269299,
-    "freeUsdToman": 268222,
+    "usdtToman": 268850,
+    "freeUsdToman": 267775,
     "gold18kToman": 17850000,
     "stale": false
   },
@@ -65,26 +65,32 @@
   },
   "crypto": {
     "BTC": {
-      "priceUsd": 68450,
+      "priceUsd": 80193.5,
       "high90dUsd": 70200,
       "ma200Usd": 63400,
       "rsi14": 54.2,
       "stale": false
     },
     "ETH": {
-      "priceUsd": 2725,
+      "priceUsd": 2315.99,
       "high90dUsd": 3420,
       "ma200Usd": 2980,
       "rsi14": 46.8,
       "stale": false
     },
     "SOL": {
-      "priceUsd": 158.4,
+      "priceUsd": 100.55,
       "high90dUsd": 188.5,
       "ma200Usd": 151.2,
       "rsi14": 51.5,
       "stale": false
     }
   },
-  "sources": {}
+  "sources": {},
+  "sentiment": {
+    "fngValue": 51,
+    "fngLabel": "Neutral",
+    "btcDominance": 57.4
+  },
+  "sourceType": "زنده (تترلند (زنده) | بورس: 0/11 | کریپتو: زنده)"
 }
