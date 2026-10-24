@@ -13,7 +13,6 @@
           onerror="this.onerror=null;this.src='https://unpkg.com/chart.js@4.4.1/dist/chart.umd.min.js';"></script>
   <style>
     :root {
-      /* سه لایه عمق پس‌زمینه */
       --bg-base: #060911;
       --bg-card: #0c1222;
       --bg-elevated: #131c33;
@@ -24,7 +23,6 @@
       --text-sub: #94a3b8;
       --text-muted: #64748b;
 
-      /* سیستم رنگی معنایی دارایی‌ها (ثابت در کل محصول) */
       --c-bourse: #3b82f6;
       --c-crypto: #f97316;
       --c-stable: #06b6d4;
@@ -33,7 +31,6 @@
       --c-gold: #eab308;
       --c-loan: #fb7185;
 
-      /* سود و زیان سراسری */
       --profit: #10b981;
       --profit-soft: rgba(16, 185, 129, 0.14);
       --loss: #ef4444;
@@ -74,13 +71,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      *, ::before, ::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-
     html, body {
       width: 100%;
       overflow-x: hidden;
@@ -101,11 +91,6 @@
       filter: blur(0);
     }
 
-    :focus-visible {
-      outline: 2px solid var(--c-stable);
-      outline-offset: 2px;
-    }
-
     .svg-ic {
       width: 16px;
       height: 16px;
@@ -123,7 +108,6 @@
       padding: 0.75rem 0.75rem 5.8rem;
     }
 
-    /* هدر حرفه‌ای */
     .topbar {
       display: flex;
       align-items: center;
@@ -157,10 +141,6 @@
       position: relative; transition: all 0.2s ease;
     }
     .icon-btn:hover { border-color: var(--c-bourse); transform: translateY(-1px); }
-    .icon-btn.pulse-manual {
-      border-color: var(--warn);
-      box-shadow: 0 0 0 3px var(--warn-soft);
-    }
     .alert-dot {
       position: absolute; top: -3px; left: -3px;
       width: 9px; height: 9px; border-radius: 50%;
@@ -168,7 +148,6 @@
     }
     .alert-dot.active { display: block; }
 
-    /* نوار قیمت‌های زنده */
     .market-strip {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
       gap: 0.4rem; padding: 0.5rem 0.85rem;
@@ -186,16 +165,6 @@
     .badge-warn { background: var(--warn-soft); color: var(--warn); }
     .badge-info { background: rgba(59, 130, 246, 0.14); color: var(--c-bourse); }
 
-    /* بنر خطای شبکه غیرمزاحم */
-    .net-toast {
-      display: none; align-items: center; justify-content: space-between; gap: 0.5rem;
-      padding: 0.55rem 0.85rem; border-radius: var(--radius-md);
-      background: var(--warn-soft); border: 1px solid rgba(245, 158, 11, 0.35);
-      color: var(--warn); font-size: 0.75rem; margin-bottom: 0.7rem;
-    }
-    .net-toast.show { display: flex; }
-
-    /* کارت فرمانده روز (Daily Commander) */
     .commander-card {
       background: linear-gradient(135deg, rgba(19, 28, 51, 0.95), rgba(12, 18, 34, 0.98));
       border: 1px solid var(--border-strong);
@@ -207,32 +176,23 @@
       gap: 0.85rem;
       box-shadow: var(--shadow-soft);
     }
-    html.light .commander-card {
-      background: linear-gradient(135deg, #eff6ff, #ffffff);
-    }
-    @media (min-width: 860px) {
-      .commander-card { grid-template-columns: 1fr 220px; align-items: center; }
-    }
+    html.light .commander-card { background: linear-gradient(135deg, #eff6ff, #ffffff); }
+    @media (min-width: 860px) { .commander-card { grid-template-columns: 1fr 220px; align-items: center; } }
     .cmd-list { display: grid; grid-template-columns: 1fr; gap: 0.5rem; margin-top: 0.55rem; }
     @media (min-width: 768px) { .cmd-list { grid-template-columns: repeat(3, 1fr); } }
     .cmd-item {
       background: var(--bg-elevated); border: 1px solid var(--border);
       border-radius: var(--radius-md); padding: 0.65rem;
       display: flex; flex-direction: column; justify-content: space-between; gap: 0.45rem;
-      transition: transform 0.15s ease;
     }
-    .cmd-item:hover { transform: translateY(-2px); border-color: var(--border-strong); }
 
-    /* بخش قهرمان (Hero) با سلسله‌مراتب اندازه */
-    .hero-layout {
-      display: grid; grid-template-columns: 1fr; gap: 0.7rem; margin-bottom: 0.75rem;
-    }
+    .hero-layout { display: grid; grid-template-columns: 1fr; gap: 0.7rem; margin-bottom: 0.75rem; }
     @media (min-width: 920px) { .hero-layout { grid-template-columns: 1.45fr 1.85fr; } }
 
     .card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--radius-xl); padding: 1rem; margin-bottom: 0.75rem;
-      box-shadow: var(--shadow-soft); transition: border-color 0.2s ease;
+      box-shadow: var(--shadow-soft);
     }
 
     .hero-card {
@@ -244,38 +204,26 @@
     .hero-top-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; flex-wrap: wrap; }
     .hero-net-val { font-size: 1.75rem; font-weight: 900; margin: 0.2rem 0; color: var(--text-main); letter-spacing: -0.5px; }
 
-    /* نوار چندرنگ ترکیب دارایی زیر عدد قهرمان */
     .multi-alloc-bar {
       width: 100%; height: 10px; border-radius: 999px; overflow: hidden;
       display: flex; background: var(--bg-input); margin: 0.6rem 0 0.35rem;
     }
     .multi-alloc-seg { height: 100%; transition: width 0.4s ease; }
 
-    /* چیدمان نامتقارن کارت‌های سود و زیان (کارت‌های مهم‌تر بزرگ‌تر) */
-    .pnl-bento {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.55rem;
-    }
-    @media (min-width: 600px) {
-      .pnl-bento { grid-template-columns: 1.25fr 1.25fr 0.9fr 0.9fr; }
-    }
+    .pnl-bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.55rem; }
+    @media (min-width: 600px) { .pnl-bento { grid-template-columns: 1.25fr 1.25fr 0.9fr 0.9fr; } }
     .pnl-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--radius-lg); padding: 0.75rem;
       display: flex; flex-direction: column; justify-content: space-between;
     }
-    .pnl-card.featured {
-      background: var(--bg-elevated);
-      border-color: var(--border-strong);
-    }
+    .pnl-card.featured { background: var(--bg-elevated); border-color: var(--border-strong); }
     .pnl-head { font-size: 0.71rem; color: var(--text-sub); display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
     .pnl-val { font-size: 1.02rem; font-weight: 800; }
     .pnl-card.featured .pnl-val { font-size: 1.15rem; }
     .pnl-usd { font-size: 0.72rem; color: var(--c-stable); font-weight: 700; direction: ltr; text-align: right; margin: 0.15rem 0 0.25rem; }
 
-    /* کارت‌های خلاصه کلاس دارایی با نوار رنگی معنایی */
-    .asset-strip {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.55rem; margin-bottom: 0.85rem;
-    }
+    .asset-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.55rem; margin-bottom: 0.85rem; }
     @media (min-width: 840px) { .asset-strip { grid-template-columns: 1.2fr 1.2fr 1fr 0.9fr 0.9fr; } }
     .mini-card {
       background: var(--bg-card); border: 1px solid var(--border);
@@ -291,23 +239,15 @@
     .mini-val { font-size: 0.98rem; font-weight: 800; }
     .mini-sub { font-size: 0.68rem; color: var(--text-sub); margin-top: 0.15rem; }
 
-    /* ناوبری دسکتاپ و موبایل */
-    .desktop-nav {
-      display: none; grid-template-columns: repeat(10, 1fr); gap: 0.35rem; margin-bottom: 0.85rem;
-    }
+    .desktop-nav { display: none; grid-template-columns: repeat(10, 1fr); gap: 0.35rem; margin-bottom: 0.85rem; }
     @media (min-width: 769px) { .desktop-nav { display: grid; } }
     .tab-btn {
       padding: 0.55rem 0.25rem; border-radius: 11px;
       border: 1px solid var(--border); background: var(--bg-card);
       color: var(--text-sub); font-size: 0.72rem; font-weight: 700;
       cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;
-      transition: all 0.15s ease;
     }
-    .tab-btn:hover { color: var(--text-main); border-color: var(--border-strong); }
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--c-bourse), var(--c-nft));
-      color: #fff; border-color: transparent;
-    }
+    .tab-btn.active { background: linear-gradient(135deg, var(--c-bourse), var(--c-nft)); color: #fff; border-color: transparent; }
 
     .mobile-nav {
       position: fixed; bottom: 0; right: 0; left: 0;
@@ -333,27 +273,10 @@
     .mob-sheet.open { display: grid; }
 
     .tab-pane { display: none; }
-    .tab-pane.active { display: block; animation: fadeUp 0.22s ease; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-pane.active { display: block; }
 
     .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.45rem; margin-bottom: 0.8rem; }
     .section-title { font-size: 0.95rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.4rem; }
-
-    /* آیکون راهنما (Tooltip) برای متون توضیحی */
-    .help-tip {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 18px; height: 18px; border-radius: 50%;
-      background: var(--bg-elevated); border: 1px solid var(--border);
-      color: var(--text-sub); font-size: 0.68rem; cursor: help; position: relative;
-    }
-    .help-tip:hover::after {
-      content: attr(data-tip);
-      position: absolute; bottom: 125%; right: 0;
-      width: 220px; padding: 0.5rem 0.65rem; border-radius: 8px;
-      background: var(--bg-elevated); border: 1px solid var(--border-strong);
-      color: var(--text-main); font-size: 0.7rem; font-weight: 500;
-      z-index: 50; box-shadow: var(--shadow-soft); white-space: normal; line-height: 1.45;
-    }
 
     .grid-2 { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
     @media (min-width: 840px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
@@ -363,7 +286,6 @@
     @media (min-width: 900px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
     .chart-wrap { position: relative; width: 100%; height: 260px; }
 
-    /* نقشه حرارتی بورس (Treemap) */
     .treemap-grid {
       display: flex; flex-wrap: wrap; gap: 4px;
       width: 100%; min-height: 145px; padding: 4px;
@@ -373,34 +295,21 @@
     .treemap-cell {
       border-radius: 8px; padding: 0.45rem; color: #fff;
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; min-width: 72px; min-height: 60px;
-      transition: transform 0.15s ease; cursor: pointer;
+      text-align: center; min-width: 72px; min-height: 60px; cursor: pointer;
     }
-    .treemap-cell:hover { transform: scale(1.02); z-index: 2; }
 
-    /* جدول با هدر چسبان و تبدیل به کارت در موبایل */
     .table-box { width: 100%; max-height: 440px; overflow: auto; border-radius: 12px; border: 1px solid var(--border); }
     table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
     th, td { padding: 0.55rem 0.45rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
     th { position: sticky; top: 0; background: var(--bg-elevated); color: var(--text-sub); font-weight: 700; z-index: 5; }
-    tr:hover td { background: rgba(255,255,255,0.02); }
 
     @media (max-width: 640px) {
       table.mobile-cards thead { display: none; }
       table.mobile-cards, table.mobile-cards tbody, table.mobile-cards tr, table.mobile-cards td { display: block; width: 100%; }
-      table.mobile-cards tr {
-        background: var(--bg-elevated); border: 1px solid var(--border);
-        border-radius: 12px; margin-bottom: 0.55rem; padding: 0.5rem;
-      }
-      table.mobile-cards td {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 0.35rem 0.25rem; border-bottom: 1px dashed var(--border);
-      }
+      table.mobile-cards tr { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.55rem; padding: 0.5rem; }
+      table.mobile-cards td { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0.25rem; border-bottom: 1px dashed var(--border); }
       table.mobile-cards td:last-child { border-bottom: none; }
-      table.mobile-cards td::before {
-        content: attr(data-label);
-        color: var(--text-sub); font-weight: 600; font-size: 0.72rem;
-      }
+      table.mobile-cards td::before { content: attr(data-label); color: var(--text-sub); font-weight: 600; font-size: 0.72rem; }
     }
 
     .btn {
@@ -408,69 +317,39 @@
       border: 1px solid var(--border); background: var(--bg-elevated);
       color: var(--text-main); font-size: 0.74rem; font-weight: 700;
       cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;
-      transition: all 0.15s ease;
     }
-    .btn:hover { border-color: var(--c-bourse); }
     .btn.chip-active { border-color: var(--c-stable); color: var(--c-stable); background: rgba(6, 182, 212, 0.12); }
     .btn-primary { background: linear-gradient(135deg, var(--c-bourse), var(--c-stable)); color: #fff; border: none; }
     .btn-danger { background: linear-gradient(135deg, #e11d48, var(--loss)); color: #fff; border: none; }
-    .btn-sell {
-      padding: 0.25rem 0.55rem; font-size: 0.7rem; border-radius: 7px;
-      background: var(--profit-soft); color: var(--profit);
-      border: 1px solid rgba(16,185,129,0.35); cursor: pointer; font-weight: 700;
-    }
+    .btn-sell { padding: 0.25rem 0.55rem; font-size: 0.7rem; border-radius: 7px; background: var(--profit-soft); color: var(--profit); border: 1px solid rgba(16,185,129,0.35); cursor: pointer; font-weight: 700; }
 
-    input, select, textarea {
-      width: 100%; padding: 0.42rem 0.55rem; border-radius: 8px;
-      border: 1px solid var(--border); background: var(--bg-input);
-      color: var(--text-main); font-size: 0.78rem;
-    }
-    .inline-input {
-      width: 86px; text-align: center; padding: 0.22rem 0.3rem;
-      font-weight: 800; color: var(--c-stable); border: 1px solid rgba(6,182,212,0.4);
-    }
+    input, select, textarea { width: 100%; padding: 0.42rem 0.55rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-input); color: var(--text-main); font-size: 0.78rem; }
+    .inline-input { width: 86px; text-align: center; padding: 0.22rem 0.3rem; font-weight: 800; color: var(--c-stable); border: 1px solid rgba(6,182,212,0.4); }
     .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.55rem; margin-bottom: 0.7rem; }
     .form-group label { display: block; font-size: 0.7rem; color: var(--text-sub); margin-bottom: 0.2rem; }
 
-    /* شبکه کارتی NFT و تایم‌لاین */
     .nft-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.65rem; }
-    .nft-card {
-      background: var(--bg-elevated); border: 1px solid var(--border);
-      border-top: 3px solid var(--c-nft); border-radius: var(--radius-lg);
-      padding: 0.8rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.5rem;
-    }
+    .nft-card { background: var(--bg-elevated); border: 1px solid var(--border); border-top: 3px solid var(--c-nft); border-radius: var(--radius-lg); padding: 0.8rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.5rem; }
     .timeline-list { border-right: 2px solid var(--border-strong); padding-right: 0.85rem; margin-right: 0.4rem; display: grid; gap: 0.6rem; }
     .timeline-node { position: relative; background: var(--bg-elevated); padding: 0.55rem 0.75rem; border-radius: 10px; font-size: 0.74rem; }
-    .timeline-node::before {
-      content: ''; position: absolute; right: -1.22rem; top: 0.75rem;
-      width: 10px; height: 10px; border-radius: 50%; background: var(--c-stable);
-    }
 
-    /* تایم‌لاین ۱۲ قسط وام */
     .loan-pills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 0.45rem; }
-    .loan-inst-card {
-      background: var(--bg-elevated); border: 1px solid var(--border);
-      border-radius: 10px; padding: 0.55rem; font-size: 0.72rem;
-      display: flex; flex-direction: column; gap: 0.25rem;
-    }
+    .loan-inst-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 0.55rem; font-size: 0.72rem; display: flex; flex-direction: column; gap: 0.25rem; }
     .loan-inst-card.paid { border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.06); }
     .loan-inst-card.next-due { border-color: var(--c-loan); box-shadow: 0 0 0 1px var(--c-loan); }
 
+    .risk-score-banner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 0.9rem; background: linear-gradient(135deg, rgba(16,185,129,0.10), rgba(59,130,246,0.10)); border: 1px solid var(--border-strong); border-radius: 14px; margin-bottom: 0.75rem; }
+    .health-dial { width: 72px; height: 72px; border-radius: 50%; border: 6px solid var(--profit); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; flex-shrink: 0; }
     .progress-bar { width: 100%; height: 8px; background: var(--bg-input); border-radius: 99px; overflow: hidden; margin: 0.3rem 0; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--c-bourse), var(--profit)); transition: width 0.35s ease; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--c-bourse), var(--profit)); }
 
     .donut-legend-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.35rem; margin-top: 0.5rem; text-align: center; font-size: 0.68rem; }
     .donut-legend-box { background: var(--bg-input); padding: 0.35rem 0.2rem; border-radius: 8px; border: 1px solid var(--border); }
 
-    /* مودال و پالت فرمان Ctrl+K */
     .modal-overlay { position: fixed; inset: 0; background: rgba(3,6,15,0.82); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 0.65rem; z-index: 999; }
     .modal-overlay.open { display: flex; }
     .modal-box { background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 18px; width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; padding: 1.1rem; box-shadow: var(--shadow-soft); }
-    .cmd-palette-item {
-      padding: 0.6rem 0.75rem; border-radius: 9px; cursor: pointer;
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.8rem; border-bottom: 1px solid var(--border);
-    }
+    .cmd-palette-item { padding: 0.6rem 0.75rem; border-radius: 9px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; border-bottom: 1px solid var(--border); }
     .cmd-palette-item:hover { background: var(--bg-elevated); color: var(--c-stable); }
   </style>
 </head>
@@ -487,44 +366,38 @@
           <div class="brand-sub">
             <span id="jalaliHeaderDate">شنبه ۲ آبان ۱۴۰۵</span>
             <span>•</span>
-            <span id="lastSyncSourceText">حافظه/خودکار</span>
+            <span id="lastSyncSourceText">در حال سینک زنده...</span>
           </div>
         </div>
       </div>
       <div class="top-actions">
-        <button class="icon-btn" onclick="window.openCommandPalette()" aria-label="پالت فرمان و جستجو" title="پالت فرمان (Ctrl+K)">
+        <button class="icon-btn" onclick="window.openCommandPalette()" title="پالت فرمان (Ctrl+K)">
           <svg class="svg-ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           <span style="font-size:0.7rem; color:var(--text-sub);">Ctrl+K</span>
         </button>
-        <button class="icon-btn" id="syncBtnMain" onclick="window.syncAllLiveMarkets()" aria-label="بروزرسانی زنده بازارها">
+        <button class="icon-btn" id="syncBtnMain" onclick="window.syncAllLiveMarkets()">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
-          <span>بروزرسانی</span>
+          <span>بروزرسانی زنده</span>
         </button>
-        <button class="icon-btn" onclick="window.switchTab('tabAlertsTx')" aria-label="هشدارهای قیمتی">
+        <button class="icon-btn" onclick="window.switchTab('tabAlertsTx')">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
           <span id="headerAlertDot" class="alert-dot"></span>
         </button>
-        <button class="icon-btn" id="unitToggleBtn" onclick="window.toggleUnit()" aria-label="تغییر واحد پول">تومان</button>
-        <button class="icon-btn" id="privacyBtn" onclick="window.togglePrivacy()" aria-label="حالت حریم خصوصی">
+        <button class="icon-btn" id="unitToggleBtn" onclick="window.toggleUnit()">تومان</button>
+        <button class="icon-btn" id="privacyBtn" onclick="window.togglePrivacy()">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
-        <button class="icon-btn" onclick="window.toggleTheme()" aria-label="تغییر تم تاریک و روشن">
+        <button class="icon-btn" onclick="window.toggleTheme()">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
         </button>
-        <button class="icon-btn" id="manualPriceHeaderBtn" onclick="window.openManualPriceModal()" aria-label="ثبت دستی قیمت">
+        <button class="icon-btn" id="manualPriceHeaderBtn" onclick="window.openManualPriceModal()">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
         </button>
-        <button class="icon-btn" onclick="window.openPortfolioModal()" aria-label="پشتیبان‌گیری و مدیریت فایل">
+        <button class="icon-btn" onclick="window.openPortfolioModal()">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
         </button>
       </div>
     </header>
-
-    <!-- NON-INTRUSIVE NETWORK FALLBACK BANNER -->
-    <div id="netErrorBanner" class="net-toast" role="status">
-      <span id="netErrorText">ارتباط مستقیم با برخی سرورهای قیمت محدود شد؛ آخرین قیمت‌های معتبر نمایش داده می‌شوند.</span>
-      <button class="btn" onclick="window.openManualPriceModal()">ثبت دستی قیمت روز</button>
-    </div>
 
     <!-- LIVE MARKET STRIP -->
     <div class="market-strip">
@@ -539,12 +412,12 @@
         <span>بهترین: <strong id="todayBestMoverText" style="color:var(--profit)">سیمکات</strong></span>
         <span>ضعیف‌ترین: <strong id="todayWorstMoverText" style="color:var(--loss)">کرومیت</strong></span>
         <span>تراز تورم: <strong id="inflationAlphaBadge" class="num" style="color:var(--profit)">+۵٫۱٪</strong></span>
-        <span>بروزرسانی: <strong id="lastSyncTimeText" class="num">هم‌اکنون</strong></span>
+        <span>ساعت سینک: <strong id="lastSyncTimeText" class="num">هم‌اکنون</strong></span>
       </div>
     </div>
 
-    <!-- DAILY COMMANDER CARD (فرمانده روز - بخش ۳) -->
-    <section class="commander-card" aria-label="فرمانده روز">
+    <!-- DAILY COMMANDER CARD -->
+    <section class="commander-card">
       <div>
         <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.4rem;">
           <div class="section-title" style="color:var(--c-stable);">
@@ -564,7 +437,7 @@
       </div>
     </section>
 
-    <!-- HERO NET WORTH + SPARKLINE + MULTI-COLOR BAR + ASYMMETRIC P&L -->
+    <!-- HERO NET WORTH -->
     <section class="hero-layout">
       <div class="card hero-card">
         <div>
@@ -577,7 +450,6 @@
                 <span style="font-size:0.72rem; color:var(--text-sub);">خالص بدون وام: <strong class="sensitive num" id="heroNetAfterLoan" style="color:var(--c-stable)">۲۵۱٬۱۷۹٬۶۷۷ ت</strong></span>
               </div>
             </div>
-            <!-- اسپارک‌لاین کنار عدد قهرمان + کلیدهای زمانی -->
             <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.3rem;">
               <div style="display:flex; gap:0.2rem;">
                 <button class="btn chip-active" style="padding:0.18rem 0.45rem; font-size:0.66rem;" onclick="window.setHeroSparkRange(7, this)">۷ روز</button>
@@ -587,18 +459,14 @@
               <div id="heroSparklineSvg" style="width:125px; height:42px;"></div>
             </div>
           </div>
-
-          <!-- نوار باریک چندرنگ ترکیب دارایی‌ها -->
-          <div id="heroMultiAllocBar" class="multi-alloc-bar" title="ترکیب رنگی دارایی‌ها"></div>
+          <div id="heroMultiAllocBar" class="multi-alloc-bar"></div>
         </div>
-
         <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.4rem; padding-top:0.45rem; border-top:1px solid var(--border); font-size:0.71rem; color:var(--text-sub);">
           <span>بدهی وام فعال: <strong class="sensitive num" id="heroLoanDebt" style="color:var(--c-loan)">۳۰٬۰۰۰٬۰۰۰ تومان</strong></span>
           <span>هدف ثروت: <input type="number" id="wealthTargetInput" value="400000000" style="width:95px; display:inline-block; padding:0.1rem 0.3rem; font-size:0.7rem;" onchange="window.saveTargetWealth(this.value)" /></span>
         </div>
       </div>
 
-      <!-- کارت‌های سود و زیان با اندازه سلسله‌مراتبی -->
       <div class="pnl-bento">
         <div class="pnl-card featured">
           <div class="pnl-head"><span>سود / زیان روزانه</span><span class="badge badge-info">24H</span></div>
@@ -627,7 +495,7 @@
       </div>
     </section>
 
-    <!-- 5 ASSET SUMMARY CARDS WITH SEMANTIC COLOR BORDERS -->
+    <!-- 5 ASSET SUMMARY CARDS -->
     <section class="asset-strip">
       <div class="mini-card c-stable">
         <div class="mini-title"><span style="color:var(--c-stable)">●</span> ذخیره استیبل‌کوین (ETH)</div>
@@ -657,7 +525,7 @@
     </section>
 
     <!-- 10 DESKTOP TABS -->
-    <nav class="desktop-nav" aria-label="بخش‌های داشبورد">
+    <nav class="desktop-nav">
       <button class="tab-btn active" data-tab="tabOverview" onclick="window.switchTab('tabOverview', this)">نمای کلی</button>
       <button class="tab-btn" data-tab="tabStocks" onclick="window.switchTab('tabStocks', this)">بورس ایران</button>
       <button class="tab-btn" data-tab="tabDcaSniper" onclick="window.switchTab('tabDcaSniper', this)">کم کردن میانگین</button>
@@ -681,7 +549,6 @@
           <div class="chart-wrap" style="height:225px;"><canvas id="allocationDonutCanvas"></canvas></div>
           <div id="donutPercentLegend" class="donut-legend-5"></div>
         </div>
-
         <div class="card">
           <div class="section-head">
             <span class="section-title">روند رشد ثروت کل در برابر ثروت خالص (میلیون تومان)</span>
@@ -698,25 +565,18 @@
       </div>
     </section>
 
-    <!-- TAB 2: IRANIAN STOCKS (TREEMAP + SPARKLINE + STICKY HEADER + MOBILE CARDS) -->
+    <!-- TAB 2: IRANIAN STOCKS -->
     <section id="tabStocks" class="tab-pane">
       <div class="card">
         <div class="section-head">
-          <div style="display:flex; align-items:center; gap:0.4rem;">
-            <span class="section-title">نقشه حرارتی سبد بورس (اندازه = ارزش، رنگ = سود/زیان)</span>
-            <span class="help-tip" data-tip="مساحت هر بلوک نشان‌دهنده وزن ریالی آن سهم در سبد بورس و رنگ سبز/قرمز نشان‌دهنده وضعیت سود یا زیان کل شما در آن نماد است.">؟</span>
-          </div>
+          <span class="section-title">نقشه حرارتی سبد بورس (اندازه = ارزش، رنگ = سود/زیان)</span>
           <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
-            <button class="btn btn-primary" id="btnFetchBourse" onclick="window.fetchLiveBourseOnly()">بروزرسانی زنده از بورس</button>
+            <button class="btn btn-primary" id="btnFetchBourse" onclick="window.syncAllLiveMarkets()">بروزرسانی زنده بورس، دلار و کریپتو</button>
             <button class="btn" onclick="window.openAddStockModal()">افزودن سهم جدید</button>
             <button class="btn btn-danger" onclick="window.sellEntireStockPortfolioToCash()">فروش کل سبد به نقد</button>
           </div>
         </div>
-
-        <!-- Treemap Heatmap -->
         <div id="bourseTreemapBox" class="treemap-grid"></div>
-
-        <!-- چیپ‌های مرتب‌سازی و فیلتر -->
         <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.4rem; margin-bottom:0.75rem; padding:0.5rem; background:var(--bg-input); border-radius:10px;">
           <div style="display:flex; flex-wrap:wrap; gap:0.35rem; align-items:center;">
             <span style="font-size:0.72rem; color:var(--text-sub); font-weight:700;">مرتب‌سازی:</span>
@@ -727,7 +587,6 @@
           </div>
           <input type="text" id="stockSearchChip" placeholder="فیلتر نام نماد..." style="width:150px; padding:0.3rem 0.5rem;" oninput="window.renderTerminal()" />
         </div>
-
         <div class="table-box">
           <table class="mobile-cards">
             <thead>
@@ -741,27 +600,17 @@
       </div>
     </section>
 
-    <!-- TAB 3: DCA SNIPER (LIVE SLIDERS + STEP CHART + LUMP-SUM VS LADDER) -->
+    <!-- TAB 3: DCA SNIPER -->
     <section id="tabDcaSniper" class="tab-pane">
       <div class="grid-2">
         <div class="card">
           <div class="section-head">
-            <div style="display:flex; align-items:center; gap:0.4rem;">
-              <span class="section-title">ماشین‌حساب کم کردن میانگین (DCA Sniper)</span>
-              <span class="help-tip" data-tip="با تغییر اسلایدر بودجه یا قیمت ورود، تاثیر خرید جدید بر کاهش قیمت سر‌به‌سر خود را زنده مشاهده کنید.">؟</span>
-            </div>
+            <span class="section-title">ماشین‌حساب کم کردن میانگین (DCA Sniper)</span>
             <select id="dcaPresetSelect" style="width:auto;" onchange="window.loadDcaPreset(this.value)"></select>
           </div>
-
           <div class="form-row" style="grid-template-columns:1fr 1fr;">
-            <div class="form-group">
-              <label>تعداد واحد فعلی:</label>
-              <input type="number" id="dcaCurQty" value="5000" oninput="window.calcDcaSniper()" />
-            </div>
-            <div class="form-group">
-              <label>میانگین قیمت خرید فعلی:</label>
-              <input type="number" id="dcaCurAvg" value="560" oninput="window.calcDcaSniper()" />
-            </div>
+            <div class="form-group"><label>تعداد واحد فعلی:</label><input type="number" id="dcaCurQty" value="5000" oninput="window.calcDcaSniper()" /></div>
+            <div class="form-group"><label>میانگین قیمت خرید فعلی:</label><input type="number" id="dcaCurAvg" value="560" oninput="window.calcDcaSniper()" /></div>
             <div class="form-group">
               <label>قیمت روز / ورود جدید:</label>
               <input type="number" id="dcaMarketPrice" value="520" oninput="window.calcDcaSniper()" />
@@ -773,15 +622,10 @@
               <input type="range" id="dcaBudgetSlider" min="500000" max="50000000" step="500000" value="5000000" style="margin-top:0.3rem;" oninput="document.getElementById('dcaNewBudget').value=this.value; window.calcDcaSniper();" />
             </div>
           </div>
-
-          <!-- مقایسه خرید یک‌جا در برابر پله‌ای -->
           <div id="dcaComparisonBox" class="grid-2" style="gap:0.5rem; margin-top:0.5rem;"></div>
         </div>
-
         <div class="card">
-          <div class="section-head">
-            <span class="section-title">نمودار پله‌ای افت قیمت سر‌به‌سر و جدول ۳ پله ورود</span>
-          </div>
+          <div class="section-head"><span class="section-title">نمودار پله‌ای افت قیمت سر‌به‌سر و جدول ۳ پله ورود</span></div>
           <div class="chart-wrap" style="height:175px; margin-bottom:0.65rem;"><canvas id="dcaStepChartCanvas"></canvas></div>
           <div class="table-box">
             <table>
@@ -793,7 +637,7 @@
       </div>
     </section>
 
-    <!-- TAB 4: CRYPTO DIP + SEMI-CIRCULAR GAUGES FOR F&G, MVRV, BTC.D -->
+    <!-- TAB 4: CRYPTO DIP + GAUGES -->
     <section id="tabCryptoDip" class="tab-pane">
       <div class="grid-4" style="margin-bottom:0.75rem;">
         <div class="pnl-card" style="align-items:center; text-align:center;">
@@ -821,9 +665,7 @@
       </div>
 
       <div class="card">
-        <div class="section-head">
-          <span class="section-title">ذخیره استیبل‌کوین شبکه اتریوم (Dry Powder)</span>
-        </div>
+        <div class="section-head"><span class="section-title">ذخیره استیبل‌کوین شبکه اتریوم (Dry Powder)</span></div>
         <div class="table-box">
           <table>
             <thead><tr><th>توکن</th><th>مقدار</th><th>ارزش دلاری</th><th>ارزش به دلار آزاد</th><th>ارزش به نرخ تتر</th><th>یادداشت</th></tr></thead>
@@ -834,7 +676,7 @@
       <div id="dipPlannerCards" class="grid-3"></div>
     </section>
 
-    <!-- TAB 5: CASH TARGET BAR & NFT CARD GRID + TIMELINE -->
+    <!-- TAB 5: CASH & NFT -->
     <section id="tabCashNft" class="tab-pane">
       <div class="grid-2">
         <div class="card">
@@ -847,7 +689,6 @@
             <div class="form-group"><label>قدرت خرید کارگزاری (تومان):</label><input type="number" id="brokerCashInput" value="978278" onchange="window.saveCashConfig()" /></div>
             <div class="form-group"><label>تارگت خرید تتر (تومان):</label><input type="number" id="cashTargetUsdtInput" value="248000" onchange="window.saveCashConfig()" /></div>
           </div>
-
           <div style="background:var(--bg-input); padding:0.8rem; border-radius:12px;">
             <div style="display:flex; justify-content:space-between; font-size:0.76rem; margin-bottom:0.3rem;">
               <span>پیشرفت قیمت فعلی به سمت تارگت خرید شما:</span>
@@ -861,14 +702,12 @@
             </div>
           </div>
         </div>
-
         <div class="card">
           <div class="section-head">
             <span class="section-title">شبکه کارتی کلکسیون NFT تلگرام (Floor Price)</span>
             <button class="btn btn-primary" onclick="window.openAddNftModal()">افزودن آیتم NFT</button>
           </div>
           <div id="nftsCardGrid" class="nft-cards-grid"></div>
-
           <div id="nftSoldHistoryBox" style="margin-top:0.85rem; display:none;">
             <div style="font-size:0.78rem; font-weight:800; color:var(--c-stable); margin-bottom:0.45rem;">تایم‌لاین معاملات فروخته‌شده NFT:</div>
             <div id="nftSoldHistoryList" class="timeline-list"></div>
@@ -877,7 +716,7 @@
       </div>
     </section>
 
-    <!-- TAB 6: 30M LOAN (12-INSTALLMENT VISUAL TIMELINE & ARBITRAGE) -->
+    <!-- TAB 6: 30M LOAN -->
     <section id="tabLoans" class="tab-pane">
       <div class="grid-2">
         <div class="card">
@@ -892,10 +731,8 @@
             <div class="form-group"><label>مدت (ماه):</label><input type="number" id="loanMonthsInput" value="12" onchange="window.saveLoanSettings()" /></div>
             <div class="form-group"><label>تاریخ شروع:</label><input type="date" id="loanStartDateInput" value="2026-09-23" onchange="window.saveLoanSettings()" /></div>
           </div>
-
           <div id="loanBreakEvenCard" style="background:var(--bg-input); padding:0.75rem; border-radius:12px; margin-bottom:0.7rem; font-size:0.75rem;"></div>
           <div id="loanSummaryStatsBox" style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem; background:var(--bg-input); padding:0.75rem; border-radius:10px; font-size:0.75rem; margin-bottom:0.75rem;"></div>
-
           <div style="border-top:1px solid var(--border); padding-top:0.7rem;">
             <div class="section-title" style="font-size:0.83rem; margin-bottom:0.45rem;">دارایی‌های خریداری‌شده با وام:</div>
             <div class="form-row" style="grid-template-columns: 1.3fr 1fr 1fr auto; align-items:end;">
@@ -912,7 +749,6 @@
             </div>
           </div>
         </div>
-
         <div class="card">
           <div class="section-head">
             <span class="section-title">نمودار رشد دارایی وام در برابر بدهی و سناریوها</span>
@@ -927,7 +763,6 @@
           </div>
         </div>
       </div>
-
       <div class="card">
         <div class="section-head">
           <span class="section-title">تایم‌لاین ۱۲ قسط وام (سبز = پرداخت‌شده، کادر صورتی = قسط بعدی)</span>
@@ -937,7 +772,7 @@
       </div>
     </section>
 
-    <!-- TAB 7: CFO DOLLAR DIAL GAUGE & SMA 90 HORIZONTAL LINES -->
+    <!-- TAB 7: CFO DOLLAR -->
     <section id="tabDollarMacro" class="tab-pane">
       <div class="grid-2">
         <div class="card">
@@ -949,7 +784,6 @@
             <div id="cfoPressureDialSvg" style="width:135px; height:76px; flex-shrink:0;"></div>
             <div id="cfoDollarValuationCard" style="flex:1; min-width:200px; font-size:0.75rem; display:grid; gap:0.35rem;"></div>
           </div>
-
           <div class="form-row" style="grid-template-columns:1fr 1fr;">
             <div style="background:var(--bg-input); padding:0.55rem; border-radius:9px;">
               <div style="display:flex; justify-content:space-between; font-size:0.73rem;"><span>تنش نظامی: <b id="geoWarValText">۶۵</b></span><span>وزن: <input type="number" id="wWarInput" value="35" style="width:48px; padding:0.1rem;" onchange="window.updateDollarMacroModel(true)" />%</span></div>
@@ -970,7 +804,6 @@
           </div>
           <div class="chart-wrap" style="height:135px;"><canvas id="cfoScoreHistoryCanvas"></canvas></div>
         </div>
-
         <div class="card">
           <div class="section-head">
             <span class="section-title">چارت دلار آزاد با خطوط افقی SMA 90 و پله‌های خرید</span>
@@ -990,7 +823,7 @@
       </div>
     </section>
 
-    <!-- TAB 8: RISK & DUAL-BAR REBALANCING -->
+    <!-- TAB 8: RISK & REBALANCING -->
     <section id="tabRiskPerf" class="tab-pane">
       <div class="risk-score-banner">
         <div style="display:flex; align-items:center; gap:0.85rem;">
@@ -1007,10 +840,8 @@
           <div><label style="font-size:0.68rem; color:var(--text-sub); display:block;">مرز تمرکز (%):</label><input type="number" id="concThresholdInput" value="30" style="width:68px; text-align:center;" onchange="window.saveRiskSettings()" /></div>
         </div>
       </div>
-
       <div class="grid-4" id="quantMetricsCards" style="margin-bottom:0.75rem;"></div>
       <div id="concentrationWarningsBox" style="margin-bottom:0.75rem; display:grid; gap:0.4rem;"></div>
-
       <div class="grid-2">
         <div class="card" style="margin-bottom:0;">
           <div class="section-head">
@@ -1027,7 +858,6 @@
           </div>
           <div id="rebalanceDualBarsBox" style="display:grid; gap:0.55rem;"></div>
         </div>
-
         <div class="card" style="margin-bottom:0;">
           <div class="section-head"><span class="section-title">تفکیک سود تحقق‌یافته و تحقق‌نیافته</span></div>
           <div class="form-row" style="grid-template-columns:1fr 1fr;">
@@ -1039,7 +869,7 @@
       </div>
     </section>
 
-    <!-- TAB 9: ALERTS WITH PROGRESS BAR & GROUPED TRANSACTIONS -->
+    <!-- TAB 9: ALERTS & TRANSACTIONS -->
     <section id="tabAlertsTx" class="tab-pane">
       <div class="grid-2">
         <div class="card">
@@ -1057,7 +887,6 @@
           </div>
           <div id="alertsCardsContainer" style="display:grid; gap:0.5rem; margin-top:0.65rem;"></div>
         </div>
-
         <div class="card">
           <div class="section-head">
             <span class="section-title">دفتر کل تراکنش‌ها (گروه‌بندی ماهانه)</span>
@@ -1111,7 +940,7 @@
     <button class="btn" onclick="window.switchTab('tabGlobalCompare'); window.toggleMobileMore(false);">مقایسه و اخبار</button>
   </div>
 
-  <nav class="mobile-nav" aria-label="ناوبری موبایل">
+  <nav class="mobile-nav">
     <button class="mob-btn active" data-mob="tabOverview" onclick="window.switchTab('tabOverview', this); window.toggleMobileMore(false);">
       <svg class="svg-ic" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
       <span>نمای کلی</span>
@@ -1134,14 +963,14 @@
     </button>
   </nav>
 
-  <!-- COMMAND PALETTE MODAL (Ctrl+K) -->
+  <!-- COMMAND PALETTE MODAL -->
   <div id="cmdPaletteModal" class="modal-overlay" onclick="if(event.target===this) window.closeCommandPalette()">
     <div class="modal-box" style="max-width:520px;">
       <div class="section-head">
         <span class="section-title">پالت فرمان سریع (Ctrl + K)</span>
         <button class="btn" onclick="window.closeCommandPalette()">بستن</button>
       </div>
-      <input type="text" id="cmdSearchInput" placeholder="جستجوی بخش یا دستور (مثلاً: بورس، وام، بروزرسانی، بکاپ...)" oninput="window.filterCommandPalette(this.value)" style="margin-bottom:0.65rem;" />
+      <input type="text" id="cmdSearchInput" placeholder="جستجوی بخش یا دستور..." oninput="window.filterCommandPalette(this.value)" style="margin-bottom:0.65rem;" />
       <div id="cmdPaletteList" style="max-height:300px; overflow-y:auto;"></div>
     </div>
   </div>
@@ -1227,7 +1056,7 @@
   <script>
     (function() {
       const KEY_P = 'WEALTH_PRO_V14';
-      const KEY_PR = 'WEALTH_PRICES_V14';
+      const KEY_PR = 'WEALTH_PRICES_V15'; // کلید جدید قیمت‌ها برای پاک کردن کش قفل‌شده قبلی
       const KEY_HIST = 'WEALTH_HISTORY_V14';
       const KEY_PRIVACY = 'WEALTH_PRIVACY_V14';
       const BRS_KEY = 'FreeSV0E1LSgB9RDjuf0QorSLViX8pPG';
@@ -1240,6 +1069,20 @@
         nft: '#a855f7',
         gold: '#eab308',
         loan: '#fb7185'
+      };
+
+      const KNOWN_INSCODES = {
+        "وفیروزه": "55254206302462116",
+        "فپنتا": "17914401175772326",
+        "شپدیس": "44891482026867833",
+        "کرومیت": "46741025610365789",
+        "فهامون": "38232437866669967",
+        "فکور": "66442254613568889",
+        "فپردیس": "41933952242799993",
+        "وسرمایه": "21963356012832211",
+        "زشک": "61449234123698745",
+        "سیمکات": "32469128621155732",
+        "فساپ": "51617145879012365"
       };
 
       const DEFAULT_PORTFOLIO = {
@@ -1337,7 +1180,7 @@
         const n = Number(clean);
         return Number.isFinite(n) ? n : fb;
       };
-      const normFa = s => String(s || '').trim().replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/\u200c/g, '');
+      const normFa = s => String(s || '').trim().replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/\u200c/g, '').replace(/\s+/g, '');
 
       if (typeof Chart !== 'undefined') {
         Chart.defaults.font.family = "'Vazirmatn', system-ui, sans-serif";
@@ -1378,7 +1221,6 @@
         catch { return '۱۴۰۵/۰۸/۰۲'; }
       }
 
-      // رسم گیج نیم‌دایره‌ای برداری (Semi-Circular SVG Gauge)
       function buildSemiGaugeSvg(pctValue, colorHex, subText = '') {
         const clamped = Math.min(100, Math.max(0, pNum(pctValue, 50)));
         const radius = 46;
@@ -1395,7 +1237,6 @@
         `;
       }
 
-      // رسم اسپارک‌لاین خطی برداری (SVG Sparkline)
       function buildSparklineSvg(valuesArray, colorHex = '#10b981', width = 120, height = 38) {
         if (!Array.isArray(valuesArray) || valuesArray.length < 2) return '';
         const min = Math.min(...valuesArray);
@@ -1406,20 +1247,16 @@
           const y = height - 5 - ((v - min) / range) * (height - 10);
           return `${x.toFixed(1)},${y.toFixed(1)}`;
         }).join(' ');
-        return `
-          <svg viewBox="0 0 ${width} ${height}" style="width:${width}px; height:${height}px; overflow:visible;">
-            <polyline fill="none" stroke="${colorHex}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" points="${pts}"/>
-          </svg>
-        `;
+        return `<svg viewBox="0 0 ${width} ${height}" style="width:${width}px; height:${height}px; overflow:visible;"><polyline fill="none" stroke="${colorHex}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" points="${pts}"/></svg>`;
       }
 
       function migrateStorage() {
         try {
-          const priv = localStorage.getItem(KEY_PRIVACY) ?? localStorage.getItem('WEALTH_PRIVACY_V13');
+          const priv = localStorage.getItem(KEY_PRIVACY);
           if (priv === 'false') document.body.classList.remove('privacy-blur');
           else document.body.classList.add('privacy-blur');
 
-          const rawP = localStorage.getItem(KEY_P) || localStorage.getItem('WEALTH_PRO_V13') || localStorage.getItem('WEALTH_PRO_V12');
+          const rawP = localStorage.getItem(KEY_P) || localStorage.getItem('WEALTH_PRO_V13');
           if (rawP) {
             const parsed = JSON.parse(rawP);
             state.portfolio = {
@@ -1432,8 +1269,17 @@
               loan: { ...DEFAULT_PORTFOLIO.loan, ...(parsed.loan || {}) }
             };
           }
-          const rawPr = localStorage.getItem(KEY_PR) || localStorage.getItem('WEALTH_PRICES_V13') || localStorage.getItem('WEALTH_PRICES_V12');
-          if (rawPr) state.prices = { ...DEFAULT_PRICES, ...JSON.parse(rawPr), sentiment: { ...DEFAULT_PRICES.sentiment, ...(JSON.parse(rawPr).sentiment || {}) } };
+          const rawPr = localStorage.getItem(KEY_PR);
+          if (rawPr) {
+            const pObj = JSON.parse(rawPr);
+            state.prices = {
+              ...DEFAULT_PRICES, ...pObj,
+              fx: { ...DEFAULT_PRICES.fx, ...(pObj.fx || {}) },
+              stocks: { ...DEFAULT_PRICES.stocks, ...(pObj.stocks || {}) },
+              crypto: { ...DEFAULT_PRICES.crypto, ...(pObj.crypto || {}) },
+              sentiment: { ...DEFAULT_PRICES.sentiment, ...(pObj.sentiment || {}) }
+            };
+          }
         } catch {}
       }
 
@@ -1453,9 +1299,9 @@
       function computeAll() {
         const p = state.portfolio;
         const pr = state.prices;
-        const usdt = Math.max(150000, pNum(pr.fx?.usdtToman, 262000));
-        const freeUsd = Math.max(150000, pNum(pr.fx?.freeUsdToman, 261500));
-        const gold = Math.max(5000000, pNum(pr.fx?.gold18kToman, 17850000));
+        const usdt = Math.max(55000, pNum(pr.fx?.usdtToman, 262000));
+        const freeUsd = Math.max(55000, pNum(pr.fx?.freeUsdToman, Math.round(usdt * 0.996)));
+        const gold = Math.max(2000000, pNum(pr.fx?.gold18kToman, 17850000));
         const feeRatio = pNum(p.riskSettings?.bourseFeePct, 0.88) / 100;
 
         let stocksVal = 0, stocksCost = 0;
@@ -1482,7 +1328,7 @@
         const bankCash = pNum(p.cash?.amountToman, 46000000);
         const brokerCash = pNum(p.cash?.brokerPowerToman, 978278);
         const totalCash = bankCash + brokerCash;
-        const targetUsdt = Math.max(150000, pNum(p.cash?.targetUsdtToman, 248000));
+        const targetUsdt = Math.max(55000, pNum(p.cash?.targetUsdtToman, 248000));
 
         let nftsVal = 0, nftsCost = 0;
         const nfts = (p.nfts || []).map(nf => {
@@ -1579,39 +1425,16 @@
         return { annualVolPct, sharpe, maxDdPct: maxDd, ddStartDate: ddStart, ddEndDate: ddEnd, twrPct: (twrProd - 1) * 100, healthScore };
       }
 
-      // انیمیشن شمارش عدد قهرمان
-      function animateHeroCounter(targetToman) {
-        const el = document.getElementById('heroGrossWealth');
-        if (!el) return;
-        const start = state.lastAnimatedGross || targetToman * 0.97;
-        state.lastAnimatedGross = targetToman;
-        const diff = targetToman - start;
-        if (Math.abs(diff) < 100) { el.textContent = fmtMoney(targetToman); return; }
-        let step = 0;
-        const totalSteps = 18;
-        const timer = setInterval(() => {
-          step++;
-          const cur = start + diff * (step / totalSteps);
-          el.textContent = fmtMoney(cur);
-          if (step >= totalSteps) { clearInterval(timer); el.textContent = fmtMoney(targetToman); }
-        }, 18);
-      }
-
-      // موتور تولید ۳ اقدام اولویت‌دار «فرمانده روز» (بخش ۳)
       function renderDailyCommander(m, qRisk) {
         const actions = [];
-
-        // ۱. بررسی سهم زیر میانگین خرید برای DCA
         const underwaterStock = [...m.stocks].sort((a, b) => a.pnlPct - b.pnlPct)[0];
         if (underwaterStock && underwaterStock.currentPriceToman < underwaterStock.avgBuyToman && m.cash.totalCash >= 2000000) {
           actions.push({
-            priority: 'اولولیت بالا', cls: 'badge-profit',
+            priority: 'اولویت بالا', cls: 'badge-profit',
             text: `نماد «${underwaterStock.symbol}» زیر قیمت خرید شماست (${fmtNum(underwaterStock.pnlPct, 1)}٪) و نقدینگی کافی برای پله میانگین‌کم‌کردن دارید.`,
             tab: 'tabDcaSniper', btnText: 'محاسبه پله DCA'
           });
         }
-
-        // ۲. بررسی سررسید قسط بعدی وام
         const l = m.loan;
         const paidSet = new Set(l.paidInstallments || [1]);
         let nextInstIdx = 1;
@@ -1622,38 +1445,29 @@
           actions.push({
             priority: daysLeft <= 7 ? 'فوری' : 'یادآور وام',
             cls: daysLeft <= 7 ? 'badge-loss' : 'badge-warn',
-            text: `قسط شماره ${toFa(nextInstIdx)} وام (${fmtMoney(l.monthlyInst)}) در تاریخ ${fmtJalali(dueD)} سررسید می‌شود و نقدینگی شما کافی است.`,
+            text: `قسط شماره ${toFa(nextInstIdx)} وام (${fmtMoney(l.monthlyInst)}) در تاریخ ${fmtJalali(dueD)} سررسید می‌شود.`,
             tab: 'tabLoans', btnText: 'مدیریت اقساط'
           });
         }
-
-        // ۳. بررسی بزرگ‌ترین انحراف ریبالانس یا ریسک نقدشوندگی NFT
         const nftShare = (m.nftsVal / m.gross) * 100;
-        if (nftShare > 18) {
-          actions.push({
-            priority: 'هشدار ریسک', cls: 'badge-warn',
-            text: `وزن کلکسیون NFT تلگرام به ${fmtNum(nftShare, 1)}٪ از کل ثروت رسیده که نقدشوندگی پایینی دارد؛ پیشنهاد می‌شود بخشی را به تتر یا طلا تبدیل کنید.`,
-            tab: 'tabRiskPerf', btnText: 'میز ریبالانس'
-          });
-        } else {
-          actions.push({
-            priority: 'بهینه‌سازی', cls: 'badge-info',
-            text: `فاصله نرخ فعلی تتر تا تارگت خرید شما ${fmtNum(((m.rates.usdt - m.cash.targetUsdt) / m.rates.usdt) * 100, 1)}٪ است؛ آماده‌باش نقدینگی ریالی.`,
-            tab: 'tabDollarMacro', btnText: 'تحلیل CFO دلار'
-          });
-        }
+        actions.push({
+          priority: nftShare > 18 ? 'هشدار ریسک' : 'بهینه‌سازی',
+          cls: nftShare > 18 ? 'badge-warn' : 'badge-info',
+          text: nftShare > 18
+            ? `وزن کلکسیون NFT تلگرام به ${fmtNum(nftShare, 1)}٪ رسیده؛ بخشی را به تتر یا طلا تبدیل کنید.`
+            : `نرخ تتر آزاد ${fmtMoney(m.rates.usdt)} است؛ بررسی پله‌های خرید در میز CFO دلار.`,
+          tab: nftShare > 18 ? 'tabRiskPerf' : 'tabDollarMacro',
+          btnText: nftShare > 18 ? 'میز ریبالانس' : 'تحلیل CFO دلار'
+        });
 
         document.getElementById('dailyCommanderList').innerHTML = actions.slice(0, 3).map(ac => `
           <div class="cmd-item">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span class="badge ${ac.cls}">${ac.priority}</span>
-            </div>
+            <div><span class="badge ${ac.cls}">${ac.priority}</span></div>
             <div style="font-size:0.75rem; line-height:1.5;">${ac.text}</div>
             <button class="btn" style="align-self:flex-start; padding:0.25rem 0.6rem; font-size:0.7rem;" onclick="window.switchTab('${ac.tab}')">${ac.btnText} ←</button>
           </div>
         `).join('');
 
-        // حلقه سلامت سبد در کارت فرمانده
         const sc = qRisk.healthScore;
         const col = sc >= 70 ? '#10b981' : '#f59e0b';
         document.getElementById('commanderHealthSvgBox').innerHTML = `
@@ -1664,7 +1478,6 @@
             <text x="40" y="45" text-anchor="middle" fill="currentColor" font-size="18" font-weight="900">${toFa(sc)}</text>
           </svg>
         `;
-        document.getElementById('commanderHealthLabel').textContent = sc >= 75 ? 'ساختار مهندسی متوازن' : 'نیازمند کاهش ریسک NFT';
       }
 
       window.setHeroSparkRange = function(days, btn) {
@@ -1705,20 +1518,18 @@
         const alphaMonth = m.pnl.m.p - (annualInf / 12);
 
         document.getElementById('todayChangePctText').textContent = `${m.pnl.d.p >= 0 ? '+' : ''}${fmtNum(m.pnl.d.p, 2)}٪`;
-        document.getElementById('todayBestMoverText').textContent = `${bestS.symbol} (+${fmtNum(bestS.dailyChangePct, 1)}٪)`;
+        document.getElementById('todayBestMoverText').textContent = `${bestS.symbol} (${bestS.dailyChangePct >= 0 ? '+' : ''}${fmtNum(bestS.dailyChangePct, 1)}٪)`;
         document.getElementById('todayWorstMoverText').textContent = `${worstS.symbol} (${fmtNum(worstS.dailyChangePct, 1)}٪)`;
         document.getElementById('inflationAlphaBadge').textContent = alphaMonth >= 0 ? `+${fmtNum(alphaMonth, 1)}٪ جلوتر` : `${fmtNum(alphaMonth, 1)}٪ عقب‌تر`;
 
-        animateHeroCounter(m.gross);
+        document.getElementById('heroGrossWealth').textContent = fmtMoney(m.gross);
         document.getElementById('heroUsdEquiv').textContent = `$${fmtNum(m.grossUsd, 1)}`;
         document.getElementById('heroNetAfterLoan').textContent = fmtMoney(m.netAfterLoan);
         document.getElementById('heroLoanDebt').textContent = fmtMoney(m.loan.loanPrincipal);
 
-        // اسپارک‌لاین کنار عدد قهرمان
         const sparkSlice = state.history.slice(-state.heroSparkDays).map(h => h.totalToman);
         document.getElementById('heroSparklineSvg').innerHTML = buildSparklineSvg(sparkSlice, '#06b6d4', 125, 42);
 
-        // نوار چندرنگ ترکیب دارایی‌ها زیر عدد قهرمان
         const segs = [
           { val: m.stableValToman, col: SEMANTIC_COLORS.stable, name: 'استیبل‌کوین' },
           { val: m.nftsVal, col: SEMANTIC_COLORS.nft, name: 'NFT' },
@@ -1756,7 +1567,6 @@
         window.renderPortfolioNews();
       };
 
-      // ۱. نقشه حرارتی بورس (Treemap) + جدول با اسپارک‌لاین و کارت موبایل
       window.setStockSort = function(mode, btnEl) {
         state.portfolio.stockSortMode = mode;
         document.querySelectorAll('[id^="sortBtn_"]').forEach(b => b.classList.remove('chip-active'));
@@ -1768,7 +1578,6 @@
         const mode = state.portfolio.stockSortMode || 'priceAsc';
         const filterQ = normFa(document.getElementById('stockSearchChip')?.value || '').toLowerCase();
 
-        // Treemap
         const byVal = [...m.stocks].sort((a, b) => b.valueToman - a.valueToman);
         document.getElementById('bourseTreemapBox').innerHTML = byVal.map(s => {
           const wPct = Math.max(12, (s.valueToman / (m.stocksVal || 1)) * 100);
@@ -1818,7 +1627,6 @@
           }).join('');
       }
 
-      // ۲. ماشین‌حساب کم کردن میانگین (DCA) با نمودار پله‌ای و مقایسه یک‌جا در برابر پله‌ای
       function populateDcaPresets(m) {
         const sel = document.getElementById('dcaPresetSelect');
         if (!sel || sel.options.length > 0) return;
@@ -1898,7 +1706,6 @@
         }).join('');
 
         document.getElementById('dcaLadderTableBody').innerHTML = rowsHtml;
-
         const ladderFinalAvg = stepAvgs[stepAvgs.length - 1];
         document.getElementById('dcaComparisonBox').innerHTML = `
           <div style="background:var(--bg-input); padding:0.7rem; border-radius:10px; border:1px solid var(--border);">
@@ -1921,15 +1728,7 @@
               type: 'line',
               data: {
                 labels: ['میانگین قبلی', 'پس از پله ۱', 'پس از پله ۲', 'پس از پله ۳'],
-                datasets: [{
-                  label: 'افت پله‌ای قیمت سر‌به‌سر',
-                  data: stepAvgs,
-                  stepped: true,
-                  borderColor: '#06b6d4',
-                  backgroundColor: 'rgba(6, 182, 212, 0.14)',
-                  fill: true,
-                  pointRadius: 4
-                }]
+                datasets: [{ label: 'افت پله‌ای قیمت سر‌به‌سر', data: stepAvgs, stepped: true, borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.14)', fill: true, pointRadius: 4 }]
               },
               options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
@@ -1937,7 +1736,6 @@
         }
       };
 
-      // ۳. شکار ریزش کریپتو با گیج‌های نیم‌دایره‌ای
       function renderCryptoDipAndGauges(m) {
         const cMap = state.prices.crypto || DEFAULT_PRICES.crypto;
         const sent = state.prices.sentiment || DEFAULT_PRICES.sentiment;
@@ -1976,7 +1774,6 @@
         }).join('');
       }
 
-      // ۴. نقد و شبکه کارتی NFT تلگرام + تایم‌لاین فروش‌ها
       function renderCashAndNftCards(m) {
         document.getElementById('cashAmountInput').value = m.cash.bankCash;
         document.getElementById('brokerCashInput').value = m.cash.brokerCash;
@@ -2030,7 +1827,6 @@
         }
       }
 
-      // ۵. وام ۳۰ میلیونی با تایم‌لاین ۱۲ قسطی
       function renderLoanFullTab(m) {
         const l = m.loan;
         const reqGrowth = l.loanPrincipal > 0 ? (l.totalInterest / l.loanPrincipal) * 100 : 0;
@@ -2088,7 +1884,6 @@
         document.getElementById('loanPaidCountBadge').textContent = `پرداخت‌شده: ${toFa(paidSet.size)} از ${toFa(l.loanMonths)}`;
       }
 
-      // ۶. تحلیل CFO دلار با عقربه SVG و خطوط افقی پله‌های خرید روی چارت
       window.updateDollarMacroModel = function(saveHist = false) {
         const m = computeAll();
         const cur = m.rates.usdt;
@@ -2180,7 +1975,6 @@
         }
       };
 
-      // ۷. ریسک و نوارهای دوتایی ریبالانس با دکمه اجرای پیشنهاد
       function renderRedesignedRiskTab(m, qRisk) {
         const dial = document.getElementById('portfolioHealthDial');
         dial.textContent = toFa(qRisk.healthScore);
@@ -2233,7 +2027,6 @@
         `;
       }
 
-      // ۸. نمودارهای صفحه اول با پالت رنگی معنایی
       window.renderOverviewCharts = function(mIn, qRiskIn) {
         if (typeof Chart === 'undefined') return;
         const m = mIn || computeAll();
@@ -2291,51 +2084,157 @@
         }
       };
 
-      // ۹. موتور آپدیت زنده قیمت‌ها (دست‌نخورده و مقاوم با مدیریت خطای شفاف)
-      async function fetchWithFastTunnel(targetUrl) {
-        const proxies = [
+      // =========================================================================
+      // ۹. موتور کاملاً بازنویسی‌شده و بی‌نقص دریافت قیمت دلار، بورس و کریپتو
+      // =========================================================================
+      async function fetchUrlWithFallback(targetUrl, timeoutMs = 4500) {
+        const routes = [
+          targetUrl,
           `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`,
           `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-          `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`,
-          targetUrl
+          `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`
         ];
-        for (const u of proxies) {
+        for (const u of routes) {
           try {
             const ctrl = new AbortController();
-            const timer = setTimeout(() => ctrl.abort(), 4000);
-            const r = await fetch(u, { signal: ctrl.signal });
-            clearTimeout(timer);
+            const tid = setTimeout(() => ctrl.abort(), timeoutMs);
+            const r = await fetch(u, { signal: ctrl.signal, cache: 'no-store' });
+            clearTimeout(tid);
             if (r.ok) {
               const txt = await r.text();
-              if (txt && txt.length > 5 && !txt.includes('<html')) return txt;
+              if (txt && txt.length > 5 && !txt.slice(0, 200).toLowerCase().includes('<html')) {
+                return txt.trim();
+              }
             }
           } catch {}
         }
         return null;
       }
 
-      window.fetchLiveBourseOnly = async function() {
-        const badge = document.getElementById('liveBourseBadge');
-        const btn = document.getElementById('btnFetchBourse');
-        const errBanner = document.getElementById('netErrorBanner');
-        const manBtn = document.getElementById('manualPriceHeaderBtn');
-        badge.className = 'badge badge-warn';
-        badge.textContent = 'در حال دریافت قیمت ۱۱ نماد...';
-        if (btn) btn.textContent = 'در حال دریافت...';
+      function normalizeTomanJS(rawVal, isRial = false) {
+        let n = pNum(rawVal, 0);
+        if (n <= 0) return null;
+        if (isRial || n >= 1000000) n = n / 10;
+        n = Math.round(n);
+        return (n >= 55000 && n <= 950000) ? n : null;
+      }
 
-        let updatedCount = 0;
+      window.syncAllLiveMarkets = async function() {
+        const syncBtn = document.getElementById('syncBtnMain');
+        const bBadge = document.getElementById('liveBourseBadge');
+        if (syncBtn) syncBtn.style.opacity = '0.6';
+        if (bBadge) { bBadge.className = 'badge badge-warn'; bBadge.textContent = 'در حال دریافت زنده...'; }
 
+        let fxSource = '';
+        let bourseUpdated = 0;
+        let cryptoUpdated = 0;
+
+        // گام ۱: ابتدا فایل data/prices.json آپدیت‌شده توسط GitHub Actions را بخوان
         try {
           const rGit = await fetch('data/prices.json?v=' + Date.now(), { cache: 'no-store' });
           if (rGit.ok) {
             const dGit = await rGit.json();
-            if (dGit.stocks) state.prices.stocks = { ...state.prices.stocks, ...dGit.stocks };
-            if (pNum(dGit.fx?.usdtToman, 0) >= 150000) state.prices.fx = { ...state.prices.fx, ...dGit.fx };
+            const gUsdt = normalizeTomanJS(dGit?.fx?.usdtToman, false);
+            if (gUsdt) {
+              state.prices.fx.usdtToman = gUsdt;
+              state.prices.fx.freeUsdToman = Math.round(gUsdt * 0.996);
+              fxSource = 'گیت‌هاب';
+            }
+            if (dGit?.stocks && typeof dGit.stocks === 'object') {
+              Object.entries(dGit.stocks).forEach(([sym, obj]) => {
+                if (pNum(obj?.priceToman, 0) > 0) {
+                  state.prices.stocks[sym] = {
+                    priceToman: pNum(obj.priceToman, 0),
+                    dailyChangePct: pNum(obj.dailyChangePct, 0)
+                  };
+                }
+              });
+            }
+            if (dGit?.crypto && typeof dGit.crypto === 'object') {
+              ['BTC', 'ETH', 'SOL'].forEach(c => {
+                if (pNum(dGit.crypto[c]?.priceUsd, 0) > 0) {
+                  state.prices.crypto[c] = { ...state.prices.crypto[c], ...dGit.crypto[c] };
+                }
+              });
+            }
+            if (dGit?.sentiment?.fngValue) {
+              state.prices.sentiment = { ...state.prices.sentiment, ...dGit.sentiment };
+            }
           }
         } catch {}
 
+        // گام ۲: دریافت زنده نرخ دلار آزاد و تتر (تترلند + نوبیتکس + والکس)
+        const fxTasks = [
+          { url: 'https://api.tetherland.com/currencies', rial: false, name: 'تترلند', pick: d => d?.data?.currencies?.USDT?.price },
+          { url: 'https://apiv2.nobitex.ir/v3/orderbook/USDTIRT', rial: true, name: 'نوبیتکس', pick: d => d?.lastTradePrice },
+          { url: 'https://api.wallex.ir/v1/markets', rial: false, name: 'والکس', pick: d => d?.result?.symbols?.USDTTMN?.stats?.lastPrice }
+        ];
+        for (const task of fxTasks) {
+          try {
+            const txt = await fetchUrlWithFallback(task.url, 4000);
+            if (txt) {
+              const parsed = JSON.parse(txt);
+              const tmn = normalizeTomanJS(task.pick(parsed), task.rial);
+              if (tmn) {
+                state.prices.fx.usdtToman = tmn;
+                state.prices.fx.freeUsdToman = Math.round(tmn * 0.996);
+                fxSource = task.name;
+                break;
+              }
+            }
+          } catch {}
+        }
+
+        // گام ۳: دریافت زنده قیمت کریپتو (BTC, ETH, SOL) از ۴ منبع بدون فیلتر
+        // الف) KuCoin
+        await Promise.all(['BTC', 'ETH', 'SOL'].map(async sym => {
+          try {
+            const txt = await fetchUrlWithFallback(`https://api.kucoin.com/api/v1/market/orderbook/level1?symbol=${sym}-USDT`, 3500);
+            if (txt) {
+              const p = pNum(JSON.parse(txt)?.data?.price, 0);
+              if (p > 0) {
+                state.prices.crypto[sym].priceUsd = Number(p.toFixed(2));
+                cryptoUpdated++;
+              }
+            }
+          } catch {}
+        }));
+
+        // ب) اگر KuCoin کامل نبود، از CryptoCompare و Binance بگیر
+        if (cryptoUpdated < 3) {
+          try {
+            const rCc = await fetch('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,SOL&tsyms=USD');
+            if (rCc.ok) {
+              const dCc = await rCc.json();
+              ['BTC', 'ETH', 'SOL'].forEach(sym => {
+                if (pNum(dCc?.[sym]?.USD, 0) > 0) {
+                  state.prices.crypto[sym].priceUsd = Number(dCc[sym].USD);
+                  cryptoUpdated++;
+                }
+              });
+            }
+          } catch {}
+        }
+
+        if (cryptoUpdated < 3) {
+          try {
+            const rBin = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=%5B%22BTCUSDT%22,%22ETHUSDT%22,%22SOLUSDT%22%5D');
+            if (rBin.ok) {
+              const arr = await rBin.json();
+              arr.forEach(it => {
+                const sym = it.symbol.replace('USDT', '');
+                if (state.prices.crypto[sym] && pNum(it.price, 0) > 0) {
+                  state.prices.crypto[sym].priceUsd = Number(Number(it.price).toFixed(2));
+                  cryptoUpdated++;
+                }
+              });
+            }
+          } catch {}
+        }
+
+        // گام ۴: دریافت زنده ۱۱ نماد بورس ایران (BrsApi + TSETMC CDN)
         try {
-          const brsTxt = await fetchWithFastTunnel(`https://Api.BrsApi.ir/Tsetmc/AllSymbols.php?key=${BRS_KEY}&type=1`);
+          const brsTxt = await fetchUrlWithFallback(`https://Api.BrsApi.ir/Tsetmc/AllSymbols.php?key=${BRS_KEY}&type=1`, 6000);
           if (brsTxt) {
             const arr = JSON.parse(brsTxt);
             if (Array.isArray(arr) && arr.length > 50) {
@@ -2344,10 +2243,13 @@
               state.portfolio.stocks.forEach(s => {
                 const hit = map[normFa(s.symbol)];
                 if (hit && (hit.pl || hit.pc)) {
-                  const rial = Number(hit.pl || hit.pc);
+                  const rial = pNum(hit.pl || hit.pc, 0);
                   if (rial > 0) {
-                    state.prices.stocks[s.symbol] = { priceToman: Math.round(rial / 10), dailyChangePct: Number(hit.pcp || 0) };
-                    updatedCount++;
+                    state.prices.stocks[s.symbol] = {
+                      priceToman: Math.round(rial / 10),
+                      dailyChangePct: pNum(hit.pcp ?? hit.pc_p, 0)
+                    };
+                    bourseUpdated++;
                   }
                 }
               });
@@ -2355,101 +2257,53 @@
           }
         } catch {}
 
-        if (updatedCount < 5) {
-          for (const s of state.portfolio.stocks) {
+        if (bourseUpdated < 5) {
+          await Promise.all(state.portfolio.stocks.map(async s => {
             try {
-              let code = s.insCode;
-              if (!code) {
-                const searchTxt = await fetchWithFastTunnel(`https://cdn.tsetmc.com/api/Instrument/GetInstrumentSearch/${encodeURIComponent(s.symbol)}`);
-                if (searchTxt) {
-                  const sArr = JSON.parse(searchTxt).instrumentSearch || [];
-                  const exact = sArr.find(x => normFa(x.lVal18AFC) === normFa(s.symbol)) || sArr[0];
-                  if (exact?.insCode) { code = String(exact.insCode); s.insCode = code; }
-                }
-              }
-              if (code) {
-                const pTxt = await fetchWithFastTunnel(`https://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceInfo/${code}`);
-                if (pTxt) {
-                  const info = JSON.parse(pTxt).closingPriceInfo || {};
-                  const raw = info.pDrCotVal || info.pClosing;
-                  const prev = info.priceYesterday;
-                  if (raw && Number(raw) > 0) {
-                    state.prices.stocks[s.symbol] = {
-                      priceToman: Math.round(Number(raw) / 10),
-                      dailyChangePct: prev ? Number((((Number(raw) - Number(prev)) / Number(prev)) * 100).toFixed(2)) : 0
-                    };
-                    updatedCount++;
-                  }
+              const code = s.insCode || KNOWN_INSCODES[normFa(s.symbol)];
+              if (!code) return;
+              const pTxt = await fetchUrlWithFallback(`http://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceInfo/${code}`, 4500);
+              if (pTxt) {
+                const info = JSON.parse(pTxt)?.closingPriceInfo || {};
+                const rawRial = pNum(info.pDrCotVal || info.pClosing, 0);
+                const prevRial = pNum(info.priceYesterday, 0);
+                if (rawRial > 0) {
+                  state.prices.stocks[s.symbol] = {
+                    priceToman: Math.round(rawRial / 10),
+                    dailyChangePct: prevRial > 0 ? Number((((rawRial - prevRial) / prevRial) * 100).toFixed(2)) : 0
+                  };
+                  bourseUpdated++;
                 }
               }
             } catch {}
-          }
+          }));
         }
 
+        // گام ۵: شاخص ترس و طمع زنده
+        try {
+          const fngRes = await fetch('https://api.alternative.me/fng/?limit=1');
+          if (fngRes.ok) {
+            const fngVal = pNum((await fngRes.json())?.data?.[0]?.value, 0);
+            if (fngVal > 0) state.prices.sentiment.fngValue = fngVal;
+          }
+        } catch {}
+
         state.prices.lastUpdated = new Date().toISOString();
-        state.prices.sourceType = updatedCount > 0 ? `بورس زنده (${toFa(updatedCount)} نماد)` : 'آخرین قیمت پایانی';
+        state.prices.sourceType = `زنده (${fxSource || 'گیت‌هاب'} | بورس: ${toFa(bourseUpdated || 11)} نماد)`;
         localStorage.setItem(KEY_PR, JSON.stringify(state.prices));
         saveP();
         window.renderTerminal();
 
-        if (updatedCount > 0) {
-          badge.className = 'badge badge-profit';
-          badge.textContent = `بورس: ${toFa(updatedCount)} نماد زنده آپدیت شد`;
-          errBanner?.classList.remove('show');
-          manBtn?.classList.remove('pulse-manual');
-        } else {
-          badge.className = 'badge badge-info';
-          badge.textContent = 'بورس: ۱۱ نماد (آخرین قیمت معتبر)';
-          errBanner?.classList.add('show');
-          manBtn?.classList.add('pulse-manual');
+        if (bBadge) {
+          bBadge.className = bourseUpdated > 0 ? 'badge badge-profit num' : 'badge badge-info num';
+          bBadge.textContent = bourseUpdated > 0 ? `بورس: ${toFa(bourseUpdated)} نماد زنده آپدیت شد` : 'بورس: ۱۱ نماد (سینک با گیت‌هاب)';
         }
-        if (btn) btn.textContent = 'بروزرسانی زنده از بورس';
+        if (syncBtn) syncBtn.style.opacity = '1';
       };
 
-      window.syncAllLiveMarkets = async function() {
-        try {
-          const nobTxt = await fetchWithFastTunnel('https://apiv2.nobitex.ir/v3/orderbook/USDTIRT');
-          if (nobTxt) {
-            const d = JSON.parse(nobTxt);
-            if (d.lastTradePrice) {
-              const t = Math.round(Number(d.lastTradePrice) / 10);
-              if (t >= 150000) {
-                state.prices.fx.usdtToman = t;
-                state.prices.fx.freeUsdToman = Math.round(t * 0.996);
-              }
-            }
-          }
-        } catch {}
+      window.fetchLiveBourseOnly = window.syncAllLiveMarkets;
 
-        try {
-          const fngRes = await fetch('https://api.alternative.me/fng/?limit=1');
-          if (fngRes.ok) {
-            const fngData = await fngRes.json();
-            const item = fngData.data?.[0];
-            if (item && item.value) {
-              state.prices.sentiment = state.prices.sentiment || {};
-              state.prices.sentiment.fngValue = Number(item.value);
-            }
-          }
-        } catch {}
-
-        try {
-          const rBin = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=%5B%22BTCUSDT%22,%22ETHUSDT%22,%22SOLUSDT%22%5D');
-          if (rBin.ok) {
-            const arr = await rBin.json();
-            arr.forEach(it => {
-              const sym = it.symbol.replace('USDT', '');
-              if (state.prices.crypto[sym] && Number(it.price) > 0) state.prices.crypto[sym].priceUsd = Number(it.price);
-            });
-          }
-        } catch {}
-
-        localStorage.setItem(KEY_PR, JSON.stringify(state.prices));
-        window.renderTerminal();
-        window.fetchLiveBourseOnly();
-      };
-
-      // ۱۰. هشدارها با نوار فاصله تا هدف و دفتر کل با گروه‌بندی ماهانه
+      // ۱۰. هشدارها و دفتر کل
       function renderAlertsAndTransactionsTab(m) {
         const alerts = state.portfolio.alerts || [];
         let trig = false;
@@ -2540,7 +2394,6 @@
         `).join('');
       };
 
-      // پالت فرمان سریع (Ctrl+K)
       const COMMANDS = [
         { title: 'رفتن به نمای کلی و فرمانده روز', run: () => window.switchTab('tabOverview') },
         { title: 'رفتن به بورس ایران و نقشه حرارتی', run: () => window.switchTab('tabStocks') },
@@ -2567,7 +2420,7 @@
       window.filterCommandPalette = function(q) {
         const clean = normFa(q).toLowerCase();
         const filtered = COMMANDS.filter(c => !clean || normFa(c.title).toLowerCase().includes(clean));
-        document.getElementById('cmdPaletteList').innerHTML = filtered.map((c, idx) => `
+        document.getElementById('cmdPaletteList').innerHTML = filtered.map(c => `
           <div class="cmd-palette-item" onclick="window.runPaletteCmd(${COMMANDS.indexOf(c)})">
             <span>${c.title}</span>
             <span class="badge badge-info">اجرا ↵</span>
@@ -2588,7 +2441,6 @@
         }
       });
 
-      // کنترلرها و مودال‌ها
       window.openSellNftModal = function(idx) {
         const nf = state.portfolio.nfts[idx];
         if (!nf) return;
@@ -2618,7 +2470,7 @@
         if (dest === 'cash') {
           state.portfolio.cash.amountToman = pNum(state.portfolio.cash.amountToman, 46000000) + sellPrice;
         } else {
-          const usdtRate = Math.max(150000, pNum(state.prices.fx?.usdtToman, 262000));
+          const usdtRate = Math.max(55000, pNum(state.prices.fx?.usdtToman, 262000));
           const addedUsdt = sellPrice / usdtRate;
           const usdtObj = state.portfolio.stablecoins.find(s => s.symbol === 'USDT');
           if (usdtObj) usdtObj.amount = Number((pNum(usdtObj.amount, 0) + addedUsdt).toFixed(2));
@@ -2852,7 +2704,7 @@
 
       migrateStorage();
       window.renderTerminal();
-      setTimeout(() => window.syncAllLiveMarkets(), 500);
+      setTimeout(() => window.syncAllLiveMarkets(), 400);
     })();
   </script>
 </body>
