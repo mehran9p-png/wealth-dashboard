@@ -1,27 +1,90 @@
 {
-  "lastUpdated": "2026-10-22T12:00:00Z",
+  "lastUpdated": "2026-10-24T13:08:40Z",
   "fx": {
-    "usdtToman": 262000,
-    "freeUsdToman": 261500,
+    "usdtToman": 269299,
+    "freeUsdToman": 268222,
     "gold18kToman": 17850000,
     "stale": false
   },
   "stocks": {
-    "وفیروزه": { "priceToman": 581, "dailyChangePct": -2.01, "stale": false },
-    "فپنتا": { "priceToman": 4704, "dailyChangePct": 0.00, "stale": false },
-    "شپدیس": { "priceToman": 1250, "dailyChangePct": -2.95, "stale": false },
-    "کرومیت": { "priceToman": 557, "dailyChangePct": -2.96, "stale": false },
-    "فهامون": { "priceToman": 718, "dailyChangePct": 2.87, "stale": false },
-    "فکور": { "priceToman": 689, "dailyChangePct": 2.99, "stale": false },
-    "فپردیس": { "priceToman": 9677, "dailyChangePct": 2.99, "stale": false },
-    "وسرمایه": { "priceToman": 504, "dailyChangePct": 2.86, "stale": false },
-    "زشک": { "priceToman": 1411, "dailyChangePct": 2.99, "stale": false },
-    "سیمکات": { "priceToman": 4584, "dailyChangePct": 4310.70, "stale": false },
-    "فساپ": { "priceToman": 497, "dailyChangePct": 2.90, "stale": false }
+    "وفیروزه": {
+      "priceToman": 581,
+      "dailyChangePct": -2.01,
+      "stale": true
+    },
+    "فپنتا": {
+      "priceToman": 4704,
+      "dailyChangePct": 0.0,
+      "stale": true
+    },
+    "شپدیس": {
+      "priceToman": 1250,
+      "dailyChangePct": -2.95,
+      "stale": true
+    },
+    "کرومیت": {
+      "priceToman": 557,
+      "dailyChangePct": -2.96,
+      "stale": true
+    },
+    "فهامون": {
+      "priceToman": 718,
+      "dailyChangePct": 2.87,
+      "stale": true
+    },
+    "فکور": {
+      "priceToman": 689,
+      "dailyChangePct": 2.99,
+      "stale": true
+    },
+    "فپردیس": {
+      "priceToman": 9677,
+      "dailyChangePct": 2.99,
+      "stale": true
+    },
+    "وسرمایه": {
+      "priceToman": 504,
+      "dailyChangePct": 2.86,
+      "stale": true
+    },
+    "زشک": {
+      "priceToman": 1411,
+      "dailyChangePct": 2.99,
+      "stale": true
+    },
+    "سیمکات": {
+      "priceToman": 4584,
+      "dailyChangePct": 4310.7,
+      "stale": true
+    },
+    "فساپ": {
+      "priceToman": 497,
+      "dailyChangePct": 2.9,
+      "stale": true
+    }
   },
   "crypto": {
-    "BTC": { "priceUsd": 68450, "high90dUsd": 70200, "ma200Usd": 63400, "rsi14": 54.2, "stale": false },
-    "ETH": { "priceUsd": 2725, "high90dUsd": 3420, "ma200Usd": 2980, "rsi14": 46.8, "stale": false },
-    "SOL": { "priceUsd": 158.4, "high90dUsd": 188.5, "ma200Usd": 151.2, "rsi14": 51.5, "stale": false }
-  }
+    "BTC": {
+      "priceUsd": 68450,
+      "high90dUsd": 70200,
+      "ma200Usd": 63400,
+      "rsi14": 54.2,
+      "stale": false
+    },
+    "ETH": {
+      "priceUsd": 2725,
+      "high90dUsd": 3420,
+      "ma200Usd": 2980,
+      "rsi14": 46.8,
+      "stale": false
+    },
+    "SOL": {
+      "priceUsd": 158.4,
+      "high90dUsd": 188.5,
+      "ma200Usd": 151.2,
+      "rsi14": 51.5,
+      "stale": false
+    }
+  },
+  "sources": {}
 }
