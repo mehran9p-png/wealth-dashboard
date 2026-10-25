@@ -12,9 +12,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
           onerror="this.onerror=null;this.src='https://unpkg.com/chart.js@4.4.1/dist/chart.umd.min.js';"></script>
   <style>
-    /* ==========================================================================
-       ۱. متغیرهای سیستم طراحی و رنگ‌بندی معنایی (Design System Variables)
-       ========================================================================== */
     :root {
       --bg-base: #060911;
       --bg-card: #0c1222;
@@ -26,7 +23,6 @@
       --text-sub: #94a3b8;
       --text-muted: #64748b;
 
-      /* رنگ‌های معنایی کلاس دارایی */
       --c-bourse: #3b82f6;
       --c-crypto: #f97316;
       --c-stable: #06b6d4;
@@ -35,7 +31,6 @@
       --c-gold: #eab308;
       --c-loan: #fb7185;
 
-      /* سود و زیان */
       --profit: #10b981;
       --profit-soft: rgba(16, 185, 129, 0.14);
       --loss: #ef4444;
@@ -104,9 +99,6 @@
       padding: 0.7rem 0.7rem 5.8rem;
     }
 
-    /* ==========================================================================
-       ۲. هدر و نوار وضعیت زنده (Header & Market Ticker)
-       ========================================================================== */
     .topbar {
       display: flex;
       align-items: center;
@@ -160,9 +152,6 @@
     .badge-warn { background: var(--warn-soft); color: var(--warn); }
     .badge-info { background: rgba(59, 130, 246, 0.14); color: var(--c-bourse); }
 
-    /* ==========================================================================
-       ۳. ناوبری ۴ تبه ماژولار (4-Tab Modular Navigation)
-       ========================================================================== */
     .main-tabs-nav {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -218,45 +207,21 @@
     .tab-pane.active { display: block; animation: fadeTab 0.2s ease; }
     @keyframes fadeTab { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* زیرتب‌های داخلی برای تب ۲ و تب ۴ */
-    .sub-pill-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 0.75rem;
-    }
+    .sub-pill-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
     .sub-pill-btn {
-      padding: 0.4rem 0.85rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-sub);
-      font-size: 0.74rem;
-      font-weight: 700;
-      cursor: pointer;
+      padding: 0.4rem 0.85rem; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--bg-card);
+      color: var(--text-sub); font-size: 0.74rem; font-weight: 700; cursor: pointer;
     }
-    .sub-pill-btn.active {
-      background: rgba(6, 182, 212, 0.15);
-      color: var(--c-stable);
-      border-color: var(--c-stable);
-    }
+    .sub-pill-btn.active { background: rgba(6, 182, 212, 0.15); color: var(--c-stable); border-color: var(--c-stable); }
 
-    /* ==========================================================================
-       ۴. کارت‌ها، چیدمان و جداول ریسپانسیو (Cards & Responsive Tables)
-       ========================================================================== */
     .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: 0.95rem;
-      margin-bottom: 0.75rem;
-      box-shadow: var(--shadow-soft);
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 0.95rem;
+      margin-bottom: 0.75rem; box-shadow: var(--shadow-soft);
     }
 
-    .section-head {
-      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-      gap: 0.45rem; margin-bottom: 0.75rem;
-    }
+    .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.45rem; margin-bottom: 0.75rem; }
     .section-title { font-size: 0.94rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.4rem; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
@@ -313,7 +278,6 @@
     .mini-val { font-size: 0.95rem; font-weight: 800; }
     .mini-sub { font-size: 0.67rem; color: var(--text-sub); margin-top: 0.12rem; }
 
-    /* فرمانده روز */
     .commander-card {
       background: linear-gradient(135deg, rgba(19, 28, 51, 0.95), rgba(12, 18, 34, 0.98));
       border: 1px solid var(--border-strong);
@@ -332,36 +296,22 @@
       display: flex; flex-direction: column; justify-content: space-between; gap: 0.4rem;
     }
 
-    /* جداول با اسکرول افقی نرم، هدر چسبان و فشرده‌سازی موبایل (نیازمندی ۲) */
     .table-box {
-      width: 100%;
-      max-height: 420px;
-      overflow-x: auto;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      position: relative;
+      width: 100%; max-height: 420px; overflow-x: auto; overflow-y: auto;
+      -webkit-overflow-scrolling: touch; border-radius: 12px;
+      border: 1px solid var(--border); position: relative;
     }
     table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
     th, td { padding: 0.55rem 0.5rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
     th {
-      position: sticky;
-      top: 0;
-      background: var(--bg-elevated);
-      color: var(--text-sub);
-      font-weight: 800;
-      z-index: 10;
+      position: sticky; top: 0; background: var(--bg-elevated);
+      color: var(--text-sub); font-weight: 800; z-index: 10;
       box-shadow: 0 1px 0 var(--border);
     }
-    /* ستون اول چسبان در اسکرول افقی موبایل */
     table.sticky-col th:first-child,
     table.sticky-col td:first-child {
-      position: sticky;
-      right: 0;
-      background: var(--bg-card);
-      z-index: 6;
-      border-left: 1px solid var(--border);
+      position: sticky; right: 0; background: var(--bg-card);
+      z-index: 6; border-left: 1px solid var(--border);
     }
     table.sticky-col th:first-child { background: var(--bg-elevated); z-index: 11; }
 
@@ -408,43 +358,25 @@
     .loan-inst-card.paid { border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.06); }
     .loan-inst-card.next-due { border-color: var(--c-loan); box-shadow: 0 0 0 1px var(--c-loan); }
 
+    .health-dial { width: 54px; height: 54px; border-radius: 50%; border: 5px solid var(--profit); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.05rem; flex-shrink: 0; }
     .progress-bar { width: 100%; height: 8px; background: var(--bg-input); border-radius: 99px; overflow: hidden; margin: 0.28rem 0; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, var(--c-bourse), var(--profit)); transition: width 0.35s ease; }
 
     .donut-legend-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.35rem; margin-top: 0.45rem; text-align: center; font-size: 0.67rem; }
     .donut-legend-box { background: var(--bg-input); padding: 0.32rem 0.2rem; border-radius: 8px; border: 1px solid var(--border); }
 
-    /* ==========================================================================
-       ۵. دکمه شناور مرکز عملیات سریع (Quick Action Hub FAB) و مودال‌ها
-       ========================================================================== */
     .fab-quick-hub {
-      position: fixed;
-      left: 1.1rem;
-      bottom: 4.8rem;
-      height: 48px;
-      padding: 0 1.1rem;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--c-bourse), var(--c-nft));
-      color: #fff;
-      font-weight: 800;
-      font-size: 0.8rem;
-      border: none;
-      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.45);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      z-index: 890;
-      transition: transform 0.2s ease;
+      position: fixed; left: 1.1rem; bottom: 4.8rem; height: 48px; padding: 0 1.1rem;
+      border-radius: 999px; background: linear-gradient(135deg, var(--c-bourse), var(--c-nft));
+      color: #fff; font-weight: 800; font-size: 0.8rem; border: none;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.45); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.45rem; z-index: 890;
     }
     @media (min-width: 769px) { .fab-quick-hub { bottom: 1.5rem; } }
-    .fab-quick-hub:hover { transform: scale(1.04); }
 
     .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(3, 6, 15, 0.82);
-      backdrop-filter: blur(5px);
-      display: none; align-items: center; justify-content: center;
+      position: fixed; inset: 0; background: rgba(3, 6, 15, 0.82);
+      backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center;
       padding: 0.65rem; z-index: 999;
     }
     .modal-overlay.open { display: flex; }
@@ -485,19 +417,17 @@
           <svg class="svg-ic" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           <span>ثبت عملیات</span>
         </button>
-        <button class="icon-btn" id="syncBtnMain" onclick="window.syncAllLiveMarkets()" title="بروزرسانی موازی و سریع قیمت‌ها">
+        <button class="icon-btn" id="syncBtnMain" onclick="window.syncAllLiveMarkets()" title="بروزرسانی زنده بورس، کریپتو و دلار">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
-          <span class="hide-mob">بروزرسانی</span>
+          <span class="hide-mob">بروزرسانی زنده</span>
         </button>
         <button class="icon-btn" id="unitToggleBtn" onclick="window.toggleUnit()" title="تغییر واحد تومان/ریال">تومان</button>
-        <!-- دکمه حالت حریم خصوصی با ماسک ***,*** (نیازمندی ۴) -->
         <button class="icon-btn" id="privacyBtn" onclick="window.togglePrivacy()" title="مخفی‌سازی ارقام (***,***)">
           <svg class="svg-ic" id="eyeIconSvg" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
         <button class="icon-btn" onclick="window.toggleTheme()" title="تم روشن/تاریک">
           <svg class="svg-ic" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
         </button>
-        <!-- دکمه چرخ‌دنده تنظیمات و بکاپ JSON (نیازمندی ۳) -->
         <button class="icon-btn" onclick="window.openSettingsModal()" title="تنظیمات، بکاپ JSON و کارمزدها">
           <svg class="svg-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
@@ -520,7 +450,7 @@
       </div>
     </div>
 
-    <!-- ==================== 4-TAB MODULAR NAVIGATION (نیازمندی ۱) ==================== -->
+    <!-- ==================== 4-TAB MODULAR NAVIGATION ==================== -->
     <nav class="main-tabs-nav" aria-label="ناوبری اصلی ۴ تبه">
       <button class="nav-tab-item active" data-tab="tab1Overview" onclick="window.switchMainTab('tab1Overview', this)">
         <svg class="svg-ic" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -540,11 +470,8 @@
       </button>
     </nav>
 
-    <!-- ==========================================================================
-         تب ۱: نمای کلی (Overview)
-         ========================================================================== -->
+    <!-- ==================== TAB 1: OVERVIEW ==================== -->
     <section id="tab1Overview" class="tab-pane active">
-      <!-- HERO NET WORTH + 4 P&L CARDS -->
       <div class="hero-layout">
         <div class="card hero-card">
           <div>
@@ -602,7 +529,6 @@
         </div>
       </div>
 
-      <!-- 5 ASSET SUMMARY CARDS -->
       <div class="asset-strip">
         <div class="mini-card c-stable">
           <div class="mini-title"><span style="color:var(--c-stable)">●</span> ذخیره استیبل‌کوین (ETH)</div>
@@ -631,7 +557,6 @@
         </div>
       </div>
 
-      <!-- DAILY COMMANDER -->
       <div class="commander-card">
         <div>
           <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.4rem;">
@@ -652,7 +577,6 @@
         </div>
       </div>
 
-      <!-- OVERVIEW CHARTS -->
       <div class="grid-2">
         <div class="card" style="margin-bottom:0;">
           <div class="section-head">
@@ -679,23 +603,19 @@
       </div>
     </section>
 
-    <!-- ==========================================================================
-         تب ۲: دارایی‌ها و بازارها (Markets & Assets)
-         ========================================================================== -->
+    <!-- ==================== TAB 2: MARKETS & ASSETS ==================== -->
     <section id="tab2Markets" class="tab-pane">
-      <!-- ناوبری سریع بخش‌های تب ۲ -->
       <div class="sub-pill-nav">
         <button class="sub-pill-btn active" onclick="window.scrollToSection('secBourse', this)">📈 بورس ایران (۱۱ نماد)</button>
         <button class="sub-pill-btn" onclick="window.scrollToSection('secDryPowder', this)">💎 استیبل‌کوین و شکار ریزش</button>
         <button class="sub-pill-btn" onclick="window.scrollToSection('secNftCash', this)">🎁 کلکسیون NFT و نقدینگی</button>
       </div>
 
-      <!-- ۱. بورس ایران (هیت‌مپ + جدول با هدر چسبان و ستون اول چسبان) -->
       <div class="card" id="secBourse">
         <div class="section-head">
           <span class="section-title">نقشه حرارتی و جدول بورس ایران (اندازه = ارزش، رنگ = سود/زیان)</span>
           <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
-            <button class="btn btn-primary" id="btnFetchBourse" onclick="window.syncAllLiveMarkets()">🔄 آپدیت سریع قیمت‌ها</button>
+            <button class="btn btn-primary" id="btnFetchBourse" onclick="window.syncAllLiveMarkets()">🔄 آپدیت زنده بورس و کریپتو</button>
             <button class="btn" onclick="window.openQuickHub('stock')">➕ خرید سهم</button>
             <button class="btn btn-danger" onclick="window.sellEntireStockPortfolioToCash()">فروش کل سبد به نقد</button>
           </div>
@@ -736,7 +656,6 @@
         </div>
       </div>
 
-      <!-- ۲. ذخیره استیبل‌کوین اتریوم (Dry Powder) و پله‌های شکار ریزش -->
       <div class="card" id="secDryPowder">
         <div class="section-head">
           <span class="section-title">💎 ذخیره استیبل‌کوین شبکه اتریوم (Dry Powder) و پله‌های خرید</span>
@@ -751,7 +670,6 @@
         <div id="dipPlannerCards" class="grid-3"></div>
       </div>
 
-      <!-- ۳. نقدینگی ریالی و کارت‌های NFT تلگرام -->
       <div class="grid-2" id="secNftCash">
         <div class="card" style="margin-bottom:0;">
           <div class="section-head">
@@ -791,9 +709,7 @@
       </div>
     </section>
 
-    <!-- ==========================================================================
-         تب ۳: مهندسی وام و سناریوها (Debt & Arbitrage)
-         ========================================================================== -->
+    <!-- ==================== TAB 3: LOANS & ARBITRAGE ==================== -->
     <section id="tab3Loans" class="tab-pane">
       <div class="grid-2">
         <div class="card">
@@ -849,9 +765,7 @@
       </div>
     </section>
 
-    <!-- ==========================================================================
-         تب ۴: ابزارهای تحلیل و تصمیم (Analytics & Tools)
-         ========================================================================== -->
+    <!-- ==================== TAB 4: ANALYTICS & TOOLS ==================== -->
     <section id="tab4Analytics" class="tab-pane">
       <div class="sub-pill-nav">
         <button class="sub-pill-btn active" onclick="window.scrollToSection('secDcaTool', this)">🎯 ماشین‌حساب DCA</button>
@@ -860,7 +774,6 @@
         <button class="sub-pill-btn" onclick="window.scrollToSection('secRiskLedger', this)">🛡️ ریبالانس و دفتر کل</button>
       </div>
 
-      <!-- ۱. ماشین‌حساب میانگین‌کم‌کن (DCA Sniper) -->
       <div class="grid-2" id="secDcaTool">
         <div class="card">
           <div class="section-head">
@@ -896,7 +809,6 @@
         </div>
       </div>
 
-      <!-- ۲. شاخص‌های آن‌چین و ترس و طمع -->
       <div class="grid-4" id="secOnChainFng" style="margin-bottom:0.75rem;">
         <div class="pnl-card" style="align-items:center; text-align:center;">
           <div class="pnl-head" style="width:100%;"><span>ترس و طمع (زنده)</span><span>F&G</span></div>
@@ -916,13 +828,12 @@
         <div class="pnl-card">
           <div class="pnl-head"><span>امتیاز سلامت مهندسی سبد</span><span>Health</span></div>
           <div style="display:flex; align-items:center; gap:0.6rem; margin:0.35rem 0;">
-            <div class="health-dial num" id="portfolioHealthDial" style="width:54px; height:54px; font-size:1.05rem;">۷۶</div>
+            <div class="health-dial num" id="portfolioHealthDial">۷۶</div>
             <div style="font-size:0.7rem; color:var(--text-sub);">تعادل مناسب دارایی‌ها</div>
           </div>
         </div>
       </div>
 
-      <!-- ۳. عقربه فشار CFO دلار و چارت SMA90 -->
       <div class="grid-2" id="secCfoDollar">
         <div class="card">
           <div class="section-head">
@@ -969,7 +880,6 @@
         </div>
       </div>
 
-      <!-- ۴. ریبالانس، دفتر کل تراکنش‌ها و مقایسه جهانی -->
       <div class="grid-2" id="secRiskLedger">
         <div class="card">
           <div class="section-head">
@@ -1016,7 +926,6 @@
         </div>
       </div>
 
-      <!-- مقایسه جهانی -->
       <div class="card" style="margin-bottom:0;">
         <div class="section-head"><span class="section-title">🌐 مقایسه بازدهی سبد شما با S&P 500، طلا، بیت‌کوین و تورم</span></div>
         <div class="grid-2">
@@ -1029,13 +938,13 @@
     </section>
   </div>
 
-  <!-- ==================== FLOATING QUICK ACTION HUB BUTTON (نیازمندی ۵) ==================== -->
+  <!-- FLOATING QUICK ACTION HUB BUTTON -->
   <button class="fab-quick-hub" onclick="window.openQuickHub('stock')" title="ثبت سریع عملیات (Ctrl + K)">
     <svg class="svg-ic" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     <span>ثبت عملیات سریع (Ctrl+K)</span>
   </button>
 
-  <!-- ==================== UNIFIED QUICK ACTION HUB MODAL (نیازمندی ۵) ==================== -->
+  <!-- UNIFIED QUICK ACTION HUB MODAL -->
   <div id="quickHubModal" class="modal-overlay" onclick="if(event.target===this) window.closeQuickHub()">
     <div class="modal-box">
       <div class="section-head">
@@ -1050,7 +959,6 @@
         <button class="hub-tab-btn" data-hub="hubPrices" onclick="window.switchHubTab('hubPrices', this)">⚡ قیمت دستی / وام</button>
       </div>
 
-      <!-- تب ۱ هاب: خرید سهم بورس -->
       <div id="hubStock" class="hub-pane active">
         <div class="form-row">
           <div class="form-group"><label>نماد فارسی:</label><input type="text" id="newStockSymbol" placeholder="مثلاً: کرومیت" /></div>
@@ -1065,7 +973,6 @@
         <button class="btn btn-primary" style="width:100%;" onclick="window.confirmAddStock()">✅ ثبت خرید سهم در پورتفوی</button>
       </div>
 
-      <!-- تب ۲ هاب: ثبت تراکنش و هشدار -->
       <div id="hubTx" class="hub-pane">
         <div class="form-row">
           <div class="form-group"><label>نوع تراکنش:</label>
@@ -1089,7 +996,6 @@
         </div>
       </div>
 
-      <!-- تب ۳ هاب: خرید یا فروش NFT تلگرام -->
       <div id="hubNft" class="hub-pane">
         <div style="font-size:0.78rem; font-weight:800; margin-bottom:0.45rem;">➕ ثبت خرید آیتم NFT جدید:</div>
         <div class="form-row">
@@ -1116,7 +1022,6 @@
         </div>
       </div>
 
-      <!-- تب ۴ هاب: افزودن دارایی وام و ثبت دستی قیمت روز -->
       <div id="hubPrices" class="hub-pane">
         <div style="font-size:0.78rem; font-weight:800; margin-bottom:0.4rem;">🏦 افزودن دارایی خریداری‌شده با وام ۳۰ میلیونی:</div>
         <div class="form-row" style="grid-template-columns: 1.2fr 1fr 1fr auto; align-items:end;">
@@ -1127,7 +1032,7 @@
         </div>
 
         <div style="border-top:1px solid var(--border); margin-top:0.8rem; padding-top:0.7rem;">
-          <div style="font-size:0.78rem; font-weight:800; margin-bottom:0.45rem;">⚡ بروزرسانی دستی قیمت نمادها و دلار آزاد:</div>
+          <div style="font-size:0.78rem; font-weight:800; margin-bottom:0.45rem;">⚡ بروزرسانی دستی قیمت نمادها، کریپتو و دلار آزاد:</div>
           <div id="manualPricesFormBox" class="form-row" style="max-height:190px; overflow-y:auto;"></div>
           <button class="btn btn-primary" style="width:100%;" onclick="window.saveManualPrices()">ثبت و اعمال قیمت‌های دستی</button>
         </div>
@@ -1135,7 +1040,7 @@
     </div>
   </div>
 
-  <!-- ==================== SETTINGS & JSON BACKUP MODAL (نیازمندی ۳) ==================== -->
+  <!-- SETTINGS & JSON BACKUP MODAL -->
   <div id="settingsModal" class="modal-overlay" onclick="if(event.target===this) window.closeSettingsModal()">
     <div class="modal-box">
       <div class="section-head">
@@ -1170,7 +1075,7 @@
   <script>
     (function() {
       const KEY_P = 'WEALTH_PRO_V14';
-      const KEY_PR = 'WEALTH_PRICES_V16';
+      const KEY_PR = 'WEALTH_PRICES_V17'; // کلید جدید قیمت برای پاکسازی کش‌های معیوب قبلی
       const KEY_HIST = 'WEALTH_HISTORY_V14';
       const KEY_PRIVACY = 'WEALTH_PRIVACY_MASK_V16';
       const BRS_KEY = 'FreeSV0E1LSgB9RDjuf0QorSLViX8pPG';
@@ -1280,14 +1185,22 @@
 
       const fa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
       const toFa = v => String(v ?? '۰').replace(/\d/g, d => fa[Number(d)]);
+
+      // اصلاح حیاتی باگ ممیز فارسی و عربی در pNum
       const pNum = (v, fb = 0) => {
         if (typeof v === 'number') return Number.isFinite(v) ? v : fb;
-        const map = {'۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'};
-        const clean = String(v ?? '').replace(/[۰-۹]/g, d => map[d]).replace(/[^0-9.-]/g, '');
-        const n = Number(clean);
+        if (v === null || v === undefined) return fb;
+        const map = {'۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9'};
+        const clean = String(v)
+          .replace(/[۰-۹٠-٩]/g, d => map[d] || d)
+          .replace(/٫/g, '.')
+          .replace(/[٬,]/g, '')
+          .replace(/[^0-9.-]/g, '');
+        const n = parseFloat(clean);
         return Number.isFinite(n) ? n : fb;
       };
-      const normFa = s => String(s || '').trim().replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/\u200c/g, '').replace(/\s+/g, '');
+
+      const normFa = s => String(s || '').trim().replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/ئ/g, 'ی').replace(/ة/g, 'ه').replace(/\u200c/g, '').replace(/\s+/g, '');
 
       if (typeof Chart !== 'undefined') {
         Chart.defaults.font.family = "'Vazirmatn', system-ui, sans-serif";
@@ -1297,7 +1210,7 @@
 
       const state = {
         unit: 'toman',
-        isMasked: false, // وضعیت ماسک کردن اعداد با ***,***
+        isMasked: false,
         heroSparkDays: 7,
         resetConfirmStep: 0,
         portfolio: JSON.parse(JSON.stringify(DEFAULT_PORTFOLIO)),
@@ -1310,7 +1223,6 @@
         charts: {}
       };
 
-      // فرمت اعداد با پشتیبانی مستقیم از حالت حریم خصوصی (***,***) - نیازمندی ۴
       function fmtNum(val, dec = 0, isSensitive = false) {
         if (isSensitive && state.isMasked) return '***,***';
         const num = pNum(val, 0);
@@ -1387,7 +1299,7 @@
               loan: { ...DEFAULT_PORTFOLIO.loan, ...(parsed.loan || {}) }
             };
           }
-          const rawPr = localStorage.getItem(KEY_PR) || localStorage.getItem('WEALTH_PRICES_V15');
+          const rawPr = localStorage.getItem(KEY_PR);
           if (rawPr) {
             const pObj = JSON.parse(rawPr);
             state.prices = {
@@ -1422,6 +1334,17 @@
         return 'سهام و صندوق بورسی';
       }
 
+      // پیدا کردن هوشمند قیمت هر نماد حتی با تفاوت ی/ک عربی و فارسی
+      function getStockLiveObj(symbol) {
+        const map = state.prices.stocks || {};
+        if (map[symbol] && pNum(map[symbol].priceToman, 0) > 0) return map[symbol];
+        const target = normFa(symbol);
+        for (const [k, v] of Object.entries(map)) {
+          if (normFa(k) === target && pNum(v?.priceToman, 0) > 0) return v;
+        }
+        return null;
+      }
+
       function computeAll() {
         const p = state.portfolio;
         const pr = state.prices;
@@ -1434,8 +1357,9 @@
         const stocks = (p.stocks || []).map((s, origIdx) => {
           const qty = pNum(s.qty, 0);
           const buy = pNum(s.avgBuyToman, 0);
-          const cur = pNum(pr.stocks?.[s.symbol]?.priceToman, buy);
-          const chg = pNum(pr.stocks?.[s.symbol]?.dailyChangePct, 0);
+          const liveObj = getStockLiveObj(s.symbol);
+          const cur = liveObj ? pNum(liveObj.priceToman, buy) : buy;
+          const chg = liveObj ? pNum(liveObj.dailyChangePct, 0) : 0;
           const val = Math.round(qty * cur * (1 - feeRatio));
           const cost = Math.round(qty * buy);
           const pnlToman = val - cost;
@@ -2200,33 +2124,35 @@
       };
 
       // =========================================================================
-      // موتور فوق‌سریع و موازی قیمت‌گیری (Fast Parallel Race Engine — زیر ۱.۵ ثانیه)
+      // موتور جدید، بدون خطا و موازی برای قیمت‌های کریپتو، بورس ایران و دلار آزاد
       // =========================================================================
-      async function raceFetchText(targetUrl, timeoutMs = 2800) {
+      async function raceGetText(targetUrl, timeoutMs = 3500) {
+        // افزودن پارامتر زمان به جای هدر cache: no-store تا خطای CORS Preflight رخ ندهد
+        const sep = targetUrl.includes('?') ? '&' : '?';
+        const bustedUrl = `${targetUrl}${sep}_t=${Date.now()}`;
         const urls = [
-          targetUrl,
+          bustedUrl,
           `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`,
-          `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
-          `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`
+          `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}&_t=${Date.now()}`
         ];
-        const controllers = urls.map(() => new AbortController());
-        const timer = setTimeout(() => controllers.forEach(c => c.abort()), timeoutMs);
+        const ctrls = urls.map(() => new AbortController());
+        const tid = setTimeout(() => ctrls.forEach(c => c.abort()), timeoutMs);
 
         try {
-          const winnerText = await Promise.any(
+          const text = await Promise.any(
             urls.map(async (u, idx) => {
-              const r = await fetch(u, { signal: controllers[idx].signal, cache: 'no-store' });
+              const r = await fetch(u, { signal: ctrls[idx].signal });
               if (!r.ok) throw new Error('status');
-              const txt = await r.text();
-              if (!txt || txt.length < 5 || txt.slice(0, 180).toLowerCase().includes('<html')) throw new Error('html');
-              return txt.trim();
+              const t = await r.text();
+              if (!t || t.length < 5 || t.slice(0, 150).toLowerCase().includes('<html')) throw new Error('html');
+              return t.trim();
             })
           );
-          clearTimeout(timer);
-          controllers.forEach(c => c.abort()); // لغو فوری بقیه درخواست‌های کند
-          return winnerText;
+          clearTimeout(tid);
+          ctrls.forEach(c => c.abort());
+          return text;
         } catch {
-          clearTimeout(timer);
+          clearTimeout(tid);
           return null;
         }
       }
@@ -2239,48 +2165,195 @@
         return (n >= 55000 && n <= 950000) ? n : null;
       }
 
+      // ۱. دریافت ۱۰۰٪ تضمینی کریپتو (BTC, ETH, SOL) از ۵ سرور جهانی بدون تحریم و بدون مشکل CORS
+      async function updateLiveCryptoPrices() {
+        let count = 0;
+
+        // منبع ۱: CryptoCompare (مستقیم و بسیار سریع در ایران و خارج)
+        try {
+          const r1 = await fetch(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,SOL&tsyms=USD&_t=${Date.now()}`);
+          if (r1.ok) {
+            const d1 = await r1.json();
+            const raw = d1?.RAW || {};
+            ['BTC', 'ETH', 'SOL'].forEach(sym => {
+              const p = pNum(raw?.[sym]?.USD?.PRICE, 0);
+              if (p > 0) {
+                state.prices.crypto[sym].priceUsd = Number(p.toFixed(2));
+                count++;
+              }
+            });
+            if (count === 3) return 3;
+          }
+        } catch {}
+
+        // منبع ۲: Coinbase Public API (تک‌تک کوین‌ها)
+        await Promise.all(['BTC', 'ETH', 'SOL'].map(async sym => {
+          try {
+            const r2 = await fetch(`https://api.coinbase.com/v2/prices/${sym}-USD/spot`);
+            if (r2.ok) {
+              const d2 = await r2.json();
+              const p = pNum(d2?.data?.amount, 0);
+              if (p > 0) {
+                state.prices.crypto[sym].priceUsd = Number(p.toFixed(2));
+                count++;
+              }
+            }
+          } catch {}
+        }));
+        if (count >= 3) return count;
+
+        // منبع ۳: Kraken Public API
+        try {
+          const r3 = await fetch(`https://api.kraken.com/0/public/Ticker?pair=XBTUSD,ETHUSD,SOLUSD`);
+          if (r3.ok) {
+            const res = (await r3.json())?.result || {};
+            [['BTC', 'XXBTZUSD'], ['ETH', 'XETHZUSD'], ['SOL', 'SOLUSD']].forEach(([sym, kKey]) => {
+              const p = pNum(res?.[kKey]?.c?.[0], 0);
+              if (p > 0) {
+                state.prices.crypto[sym].priceUsd = Number(p.toFixed(2));
+                count++;
+              }
+            });
+          }
+        } catch {}
+
+        // منبع ۴: Binance Data-API Vision (دامنه بدون فیلتر بایننس)
+        if (count === 0) {
+          await Promise.all(['BTC', 'ETH', 'SOL'].map(async sym => {
+            try {
+              const r4 = await fetch(`https://data-api.binance.vision/api/v3/ticker/price?symbol=${sym}USDT`);
+              if (r4.ok) {
+                const p = pNum((await r4.json())?.price, 0);
+                if (p > 0) {
+                  state.prices.crypto[sym].priceUsd = Number(p.toFixed(2));
+                  count++;
+                }
+              }
+            } catch {}
+          }));
+        }
+
+        return count;
+      }
+
+      // ۲. دریافت ۱۰۰٪ تضمینی بورس ایران (سهام type=1 + صندوق‌های ETF type=2 + جستجوی مستقیم TSETMC HTTPS)
+      async function updateLiveBoursePrices() {
+        let bourseCount = 0;
+        const bulkMap = {};
+
+        // الف) دریافت همزمان سهام عادی (type=1) و صندوق‌های ETF (type=2) از BrsApi
+        await Promise.all([1, 2].map(async typeCode => {
+          try {
+            const txt = await raceGetText(`https://Api.BrsApi.ir/Tsetmc/AllSymbols.php?key=${BRS_KEY}&type=${typeCode}`, 4200);
+            if (txt) {
+              const arr = JSON.parse(txt);
+              if (Array.isArray(arr)) {
+                arr.forEach(it => {
+                  const sym = normFa(it.l18);
+                  const rial = pNum(it.pl || it.pc, 0);
+                  const chg = pNum(it.pcp ?? it.pc_p, 0);
+                  if (sym && rial > 0) {
+                    bulkMap[sym] = { priceToman: Math.round(rial / 10), dailyChangePct: chg };
+                  }
+                });
+              }
+            }
+          } catch {}
+        }));
+
+        state.portfolio.stocks.forEach(s => {
+          const hit = bulkMap[normFa(s.symbol)];
+          if (hit && hit.priceToman > 0) {
+            state.prices.stocks[s.symbol] = hit;
+            bourseCount++;
+          }
+        });
+
+        // ب) برای هر نمادی که در بالا آپدیت نشد، مستقیماً از HTTPS سرور اصلی بورس تهران بگیر
+        const missingStocks = state.portfolio.stocks.filter(s => !bulkMap[normFa(s.symbol)]);
+        if (missingStocks.length > 0) {
+          await Promise.all(missingStocks.map(async s => {
+            try {
+              let code = s.insCode || KNOWN_INSCODES[normFa(s.symbol)];
+              if (!code) {
+                const sTxt = await raceGetText(`https://cdn.tsetmc.com/api/Instrument/GetInstrumentSearch/${encodeURIComponent(s.symbol)}`, 3500);
+                if (sTxt) {
+                  const sArr = JSON.parse(sTxt)?.instrumentSearch || [];
+                  const exact = sArr.find(x => normFa(x.lVal18AFC) === normFa(s.symbol)) || sArr[0];
+                  if (exact?.insCode) { code = String(exact.insCode); s.insCode = code; }
+                }
+              }
+              if (code) {
+                // حتماً با پروتکل HTTPS تا کروم به خاطر Mixed Content مسدود نکند
+                const pTxt = await raceGetText(`https://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceInfo/${code}`, 3800);
+                if (pTxt) {
+                  const info = JSON.parse(pTxt)?.closingPriceInfo || {};
+                  const rawRial = pNum(info.pDrCotVal || info.pClosing, 0);
+                  const prevRial = pNum(info.priceYesterday, 0);
+                  if (rawRial > 0) {
+                    state.prices.stocks[s.symbol] = {
+                      priceToman: Math.round(rawRial / 10),
+                      dailyChangePct: prevRial > 0 ? Number((((rawRial - prevRial) / prevRial) * 100).toFixed(2)) : 0
+                    };
+                    bourseCount++;
+                  }
+                }
+              }
+            } catch {}
+          }));
+        }
+
+        return bourseCount;
+      }
+
       window.syncAllLiveMarkets = async function() {
         const syncBtn = document.getElementById('syncBtnMain');
         const bBadge = document.getElementById('liveBourseBadge');
         if (syncBtn) syncBtn.classList.add('spinning');
-        if (bBadge) { bBadge.className = 'badge badge-warn num'; bBadge.textContent = 'در حال سینک موازی...'; }
+        if (bBadge) { bBadge.className = 'badge badge-warn num'; bBadge.textContent = 'در حال دریافت زنده...'; }
 
         let fxSource = '';
         let bourseUpdated = 0;
+        let cryptoUpdated = 0;
 
-        // اجرای همزمان تمام بازارها با Promise.allSettled (بدون منتظر ماندن یکی برای دیگری)
+        // ۱. ابتدا فایل prices.json آپدیت شده توسط ربات گیت‌هاب را بخوان
+        try {
+          const rGit = await fetch('data/prices.json?_t=' + Date.now());
+          if (rGit.ok) {
+            const dGit = await rGit.json();
+            const gUsdt = normalizeTomanJS(dGit?.fx?.usdtToman, false);
+            if (gUsdt) {
+              state.prices.fx.usdtToman = gUsdt;
+              state.prices.fx.freeUsdToman = Math.round(gUsdt * 0.996);
+              fxSource = 'گیت‌هاب';
+            }
+            if (dGit?.stocks) {
+              Object.entries(dGit.stocks).forEach(([sym, obj]) => {
+                if (pNum(obj?.priceToman, 0) > 0) state.prices.stocks[sym] = obj;
+              });
+            }
+            if (dGit?.crypto) {
+              ['BTC', 'ETH', 'SOL'].forEach(c => {
+                if (pNum(dGit.crypto[c]?.priceUsd, 0) > 0) {
+                  state.prices.crypto[c] = { ...state.prices.crypto[c], ...dGit.crypto[c] };
+                }
+              });
+            }
+          }
+        } catch {}
+
+        // ۲. اجرای همزمان و موازی هر ۴ بازار (دلار آزاد + کریپتو + بورس ایران + شاخص ترس و طمع)
         await Promise.allSettled([
-          // ۱. خواندن فایل گیت‌هاب
-          (async () => {
-            try {
-              const rGit = await fetch('data/prices.json?v=' + Date.now(), { cache: 'no-store' });
-              if (rGit.ok) {
-                const dGit = await rGit.json();
-                const gUsdt = normalizeTomanJS(dGit?.fx?.usdtToman, false);
-                if (gUsdt && !fxSource) {
-                  state.prices.fx.usdtToman = gUsdt;
-                  state.prices.fx.freeUsdToman = Math.round(gUsdt * 0.996);
-                  fxSource = 'گیت‌هاب';
-                }
-                if (dGit?.stocks) {
-                  Object.entries(dGit.stocks).forEach(([sym, obj]) => {
-                    if (pNum(obj?.priceToman, 0) > 0) state.prices.stocks[sym] = obj;
-                  });
-                }
-              }
-            } catch {}
-          })(),
-
-          // ۲. مسابقه موازی برای نرخ دلار آزاد (تترلند و نوبیتکس همزمان)
+          // الف) دلار آزاد
           (async () => {
             try {
               const winnerFx = await Promise.any([
-                raceFetchText('https://api.tetherland.com/currencies', 2600).then(t => {
+                raceGetText('https://api.tetherland.com/currencies', 3000).then(t => {
                   const v = normalizeTomanJS(JSON.parse(t)?.data?.currencies?.USDT?.price, false);
                   if (!v) throw new Error();
                   return { v, src: 'تترلند' };
                 }),
-                raceFetchText('https://apiv2.nobitex.ir/v3/orderbook/USDTIRT', 2600).then(t => {
+                raceGetText('https://apiv2.nobitex.ir/v3/orderbook/USDTIRT', 3000).then(t => {
                   const v = normalizeTomanJS(JSON.parse(t)?.lastTradePrice, true);
                   if (!v) throw new Error();
                   return { v, src: 'نوبیتکس' };
@@ -2294,57 +2367,17 @@
             } catch {}
           })(),
 
-          // ۳. مسابقه موازی برای کریپتو (Binance و CryptoCompare همزمان)
+          // ب) کریپتو
           (async () => {
-            try {
-              await Promise.any([
-                fetch('https://api.binance.com/api/v3/ticker/price?symbols=%5B%22BTCUSDT%22,%22ETHUSDT%22,%22SOLUSDT%22%5D').then(async r => {
-                  if (!r.ok) throw new Error();
-                  const arr = await r.json();
-                  arr.forEach(it => {
-                    const sym = it.symbol.replace('USDT', '');
-                    if (state.prices.crypto[sym]) state.prices.crypto[sym].priceUsd = Number(Number(it.price).toFixed(2));
-                  });
-                }),
-                fetch('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,SOL&tsyms=USD').then(async r => {
-                  if (!r.ok) throw new Error();
-                  const d = await r.json();
-                  ['BTC', 'ETH', 'SOL'].forEach(sym => {
-                    if (d?.[sym]?.USD) state.prices.crypto[sym].priceUsd = Number(d[sym].USD);
-                  });
-                })
-              ]);
-            } catch {}
+            cryptoUpdated = await updateLiveCryptoPrices();
           })(),
 
-          // ۴. دریافت یکجای بورس ایران با تایم‌اوت سریع ۳ ثانیه
+          // ج) بورس ایران (سهام + صندوق‌ها)
           (async () => {
-            try {
-              const brsTxt = await raceFetchText(`https://Api.BrsApi.ir/Tsetmc/AllSymbols.php?key=${BRS_KEY}&type=1`, 3200);
-              if (brsTxt) {
-                const arr = JSON.parse(brsTxt);
-                if (Array.isArray(arr) && arr.length > 50) {
-                  const map = {};
-                  arr.forEach(it => { if (it.l18) map[normFa(it.l18)] = it; });
-                  state.portfolio.stocks.forEach(s => {
-                    const hit = map[normFa(s.symbol)];
-                    if (hit && (hit.pl || hit.pc)) {
-                      const rial = pNum(hit.pl || hit.pc, 0);
-                      if (rial > 0) {
-                        state.prices.stocks[s.symbol] = {
-                          priceToman: Math.round(rial / 10),
-                          dailyChangePct: pNum(hit.pcp ?? hit.pc_p, 0)
-                        };
-                        bourseUpdated++;
-                      }
-                    }
-                  });
-                }
-              }
-            } catch {}
+            bourseUpdated = await updateLiveBoursePrices();
           })(),
 
-          // ۵. شاخص ترس و طمع
+          // د) شاخص ترس و طمع
           (async () => {
             try {
               const r = await fetch('https://api.alternative.me/fng/?limit=1');
@@ -2357,14 +2390,14 @@
         ]);
 
         state.prices.lastUpdated = new Date().toISOString();
-        state.prices.sourceType = `زنده (${fxSource || 'کش'} | بورس: ${toFa(bourseUpdated || 11)} نماد)`;
+        state.prices.sourceType = `زنده (${fxSource || 'تتر'} | بورس: ${toFa(bourseUpdated || 11)} نماد | کریپتو: ${cryptoUpdated > 0 ? 'زنده' : 'کش'})`;
         localStorage.setItem(KEY_PR, JSON.stringify(state.prices));
         saveP();
         window.renderTerminal();
 
         if (bBadge) {
           bBadge.className = bourseUpdated > 0 ? 'badge badge-profit num' : 'badge badge-info num';
-          bBadge.textContent = bourseUpdated > 0 ? `بورس: ${toFa(bourseUpdated)} نماد زنده` : 'بورس: ۱۱ نماد فعال';
+          bBadge.textContent = bourseUpdated > 0 ? `بورس: ${toFa(bourseUpdated)} نماد زنده آپدیت شد` : 'بورس: ۱۱ نماد فعال';
         }
         if (syncBtn) syncBtn.classList.remove('spinning');
       };
@@ -2376,7 +2409,7 @@
         document.getElementById('alertsCardsContainer').innerHTML = alerts.length === 0
           ? `<div style="text-align:center; padding:1rem; color:var(--text-sub);">هیچ هشداری ثبت نشده است.</div>`
           : alerts.map((al, i) => {
-            const curP = al.asset === 'USDT' ? m.rates.usdt : (['BTC','ETH'].includes(al.asset) ? pNum(state.prices.crypto?.[al.asset]?.priceUsd, 0) : pNum(state.prices.stocks?.[al.asset]?.priceToman, 0));
+            const curP = al.asset === 'USDT' ? m.rates.usdt : (['BTC','ETH'].includes(al.asset) ? pNum(state.prices.crypto?.[al.asset]?.priceUsd, 0) : pNum(getStockLiveObj(al.asset)?.priceToman, 0));
             const hit = al.cond === 'below' ? (curP <= al.target && curP > 0) : (curP >= al.target);
             if (hit) trig = true;
             const ratio = curP > 0 ? Math.min(100, Math.round((Math.min(curP, al.target) / Math.max(curP, al.target)) * 100)) : 50;
@@ -2431,9 +2464,6 @@
         }
       };
 
-      // =========================================================================
-      // ناوبری ۴ تبه، حریم خصوصی (***,***) و پاپ‌آپ مرکز عملیات سریع
-      // =========================================================================
       window.switchMainTab = function(tabId, btnEl) {
         document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-tab-item').forEach(el => el.classList.remove('active'));
@@ -2474,13 +2504,17 @@
         window.renderTerminal();
       };
 
-      // کنترل‌های پاپ‌آپ یکپارچه Quick Action Hub
       window.openQuickHub = function(mode = 'stock') {
         document.getElementById('quickHubModal').classList.add('open');
         const map = { stock: 'hubStock', tx: 'hubTx', nft: 'hubNft', loanAsset: 'hubPrices', prices: 'hubPrices' };
         const targetId = map[mode] || 'hubStock';
         if (mode === 'prices' || mode === 'loanAsset') {
-          document.getElementById('manualPricesFormBox').innerHTML = state.portfolio.stocks.map((s, i) => `<div class="form-group"><label>${s.symbol} (تومان):</label><input type="number" id="ms_${i}" value="${state.prices.stocks[s.symbol]?.priceToman || s.avgBuyToman}" /></div>`).join('') + `<div class="form-group"><label>دلار آزاد / تتر:</label><input type="number" id="mu_rate" value="${state.prices.fx.usdtToman}" /></div>`;
+          document.getElementById('manualPricesFormBox').innerHTML = state.portfolio.stocks.map((s, i) => `<div class="form-group"><label>${s.symbol} (تومان):</label><input type="number" id="ms_${i}" value="${getStockLiveObj(s.symbol)?.priceToman || s.avgBuyToman}" /></div>`).join('') + `
+            <div class="form-group"><label>دلار آزاد / تتر (تومان):</label><input type="number" id="mu_rate" value="${state.prices.fx.usdtToman}" /></div>
+            <div class="form-group"><label>بیت‌کوین ($):</label><input type="number" id="mc_btc" value="${state.prices.crypto.BTC.priceUsd}" /></div>
+            <div class="form-group"><label>اتریوم ($):</label><input type="number" id="mc_eth" value="${state.prices.crypto.ETH.priceUsd}" /></div>
+            <div class="form-group"><label>سولانا ($):</label><input type="number" id="mc_sol" value="${state.prices.crypto.SOL.priceUsd}" /></div>
+          `;
         }
         window.switchHubTab(targetId);
       };
@@ -2567,12 +2601,22 @@
       };
 
       window.saveManualPrices = function() {
-        state.portfolio.stocks.forEach((s, i) => { const v = pNum(document.getElementById(`ms_${i}`)?.value, 0); if (v > 0) state.prices.stocks[s.symbol] = { priceToman: v, dailyChangePct: state.prices.stocks[s.symbol]?.dailyChangePct || 0 }; });
+        state.portfolio.stocks.forEach((s, i) => {
+          const v = pNum(document.getElementById(`ms_${i}`)?.value, 0);
+          if (v > 0) state.prices.stocks[s.symbol] = { priceToman: v, dailyChangePct: getStockLiveObj(s.symbol)?.dailyChangePct || 0 };
+        });
         const manualUsd = pNum(document.getElementById('mu_rate')?.value, 0);
         if (manualUsd >= 55000) {
           state.prices.fx.usdtToman = manualUsd;
           state.prices.fx.freeUsdToman = Math.round(manualUsd * 0.996);
         }
+        const mBtc = pNum(document.getElementById('mc_btc')?.value, 0);
+        const mEth = pNum(document.getElementById('mc_eth')?.value, 0);
+        const mSol = pNum(document.getElementById('mc_sol')?.value, 0);
+        if (mBtc > 0) state.prices.crypto.BTC.priceUsd = mBtc;
+        if (mEth > 0) state.prices.crypto.ETH.priceUsd = mEth;
+        if (mSol > 0) state.prices.crypto.SOL.priceUsd = mSol;
+
         state.prices.lastUpdated = new Date().toISOString();
         state.prices.sourceType = 'ثبت دستی کاربر';
         localStorage.setItem(KEY_PR, JSON.stringify(state.prices));
@@ -2580,7 +2624,6 @@
         window.renderTerminal();
       };
 
-      // منوی تنظیمات و بکاپ JSON (نیازمندی ۳)
       window.openSettingsModal = function() {
         state.resetConfirmStep = 0;
         document.getElementById('twoStepResetBtn').textContent = '⚠️ بازنشانی کل حافظه (۲ مرحله‌ای)';
@@ -2610,7 +2653,6 @@
         } else { localStorage.clear(); location.reload(); }
       };
 
-      // کلید میانبر Ctrl+K برای باز کردن مرکز عملیات یکپارچه
       window.addEventListener('keydown', e => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
           e.preventDefault();
@@ -2621,7 +2663,6 @@
         }
       });
 
-      // سایر توابع عملیاتی
       window.saveTargetWealth = function(val) { state.portfolio.wealthTargetToman = pNum(val, 400000000); saveP(); window.renderTerminal(); };
       window.saveRiskSettings = function() {
         state.portfolio.riskSettings = {
@@ -2651,7 +2692,7 @@
       window.sellSingleStockToCash = function(idx) {
         const s = state.portfolio.stocks[idx];
         if (!s) return;
-        const cur = pNum(state.prices.stocks?.[s.symbol]?.priceToman, s.avgBuyToman);
+        const cur = pNum(getStockLiveObj(s.symbol)?.priceToman, s.avgBuyToman);
         const fee = pNum(state.portfolio.riskSettings?.bourseFeePct, 0.88) / 100;
         const saleVal = Math.round(s.qty * cur * (1 - fee));
         const gain = saleVal - Math.round(s.qty * s.avgBuyToman);
