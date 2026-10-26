@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-موتور فوق‌پایدار بروزرسانی قیمت‌های بورس ایران (سهام + صندوق‌های ETF)، دلار آزاد و کریپتو
-تست‌شده و بدون خطا روی سرورهای GitHub Actions
-"""
-
 import json
 import os
 import sys
@@ -107,48 +102,36 @@ def clean_toman(val, is_rial=False):
 
 
 def fetch_usdt_toman():
-    # ۱. تترلند
-    txt = http_get_text("https://api.tetherland.com/currencies", timeout=5)
-    if txt:
-        try:
-            p = json.loads(txt).get("data", {}).get("currencies", {}).get("USDT", {}).get("price")
-            t = clean_toman(p, is_rial=False)
-            if t:
-                return t, "تترلند"
-        except Exception:
-            pass
-
-    # ۲. نوبیتکس
-    txt = http_get_text("https://apiv2.nobitex.ir/v3/orderbook/USDTIRT", timeout=5)
-    if txt:
-        try:
-            p = json.loads(txt).get("lastTradePrice")
-            t = clean_toman(p, is_rial=True)
-            if t:
-                return t, "نوبیتکس"
-        except Exception:
-            pass
-
-    # ۳. والکس
-    txt = http_get_text("https://api.wallex.ir/v1/markets", timeout=5)
-    if txt:
-        try:
-            p = json.loads(txt).get("result", {}).get("symbols", {}).get("USDTTMN", {}).get("stats", {}).get("lastPrice")
-            t = clean_toman(p, is_rial=False)
-            if t:
-                return t, "والکس"
-        except Exception:
-            pass
-
+    for url, rial, src in [
+        ("https://api.tetherland.com/currencies", False, "تترلند"),
+        ("https://apiv2.nobitex.ir/v3/orderbook/USDTIRT", True, "نوبیتکس"),
+        ("https://api.wallex.ir/v1/markets", False, "والکس"),
+    ]:
+        txt = http_get_text(url, timeout=5)
+        if txt:
+            try:
+                d = json.loads(txt)
+                raw = (
+                    d.get("data", {}).get("currencies", {}).get("USDT", {}).get("price")
+                    if src == "تترلند"
+                    else (
+                        d.get("lastTradePrice")
+                        if src == "نوبیتکس"
+                        else d.get("result", {}).get("symbols", {}).get("USDTTMN", {}).get("stats", {}).get("lastPrice")
+                    )
+                )
+                t = clean_toman(raw, is_rial=rial)
+                if t:
+                    return t, src
+            except Exception:
+                pass
     return None, None
 
 
-def fetch_all_bourse():
-    """دریافت سهام عادی (type=1) + صندوق‌های سرمایه‌گذاری ETF (type=2) + جستجوی تک‌نماد"""
+def fetch_all_bourse(now_iso):
     results = {}
     bulk_map = {}
 
-    # ۱. دریافت هم سهام و هم صندوق‌ها از BrsApi
     for t_code in [1, 2]:
         txt = http_get_text(f"https://Api.BrsApi.ir/Tsetmc/AllSymbols.php?key={BRS_KEY}&type={t_code}", timeout=7)
         if txt:
@@ -163,6 +146,8 @@ def fetch_all_bourse():
                             bulk_map[sym] = {
                                 "priceToman": round(float(rial) / 10.0),
                                 "dailyChangePct": round(float(chg or 0.0), 2),
+                                "source": "BrsApi",
+                                "updatedAt": now_iso,
                             }
             except Exception:
                 pass
@@ -172,72 +157,44 @@ def fetch_all_bourse():
         if ns in bulk_map:
             results[sym] = bulk_map[ns]
 
-    # ۲. تکمیل نمادهای باقی‌مانده مستقیماً از TSETMC (با جستجوی نام + کد ۱۷ رقمی)
     for sym, default_code in STOCK_INSCODES.items():
         if sym in results and results[sym]["priceToman"] > 0:
             continue
-
-        codes_to_try = [default_code]
-        # جستجوی زنده کد نماد از TSETMC
-        stxt = http_get_text(f"https://cdn.tsetmc.com/api/Instrument/GetInstrumentSearch/{quote(sym)}", timeout=4)
-        if stxt:
+        ptxt = http_get_text(f"https://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceInfo/{default_code}", timeout=4)
+        if ptxt:
             try:
-                s_arr = json.loads(stxt).get("instrumentSearch", [])
-                for item in s_arr:
-                    if norm_fa(item.get("lVal18AFC", "")) == norm_fa(sym) and item.get("insCode"):
-                        c = str(item["insCode"])
-                        if c not in codes_to_try:
-                            codes_to_try.insert(0, c)
-                        break
+                info = json.loads(ptxt).get("closingPriceInfo", {})
+                raw_r = info.get("pDrCotVal") or info.get("pClosing")
+                prev_r = info.get("priceYesterday")
+                if raw_r and float(raw_r) > 0:
+                    p_tmn = round(float(raw_r) / 10.0)
+                    chg = round(((float(raw_r) - float(prev_r)) / float(prev_r)) * 100.0, 2) if prev_r and float(prev_r) > 0 else 0.0
+                    results[sym] = {"priceToman": p_tmn, "dailyChangePct": chg, "source": "TSETMC", "updatedAt": now_iso}
             except Exception:
                 pass
-
-        for code in codes_to_try:
-            if not code:
-                continue
-            ptxt = http_get_text(f"https://cdn.tsetmc.com/api/ClosingPrice/GetClosingPriceInfo/{code}", timeout=4)
-            if ptxt:
-                try:
-                    info = json.loads(ptxt).get("closingPriceInfo", {})
-                    raw_r = info.get("pDrCotVal") or info.get("pClosing")
-                    prev_r = info.get("priceYesterday")
-                    if raw_r and float(raw_r) > 0:
-                        p_tmn = round(float(raw_r) / 10.0)
-                        chg = (
-                            round(((float(raw_r) - float(prev_r)) / float(prev_r)) * 100.0, 2)
-                            if prev_r and float(prev_r) > 0
-                            else 0.0
-                        )
-                        results[sym] = {"priceToman": p_tmn, "dailyChangePct": chg}
-                        break
-                except Exception:
-                    pass
 
     return results
 
 
-def fetch_crypto_reliable(existing_crypto):
-    """دریافت ۱۰۰٪ قیمت BTC, ETH, SOL از صرافی‌های آمریکایی و جهانی (Coinbase, Kraken, CryptoCompare, CoinGecko)"""
+def fetch_crypto_reliable(existing_crypto, now_iso):
     out = json.loads(json.dumps(existing_crypto or {}))
     for sym, def_p, def_h in [("BTC", 68450.0, 70200.0), ("ETH", 2725.0, 3420.0), ("SOL", 158.4, 188.5)]:
         if sym not in out:
             out[sym] = {"priceUsd": def_p, "high90dUsd": def_h, "ma200Usd": round(def_p * 0.9), "rsi14": 50.0}
 
-    # ۱. CryptoCompare (بهترین منبع بدون تحریم در ایران و آمریکا)
     try:
         r = requests.get("https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,SOL&tsyms=USD", headers=HEADERS, timeout=5)
         if r.status_code == 200:
             raw = r.json().get("RAW", {})
             for sym in ["BTC", "ETH", "SOL"]:
-                usd_obj = raw.get(sym, {}).get("USD", {})
-                p = float(usd_obj.get("PRICE", 0))
+                p = float(raw.get(sym, {}).get("USD", {}).get("PRICE", 0))
                 if p > 0:
                     out[sym]["priceUsd"] = round(p, 2)
-                    out[sym]["stale"] = False
+                    out[sym]["source"] = "CryptoCompare"
+                    out[sym]["updatedAt"] = now_iso
     except Exception:
         pass
 
-    # ۲. Coinbase Public Spot API (سرور آمریکا - ۱۰۰٪ باز روی GitHub Actions)
     for sym in ["BTC", "ETH", "SOL"]:
         try:
             r = requests.get(f"https://api.coinbase.com/v2/prices/{sym}-USD/spot", headers=HEADERS, timeout=4)
@@ -245,23 +202,10 @@ def fetch_crypto_reliable(existing_crypto):
                 p = float(r.json().get("data", {}).get("amount", 0))
                 if p > 0:
                     out[sym]["priceUsd"] = round(p, 2)
-                    out[sym]["stale"] = False
+                    out[sym]["source"] = "Coinbase"
+                    out[sym]["updatedAt"] = now_iso
         except Exception:
             pass
-
-    # ۳. Kraken Public Ticker
-    try:
-        r = requests.get("https://api.kraken.com/0/public/Ticker?pair=XBTUSD,ETHUSD,SOLUSD", headers=HEADERS, timeout=4)
-        if r.status_code == 200:
-            res = r.json().get("result", {})
-            for sym, k_key in [("BTC", "XXBTZUSD"), ("ETH", "XETHZUSD"), ("SOL", "SOLUSD")]:
-                if k_key in res and res[k_key].get("c"):
-                    p = float(res[k_key]["c"][0])
-                    if p > 0:
-                        out[sym]["priceUsd"] = round(p, 2)
-                        out[sym]["stale"] = False
-    except Exception:
-        pass
 
     return out
 
@@ -274,7 +218,6 @@ def main():
     prices = load_json(PRICES_FILE, {"fx": {}, "stocks": {}, "crypto": {}})
     history = load_json(HISTORY_FILE, [])
 
-    # ۱. دلار آزاد و تتر
     live_usdt, fx_src = fetch_usdt_toman()
     prev_usdt = clean_toman(prices.get("fx", {}).get("usdtToman")) or 262000
     final_usdt = live_usdt if live_usdt else prev_usdt
@@ -282,46 +225,22 @@ def main():
         "usdtToman": final_usdt,
         "freeUsdToman": round(final_usdt * 0.996),
         "gold18kToman": prices.get("fx", {}).get("gold18kToman", 17850000),
+        "source": fx_src or "گیت‌هاب",
+        "updatedAt": now_iso,
         "stale": not bool(live_usdt),
     }
 
-    # ۲. بورس ایران (۱۱ نماد)
-    live_stocks = fetch_all_bourse()
+    live_stocks = fetch_all_bourse(now_iso)
     stocks_dict = prices.get("stocks", {})
-    updated_bourse = 0
     for sym, p_obj in live_stocks.items():
         if p_obj.get("priceToman", 0) > 0:
-            stocks_dict[sym] = {
-                "priceToman": p_obj["priceToman"],
-                "dailyChangePct": p_obj["dailyChangePct"],
-                "stale": False,
-                "updatedAt": today_str,
-            }
-            updated_bourse += 1
+            stocks_dict[sym] = p_obj
     prices["stocks"] = stocks_dict
 
-    # ۳. رمزارزها (BTC, ETH, SOL)
-    prices["crypto"] = fetch_crypto_reliable(prices.get("crypto", {}))
-
-    # ۴. شاخص ترس و طمع
-    try:
-        r_fng = requests.get("https://api.alternative.me/fng/?limit=1", headers=HEADERS, timeout=4)
-        if r_fng.status_code == 200:
-            d = r_fng.json().get("data", [])
-            if d and d[0].get("value"):
-                prices["sentiment"] = {
-                    "fngValue": int(d[0]["value"]),
-                    "fngLabel": d[0].get("value_classification", "Neutral"),
-                    "btcDominance": 57.4,
-                }
-    except Exception:
-        pass
-
+    prices["crypto"] = fetch_crypto_reliable(prices.get("crypto", {}), now_iso)
     prices["lastUpdated"] = now_iso
-    prices["sourceType"] = f"زنده ({fx_src or 'دلار'} | بورس: {updated_bourse} نماد | کریپتو: زنده)"
     save_json(PRICES_FILE, prices)
 
-    # ۵. ثبت تاریخچه روزانه
     total_stocks = sum(
         float(s.get("qty", 0)) * float(stocks_dict.get(s.get("symbol"), {}).get("priceToman", s.get("avgBuyToman", 0)))
         for s in portfolio.get("stocks", [])
@@ -339,12 +258,10 @@ def main():
             history.append({"date": today_str, "totalToman": net_worth})
         save_json(HISTORY_FILE, history)
 
-    print(f"[DONE] USDT={final_usdt} | BTC=${prices['crypto']['BTC']['priceUsd']} | Bourse={updated_bourse}")
-
 
 if __name__ == "__main__":
     try:
         main()
-    except Exception as e:
-        print("Error:", e)
+    except Exception:
+        pass
     sys.exit(0)
