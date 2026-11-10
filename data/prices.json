@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-11-09T13:46:02Z",
+  "lastUpdated": "2026-11-10T13:39:05Z",
   "fx": {
-    "usdtToman": 263500,
-    "freeUsdToman": 262446,
+    "usdtToman": 260811,
+    "freeUsdToman": 259768,
     "gold18kToman": 17850000,
     "source": "نوبیتکس",
-    "updatedAt": "2026-11-09T13:46:02Z",
+    "updatedAt": "2026-11-10T13:39:05Z",
     "stale": false
   },
   "stocks": {
@@ -67,31 +67,31 @@
   },
   "crypto": {
     "BTC": {
-      "priceUsd": 74700.51,
+      "priceUsd": 73758.6,
       "high90dUsd": 70200,
       "ma200Usd": 63400,
       "rsi14": 54.2,
       "stale": false,
       "source": "Coinbase",
-      "updatedAt": "2026-11-09T13:46:02Z"
+      "updatedAt": "2026-11-10T13:39:05Z"
     },
     "ETH": {
-      "priceUsd": 2119.76,
+      "priceUsd": 2065.93,
       "high90dUsd": 3420,
       "ma200Usd": 2980,
       "rsi14": 46.8,
       "stale": false,
       "source": "Coinbase",
-      "updatedAt": "2026-11-09T13:46:02Z"
+      "updatedAt": "2026-11-10T13:39:05Z"
     },
     "SOL": {
-      "priceUsd": 86.56,
+      "priceUsd": 84.17,
       "high90dUsd": 188.5,
       "ma200Usd": 151.2,
       "rsi14": 51.5,
       "stale": false,
       "source": "Coinbase",
-      "updatedAt": "2026-11-09T13:46:02Z"
+      "updatedAt": "2026-11-10T13:39:05Z"
     }
   },
   "sources": {},
