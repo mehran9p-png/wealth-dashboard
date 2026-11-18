@@ -1,31 +1,31 @@
 {
-  "lastUpdated": "2026-11-17T13:45:23Z",
+  "lastUpdated": "2026-11-18T13:47:37Z",
   "fx": {
-    "usdtToman": 269450,
-    "freeUsdToman": 268372,
+    "usdtToman": 269990,
+    "freeUsdToman": 268910,
     "gold18kToman": 17850000,
     "source": "نوبیتکس",
-    "updatedAt": "2026-11-17T13:45:23Z",
+    "updatedAt": "2026-11-18T13:47:37Z",
     "stale": false
   },
   "stocks": {
     "وفیروزه": {
-      "priceToman": 955,
-      "dailyChangePct": 0.32,
+      "priceToman": 940,
+      "dailyChangePct": -1.47,
       "source": "TSETMC",
-      "updatedAt": "2026-11-17T13:45:23Z"
+      "updatedAt": "2026-11-18T13:47:37Z"
     },
     "فپنتا": {
-      "priceToman": 9092,
-      "dailyChangePct": -2.85,
+      "priceToman": 8732,
+      "dailyChangePct": -5.88,
       "source": "TSETMC",
-      "updatedAt": "2026-11-17T13:45:23Z"
+      "updatedAt": "2026-11-18T13:47:37Z"
     },
     "شپدیس": {
-      "priceToman": 63,
-      "dailyChangePct": 1.93,
+      "priceToman": 64,
+      "dailyChangePct": 0.47,
       "source": "TSETMC",
-      "updatedAt": "2026-11-17T13:45:23Z"
+      "updatedAt": "2026-11-18T13:47:37Z"
     },
     "کرومیت": {
       "priceToman": 557,
@@ -70,31 +70,31 @@
   },
   "crypto": {
     "BTC": {
-      "priceUsd": 64910.94,
+      "priceUsd": 63960.11,
       "high90dUsd": 70200,
       "ma200Usd": 63400,
       "rsi14": 54.2,
       "stale": false,
       "source": "Coinbase",
-      "updatedAt": "2026-11-17T13:45:23Z"
+      "updatedAt": "2026-11-18T13:47:37Z"
     },
     "ETH": {
-      "priceUsd": 1821.24,
+      "priceUsd": 1792.48,
       "high90dUsd": 3420,
       "ma200Usd": 2980,
       "rsi14": 46.8,
       "stale": false,
       "source": "Coinbase",
-      "updatedAt": "2026-11-17T13:45:23Z"
+      "updatedAt": "2026-11-18T13:47:37Z"
     },
     "SOL": {
-      "priceUsd": 73.39,
+      "priceUsd": 74.22,
       "high90dUsd": 188.5,
       "ma200Usd": 151.2,
       "rsi14": 51.5,
       "stale": false,
       "source": "Coinbase",
-      "updatedAt": "2026-11-17T13:45:23Z"
+      "updatedAt": "2026-11-18T13:47:37Z"
     }
   },
   "sources": {},
